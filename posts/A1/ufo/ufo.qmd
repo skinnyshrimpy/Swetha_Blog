@@ -1,0 +1,419 @@
+---
+title: "ufo"
+format: html
+---
+# 2. UFO Data set
+
+## Setting up R Packages
+```{r}
+library(tidyverse) 
+library(mosaic) 
+library(ggformula) 
+library(skimr) 
+library(janitor) 
+library(naniar) 
+library(visdat) 
+library(tinytable) 
+library(DT) 
+library(crosstable) 
+library(RColorBrewer)
+library(naniar)
+library(tidyr)
+library(dplyr) 
+```
+## Read Data
+
+```{r}
+ufo_sightings <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2019/2019-06-25/ufo_sightings.csv") %>% 
+  janitor::clean_names(case = "snake")
+
+
+```
+
+## Examine Data
+```{r}
+base::names(ufo_sightings)
+```
+
+```{r}
+dplyr::glimpse(ufo_sightings)
+```
+
+```{r}
+base::dim(ufo_sightings)
+```
+
+```{r}
+utils::str(ufo_sightings)
+```
+## Viewing Missing Data
+
+```{r}
+visdat::vis_dat(ufo_sightings)
+```
+```{r}
+visdat::vis_miss(ufo_sightings)
+
+```
+## Removing Missing Data
+```{r}
+ufo_sightings_withoutNA <- ufo_sightings %>% drop_na()
+glimpse(ufo_sightings_withoutNA)
+```
+```{r}
+summary(ufo_sightings_withoutNA)
+```
+
+# Understanding the Data
+```{r}
+colnames(ufo_sightings_withoutNA)
+```
+
+The column described_encounter_length and encounter_length both contain similar information, but encounter_length is more cleaner and easier to work with for analysis. Therefore, we will remove the redundant column.
+
+The columns country, ufo_shape, and state may contain inconsistent or repeated entries — for example, light, Light, lights. We will examine all unique values in these columns to identify and correct such inconsistencies.
+
+Additionally, the date_documented column could reveal interesting patterns, such as multiple UFO sightings on the same date, which we will explore.
+
+## Removing column described_encounter_length
+
+```{r}
+ufo_sightings_new <- ufo_sightings_withoutNA %>%
+  select(-described_encounter_length)
+
+glimpse(ufo_sightings_new)
+
+```
+
+## Visualising Data
+
+### 1. UFO Sightings throughout the years (date)
+
+Looking at ufo sightings found on the same date.
+
+```{r}
+ufo_sightings_repeated <- ufo_sightings_new %>%
+  group_by(date_documented) %>%       
+  summarise(count = n()) %>%          
+  filter(count > 1)  
+
+glimpse(ufo_sightings_repeated)
+
+```
+The above piece of code tells us that there are 314 unique dates where data was documented - dataset that had at least one sighting.
+
+Since the there will be countless data stored in each date, we plotted a graph where x as a timeline with the range of the first date data was collected and the latest and the y-axis with a count function inbuilt in ggformula.
+
+```{r}
+ufo_sightings_new %>%
+  count(date_documented, name = "count") %>%
+  mutate(date_documented = mdy(date_documented)) %>%
+  gf_line(count ~ date_documented)
+
+```
+
+Seeing this graph we can see a stark differences around 2010, there is a high point and low point and its very erratic. Lets isolate the high and low points of the graph alone.
+
+```{r}
+ufo_sightings_new%>%
+  count(date_documented, name = "count") %>%
+  mutate(date_documented = mdy(date_documented)) %>%
+  gf_point(count ~ date_documented,
+           color = "red", size = 1.5) %>%
+  gf_labs(
+    title = "Reported UFO Sightings per Date",
+    x = "Date",
+    y = "Number of Sightings"
+  )
+
+```
+This tells us that the data with lesser number of sightings is significantly more than data with higher number of sightings which makes intuitive sense. Lets make this more useful by making a gradient within the graph. Lowest - blue and highest - red
+
+```{r}
+library(RColorBrewer)
+
+ufo_sightings_new %>%
+  count(date_documented, name = "count") %>%
+  mutate(date_documented = mdy(date_documented)) %>%
+  gf_point(count ~ date_documented, color = ~count, size = 1.5) %>%
+  gf_refine(scale_color_gradient(low = "blue", high = "red")) %>%
+  gf_labs(
+    title = "Reported UFO Sightings per Date",
+    x = "Date",
+    y = "Number of Sightings",
+    color = "Sightings Count"
+  )
+
+```
+
+Visualising the graph with red points and the line graph:
+```{r}
+ufo_sightings_new %>%
+  mutate(date_documented = mdy(date_documented)) %>%
+  group_by(date_documented) %>%
+  summarise(count = n()) %>%
+  gf_line(count ~ date_documented) %>%
+  gf_point(color = "red", size = 1) %>%
+  gf_labs(
+    title = "Reported UFO Sightings Over Time",
+    x = "Date",
+    y = "Number of Sightings"
+  )
+
+```
+
+
+The graph looks very congested so faceting it would give more precise graphs. Lets facet it into 8 different segments.
+```{r}
+ufo_sightings_new %>%
+  mutate(date_documented = mdy(date_documented),
+         segment = ntile(date_documented, 8)) %>%
+  group_by(date_documented, segment) %>%
+  summarise(count = n(), .groups = "drop") %>%
+  gf_line(count ~ date_documented) %>%
+  gf_point(color = "red", size = 1) %>%
+  gf_facet_wrap(~segment, scales = "free_x") %>%
+  gf_labs(
+    title = "Reported UFO Sightings Over Time",
+    x = "Date",
+    y = "Number of Sightings"
+  )
+
+```
+
+
+It would be nice to see the highest and lowest point throughout the years. Lets try doing that:
+```{r}
+ufo_highest_lowest <-ufo_sightings_new %>%
+  mutate(date_documented = mdy(date_documented)) %>%
+  group_by(date_documented) %>%
+  summarise(count = n(), .groups = "drop") %>%
+  summarise(
+    lowest_count = min(count),
+    lowest_date  = date_documented[which.min(count)],
+    highest_count = max(count),
+    highest_date  = date_documented[which.max(count)]
+  )
+
+glimpse(ufo_highest_lowest)
+
+```
+
+The lowest count of 1 during 2002 makes me think whether there are other data with a count of 1, but during a different year making both equally competent dates for the lowest range.
+```{r}
+ufo_sightings_new %>%
+  mutate(date_documented = mdy(date_documented)) %>%
+  group_by(date_documented) %>%
+  summarise(count = n(), .groups = "drop") %>%
+  filter(count == min(count))
+
+```
+
+
+It turns out there are two dates - but the reason for 2002 showing up first is because it was parsed properly before hand itself.
+
+This graph is plotted using the whole date - to make a bar graph or histogram we need to extract the year from the date. We will store this view format of viewing data as ufo_sightings_new1
+
+```{r}
+ufo_sightings_new1 <- ufo_sightings_new %>%
+  mutate(
+    date_time_parsed = mdy_hm(date_time),
+    date_only = as.Date(date_time_parsed),
+    time_only = format(date_time_parsed, "%H:%M"),
+    year = year(date_time_parsed)
+  )
+glimpse(ufo_sightings_new1)
+
+```
+
+Lets parse the date_time and also seperate date and time - which might be useful to look at separately, and store them into ufo_sightings_new1
+```{r}
+ufo_sightings_new1 <- ufo_sightings_withoutNA %>%
+  mutate(
+    date_time_parsed = mdy_hm(date_time),
+    date_only = as.Date(date_time_parsed),
+    time_only = format(date_time_parsed, "%H:%M"),
+    year = year(date_time_parsed)
+  )
+
+glimpse(ufo_sightings_new1)
+
+```
+### 2. UFO Shape count accross timeline
+
+Faceting the UFO shapes and plotting their counts over time.
+```{r}
+sightings_per_year <- ufo_sightings_new1 %>%
+  group_by(year, ufo_shape) %>%
+  summarise(count = n(), .groups = "drop")
+
+gf_line(count ~ year, data = sightings_per_year, color = ~ufo_shape) %>%
+  gf_facet_wrap(~ufo_shape)
+
+```
+
+
+
+This tells us that the pyramid, hexagon and changed ufo_shapes have almost no data. But there should exist atleast one data for it to be part of ufo_shape - so lets see how many is its count.
+
+```{r}
+ufo_sightings_new %>%
+  filter(ufo_shape %in% c("pyramid", "hexagon", "changed")) %>%
+  count(ufo_shape)
+
+```
+
+Just like predicted there is only 1 data in these ufo shape categories.
+
+### 3. UFO Shape count accross location
+
+We created a cartograph — plotting each sighting by country to make a visual map of where the UFO sightings occurred
+```{r}
+gf_point(latitude ~ longitude, data = ufo_sightings_new1, color = ~ufo_shape, size = ~encounter_length) %>%
+  gf_labs(
+    x = "Longitude",
+    y = "Latitude",
+    color = "UFO Shape",
+    size = "Encounter Length",
+    title = "UFO Sightings by Location"
+  )
+
+
+```
+
+
+The cartograph shows an overview of the sighting locations and UFO shapes. We can see that U.S. is highlighted prominently.
+
+Next, the data can be plotted by longitude and latitude while keeping the faceting by UFO shape, to check for possible patterns.
+
+```{r}
+gf_point(latitude ~ longitude, data = ufo_sightings_new1, color = ~ufo_shape) %>%
+  gf_facet_wrap(~ufo_shape) %>%
+  gf_labs(
+    x = "Longitude",
+    y = "Latitude",
+    color = "UFO Shape",
+    title = "UFO Sightings by Shape"
+  )
+
+```
+
+This plot shows the geographic distribution of UFO sightings by shape, helping us see where each type is reported.
+
+Faceting by shape highlights patterns or rare sightings that might be hidden in the overall dataset.
+
+### Encounter Length vs Latitude based on UFO shape
+
+Visualising encounter length instead of Latitude - just to check for interesting patterns.
+
+```{r}
+ufo_sightings_new %>%
+  filter(!is.na(ufo_shape)) %>%
+  slice_sample(n = 150) %>%
+  gf_point(encounter_length ~ latitude | ufo_shape,
+           colour = ~ufo_shape,
+           size = 2) %>%
+  gf_labs(
+    title  = "UFO Sightings Sample",
+    x      = "Latitude",
+    y      = "Encounter Length",
+    colour = "UFO Shape"
+  )
+
+```
+
+
+This plot visualizes a random sample of UFO sightings, showing how encounter lengths vary with latitude for different shapes.
+
+Faceting by shape and coloring points highlights differences and patterns across UFO types in the sample.
+
+### 4. Reported UFO Sightings by Day
+
+It would be interesting to check whether UFO sightings are more common on certain days of the week. A bar graph can help visualize this.
+
+```{r}
+ufo_sightings_new %>%
+  count(weekday = wday(mdy_hm(date_time), label = TRUE)) %>%
+  gf_col(n ~ weekday, fill = "orange") %>%
+  gf_labs(title = "Reported UFO Sightings by Day", x = "Day", y = "No of Reported Sightings")
+
+
+```
+
+*Saturday* has the most number of UFO sightings reported but it isn't exorbitantly high - but lets see a numeric representation for better understanding
+
+```{r}
+ufo_sightings_byweek <- ufo_sightings_new1 %>%
+  mutate(weekday = wday(mdy_hm(date_time), label = TRUE)) %>%
+  count(weekday) %>%
+  arrange(match(weekday, c("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat")))
+
+ufo_sightings_byweek
+
+```
+
+### 5. Reported UFO Sightings by Hours
+
+Lets try doing the same but instead of days of week - we will try hours of week
+```{r}
+ufo_sightings_new %>%
+  count(hour = hour(mdy_hm(date_time))) %>%
+  gf_col(n ~ hour, fill = "skyblue") %>%
+  gf_labs(title = "Reported UFO Sightings by Hour", x = "Hour", y = "No of Reported Sightings")
+
+
+
+```
+
+
+### 6. UFO Sightings by US States
+
+Since US is the biggest factor in ufo sightings - lets take each of US state and view its counts
+```{r}
+us_sightings <- ufo_sightings_new1 %>%
+  filter(country == "us") %>%
+  count(state, sort = TRUE)
+glimpse(us_sightings)
+
+```
+Visualising this into bar graphs
+
+```{r}
+us_sightings %>%
+  gf_col(n ~ state, fill = ~state) %>%
+  gf_labs(
+    title = "UFO Sightings by US State",
+    x = "State",
+    y = "No of Reported Sightings",
+    fill = "State"
+  ) 
+
+```
+
+
+The states since they aren't abreviated are very congested but the state coded California has a exorbidantly high number of reportings - lets find its value
+
+```{r}
+us_sightings %>%
+  filter(state == "ca") %>%
+  select(state, n)
+
+```
+
+
+California has 8683 ufo sightings which we can see is pretty high compared to the rest of the states but lets find the mean, median and mode to get an accurate understanding
+```{r}
+x <- us_sightings$n
+
+summary_table <- tibble(
+  Statistic = c("Mean", "Median", "Mode"),
+  Value = c(mean(x), median(x), as.numeric(names(sort(table(x), decreasing = TRUE)[1])))
+)
+
+summary_table
+
+```
+
+The UFO sightings in CA is extremely high compared to all three mean, median and mode. So we can assume there is high delusion and hallucination rates in the state of California of the US.
+
+------------------------------------------------------------------------
