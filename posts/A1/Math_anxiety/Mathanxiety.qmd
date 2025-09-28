@@ -1,0 +1,1035 @@
+---
+title: "Mathanxiety"
+format: html
+---
+
+Math, math, math... for some an absolute nightmare for others the holy grail of existence. Let's break it down
+
+## Data Cleaning
+
+This section handles loading the dataset, cleaning missing values, and initial transformations like converting variables to factors.
+
+Load necessary libraries for data manipulation, visualization, and interactive elements.
+
+```{r}
+library(tidyverse)
+library(mosaic)
+library(skimr)
+library(visdat)
+library(naniar)
+library(janitor)
+library(tinytable)
+library(ggformula)
+library(DT)
+library(ggridges)
+library(shiny)
+library(shinydashboard)
+library(ggridges)
+library(corrplot)
+library(TeachHist)
+```
+Read the CSV file into a data frame, clean column names, and display the initial data.
+```{r}
+meth <- readr::read_delim("MathAnxiety.csv") %>% 
+janitor::clean_names(case="snake")
+meth
+
+```
+```{r}
+head(meth)
+
+```
+<div>
+
+*Data dictionary*
+
+Age: The age of the child in months.
+
+Gender: The gender of the child (Boy or Girl).
+
+Grade: The educational level of the child (Primary or Secondary).
+
+AMAS: The score on the Abbreviated Math Anxiety Scale, where a higher score indicates greater math anxiety.
+
+RCMAS: The score on the Revised Children's Manifest Anxiety Scale, measuring general anxiety.
+
+Arith: The score on an arithmetic test.
+
+</div>
+
+## Inspecting
+
+This section inspects the dataset structure, summaries, counts, and missing values through various diagnostic functions.
+
+```{r}
+summary(meth)
+```
+
+```{r}
+skimr::skim(meth)
+
+```
+
+Show the structure of the dataset including data types.
+
+```{r}
+str(meth)
+
+```
+Count occurrences by gender.
+```{r}
+count(meth, gender)
+
+```
+Count occurrences by grade.
+```{r}
+count(meth, grade)
+```
+Return the dimensions of the dataset.
+```{r}
+dim(meth)
+
+```
+List the column names of the dataset.
+
+```{r}
+base::names(meth)
+
+```
+
+
+Provide a glimpse of the dataset showing types and sample values.
+
+```{r}
+dplyr::glimpse(meth)
+
+```
+
+
+Replace common NA representations with actual NA values in the dataset.
+```{r}
+meth_modified <- meth %>%
+  naniar::replace_with_na_all(data = ., condition = ~ .x %in% common_na_numbers) %>%
+  naniar::replace_with_na_all(data = ., condition = ~ .x %in% common_na_strings)
+glimpse(meth_modified)
+
+```
+
+Visualize missing values in the modified dataset: Luckily there are none!
+```{r}
+
+```
+
+
+## Munging
+
+This section performs further data wrangling, such as binning age and factoring variables.
+
+Convert gender and grade to factors and relocate them before age for better organization.
+
+```{r}
+meth_modified <- meth_modified %>%
+  mutate(
+    gender = as.factor(gender),
+    grade = as.factor(grade),
+  ) %>%
+  dplyr::relocate(where(is.factor), .before = age)
+glimpse(meth_modified)
+
+```
+```{r}
+meth_modified %>%
+  head(10) %>%
+  dplyr::rename(
+    "Gender" = gender,
+    "Grade" = grade,
+    "Age (months)" = age,
+    "AMAS (Math Anxiety)" = amas,
+    "RCMAS (General Anxiety)" = rcmas,
+    "Arithmetic Score" = arith
+  ) %>%
+  tt(
+    caption = "Math is fun!"
+  ) %>%
+  theme_html(class = "table table-hover table-striped table-condensed") %>%
+  style_tt(fontsize = 0.8)
+
+```
+
+
+## Table
+
+This section creates tabular displays of the data, including styled tables and interactive datatables.
+```{r}
+meth_modified %>%
+  DT::datatable(
+    style = "default",
+    caption = htmltools::tags$caption(
+      style = "caption-side: top; text-align: left; color: black; font-size: 100%;", "Math Anxiety Dataset (Clean)"
+    ),
+    options = list(pageLength = 10, autoWidth = TRUE)
+  ) %>%
+  DT::formatStyle(
+    columns = names(meth_modified),
+    fontFamily = "Roboto Condensed",
+    fontSize = "12px"
+  )
+
+```
+```{r}
+meth_modified %>%
+  slice_sample(n = 150, weight_by = gender) %>%
+  gf_point(amas ~ age,
+    colour = ~gender,
+    shape = ~gender,
+    size = 2, data = .
+  ) %>%
+  gf_labs(
+    title = "MATH ANXIETY & AGE",
+    subtitle = "By Gender",
+    caption = "From the MathAnxiety dataset",
+    x = "Age (years)",
+    y = "AMAS (Math Anxiety Score)"
+  ) %>%
+  gf_refine(
+    scale_color_brewer(
+      name = "Gender",
+      palette = "Set1"
+    ),
+    scale_shape_manual(
+      name = "Gender",
+      values = c(15:21)
+    )
+  )
+```
+
+## Charts
+
+This section generates various visualizations including points, histograms, boxplots, bars, and more to explore relationships.
+```{r}
+meth_modified %>%
+  slice_sample(n = 150, weight_by = grade) %>%
+  gf_point(amas ~ age | grade,
+    colour = ~gender,
+    shape = ~gender,
+    size = 2, data = .
+  ) %>%
+  gf_labs(
+    title = "MATH ANXIETY BY GRADE",
+    subtitle = "Faceted by Grade, Colored by Gender",
+    caption = "From the MathAnxiety dataset",
+    x = "Age (years)",
+    y = "AMAS (Math Anxiety Score)"
+  ) %>%
+  gf_refine(
+    scale_color_brewer(
+      name = "Gender",
+      palette = "Set1"
+    ),
+    scale_shape_manual(
+      name = "Gender",
+      values = c(15:21)
+    )
+  )
+
+```
+```{r}
+meth_modified %>% dplyr::glimpse()
+```
+```{r}
+meth_modified %>% mosaic::inspect()
+```
+```{r}
+meth_modified %>% skimr::skim()
+```
+```{r}
+meth_modified %>%  dplyr::count(gender)
+```
+```{r}
+meth_modified %>%  dplyr::count(across(.cols = c(gender, grade)))
+
+```
+```{r}
+meth_modified %>%  dplyr::count(across(where(is.factor)))
+```
+```{r}
+meth_modified %>% mosaic::inspect()
+meth_modified %>% skimr::skim()
+meth_modified %>%  dplyr::count(gender)
+meth_modified %>%  dplyr::count(across(.cols = c(gender, grade)))
+meth_modified %>%  dplyr::count(across(where(is.factor)))
+```
+```{r}
+overall_count <- meth_modified
+```
+
+```{r}
+meth_modified %>% dplyr::count(across(.cols = c(gender, grade)))
+```
+```{r}
+meth_modified %>%
+  dplyr::summarise(
+    mean_amas = mean(amas, na.rm = T),
+    sd_amas = sd(amas, na.rm = T),
+    min_amas = min(amas, na.rm = T),
+    max_amas = max(amas, na.rm = T)
+  )
+
+```
+```{r}
+meth_modified %>%
+  dplyr::summarise(across(
+    .cols = c(amas, rcmas), 
+
+    .fns = list(
+      mean = ~ mean(., na.rm = T),
+      sd = sd,
+      min = min, max = max
+    )
+  ))
+
+```
+```{r}
+meth_modified %>%
+  dplyr::summarise(mean_rcmas = mean(rcmas, na.rm = T))
+
+```
+```{r}
+meth_modified %>%
+  dplyr::summarise(
+    mean_rcmas = mean(rcmas, na.rm = T),
+    sd_rcmas = sd(rcmas, na.rm = T),
+    min_rcmas = min(rcmas, na.rm = T),
+    max_rcmas = max(rcmas, na.rm = T)
+  )
+
+```
+```{r}
+meth_modified %>%
+  dplyr::summarise(
+    mean_arith = mean(arith, na.rm = T),
+    sd_arith = sd(arith, na.rm = T),
+    min_arith = min(arith, na.rm = T),
+    max_arith = max(arith, na.rm = T)
+  )
+
+```
+```{r}
+meth_modified %>%
+  dplyr::summarise(
+    mean_age = mean(age, na.rm = T),
+    sd_age = sd(age, na.rm = T),
+    min_age = min(age, na.rm = T),
+    max_age = max(age, na.rm = T)
+  )
+
+```
+```{r}
+meth_modified %>%
+  dplyr::summarise(across(
+    .cols = c(age, amas, rcmas, arith),
+
+    .fns = list(
+      mean = ~ mean(., na.rm = T),
+      sd = sd,
+      min = min, max = max
+    )
+  ))
+
+```
+```{r}
+meth_modified %>%
+  group_by(gender) %>%
+  dplyr::summarise(across(
+    .cols = c(age, amas, rcmas, arith),
+
+    .fns = list(
+      mean = ~ mean(., na.rm = T),
+      sd = sd,
+      min = min, max = max
+    )
+  ))
+
+
+```
+```{r}
+meth_modified %>%
+  group_by(grade) %>%
+  dplyr::summarise(across(
+    .cols = c(age, amas, rcmas, arith),
+
+    .fns = list(
+      mean = ~ mean(., na.rm = T),
+      sd = sd,
+      min = min, max = max
+    )
+  ))
+
+```
+```{r}
+meth_modified %>%
+  group_by(gender, grade) %>%
+  dplyr::summarise(across(
+    .cols = c(age, amas, rcmas, arith),
+
+    .fns = list(
+      mean = ~ mean(., na.rm = T),
+      sd = sd,
+      min = min, max = max
+    )
+  ))
+
+
+```
+```{r}
+meth_modified %>%
+  dplyr::summarise(across(
+    .cols = c(age, amas, rcmas, arith),
+    .fns = list(
+      mean = ~ mean(., na.rm = T),
+      sd = sd,
+      min = min, max = max
+    )
+  ))
+
+```
+```{r}
+meth_modified %>%
+  group_by(G=grade) %>%
+  dplyr::summarise(across(
+    .cols = c(age, amas, rcmas, arith), 
+    .fns = list(
+      mean = ~ mean(., na.rm = T),
+      sd = sd,
+      min = min, max = max
+    )
+  ))
+
+
+```
+```{r}
+meth_modified %>%
+  group_by(gender, grade) %>%
+  dplyr::summarise(across(
+    .cols = c(age, amas, rcmas, arith), 
+    .fns = list(
+      mean = ~ mean(., na.rm = T),
+      sd = sd,
+      min = min, max = max
+    )
+  ))
+
+```
+```{r}
+gf_histogram(~age, data = meth_modified) %>%
+  gf_labs(title = "Histogram of Age")
+
+```
+
+```{r}
+gf_histogram(~amas, data = meth_modified) %>%
+  gf_labs(title = "Histogram of AMAS")
+
+```
+```{r}
+gf_histogram(~rcmas, data = meth_modified) %>%
+  gf_labs(title = "Histogram of RCMAS")
+
+```
+```{r}
+gf_bar(~grade, data = meth_modified) %>%
+  gf_labs(title = "Bar Plot of Grade")
+
+```
+```{r}
+gf_bar(~gender, data = meth_modified) %>%
+  gf_labs(title = "Bar Plot of Gender")
+
+```
+```{r}
+meth_modified %>%
+  ggplot() +
+  geom_bar(aes(x = grade, fill = gender), position = "dodge") +
+  labs(title = "Dodged Bar Chart") +
+  scale_fill_brewer(palette = "Set2")
+
+```
+```{r}
+meth_modified %>%
+  ggplot() +
+  geom_bar(aes(x = grade, fill = gender), position = "stack") +
+  labs(
+    title = "Stacked Bar Chart",
+    subtitle = "Can we spot per group differences in proportions??"
+  ) +
+  scale_fill_brewer(palette = "Set2")
+```
+```{r}
+meth_modified %>%
+  ggplot() +
+  geom_bar(aes(x = grade, fill = gender), position = "fill") +
+  labs(title = "Filled Bar Chart", subtitle = "Shows Per group differences in Proportions!") +
+  scale_fill_brewer(palette = "Set2")
+
+```
+```{r}
+meth_modified %>%
+  ggplot() +
+  geom_bar(aes(x = grade, fill = gender), position = "fill") +
+  labs(
+    title = "Filled Bar Chart",
+    subtitle = "Shows Per group differences in Proportions!",
+    y = "Proportion"
+  ) +
+  scale_fill_brewer(palette = "Set2")
+
+```
+```{r}
+meth_modified %>%
+  ggplot(aes(x = amas)) +
+  geom_histogram(binwidth = 5, fill = "steelblue", color = "white") +
+  facet_grid(grade ~ gender) +
+  labs(title = "Histogram of AMAS Scores",
+       subtitle = "Faceted by Grade and Gender",
+       x = "AMAS Score",
+       y = "Count") +
+  theme_minimal()
+
+```
+```{r}
+meth_modified %>%
+  ggplot(aes(x = grade, y = rcmas)) +
+  geom_boxplot(fill = "lightblue") +
+  facet_wrap(~ gender) +
+  labs(title = "Boxplots of RCMAS Scores by Grade",
+       subtitle = "Faceted by Gender",
+       x = "Grade",
+       y = "RCMAS Score") +
+  theme_minimal()
+
+```
+```{r}
+meth_modified %>%
+  ggplot(aes(x = age, y = arith, color = grade)) +
+  geom_point(alpha = 0.6) +
+  facet_grid(. ~ gender) +
+  labs(title = "Scatter Plot of Age vs Arithmetic Score",
+       subtitle = "Faceted by Gender, Colored by Grade",
+       x = "Age",
+       y = "Arithmetic Score") +
+  scale_color_brewer(palette = "Set2") +
+  theme_minimal()
+
+```
+```{r}
+meth_modified %>%
+  ggplot(aes(x = age, fill = gender)) +
+  geom_density(alpha = 0.5) +
+  facet_wrap(~ grade) +
+  labs(title = "Density Plots of Age",
+       subtitle = "Faceted by Grade, Filled by Gender",
+       x = "Age",
+       y = "Density") +
+  scale_fill_brewer(palette = "Set2") +
+  theme_minimal()
+
+```
+```{r}
+meth_modified %>%
+  ggplot() +
+  geom_bar(aes(x = factor(arith), fill = gender), position = "dodge") +
+  labs(title = "Dodged Bar Chart") +
+  theme(axis.text.x = element_text(size = 6, angle = 45, hjust = 1)) +
+  scale_fill_brewer(palette = "Set3")
+
+
+```
+```{r}
+meth_modified %>%
+  ggplot() +
+  geom_bar(aes(x = factor(arith), fill = gender), position = "stack") +
+  labs(
+    title = "Stacked Bar Chart",
+    subtitle = "Can we spot per group differences in proportions??"
+  ) +
+  theme(axis.text.x = element_text(size = 6, angle = 45, hjust = 1)) +
+  scale_fill_brewer(palette = "Set3")
+
+```
+```{r}
+meth_modified %>%
+  ggplot() +
+  geom_bar(aes(x = factor(arith), fill = gender), position = "fill") +
+  labs(
+    title = "Filled Bar Chart",
+    subtitle = "Shows Per group differences in Proportions!"
+  ) +
+  theme(axis.text.x = element_text(size = 6, angle = 45, hjust = 1)) +
+  scale_fill_brewer(palette = "Set3")
+
+```
+```{r}
+meth_modified %>%
+  ggplot() +
+  geom_bar(aes(x = factor(arith), fill = gender), position = "fill") +
+  labs(
+    title = "Filled Bar Chart",
+    subtitle = "Shows Per group differences in Proportions!",
+    y = "Proportions"
+  ) +
+  theme(axis.text.x = element_text(size = 6, angle = 45, hjust = 1)) +
+  scale_fill_brewer(palette = "Set3")
+
+```
+```{r}
+meth_modified <- meth_modified %>%
+  mutate(
+    age_group = cut(
+      age,
+      breaks = c(0, 80, 100, 120, 140, 160, 180, 200),
+      labels = c("0-80", "80-100", "100-120", "120-140", "140-160", "160-180", "180-200"),
+      include.lowest = TRUE
+    ),
+    arith = factor(arith)
+  )
+
+
+```
+
+```{r}
+gf_bar(~arith, fill = ~gender, data = meth_modified) %>%
+  gf_labs(title = "Counts of Gender by Arithmetic Score") %>%
+  gf_refine(scale_fill_brewer(palette = "Set4"))
+
+```
+
+```{r}
+ggplot(meth_modified) +
+  geom_bar(aes(x = age_group, fill = gender)) +
+  labs(title = "Counts of Gender by Age Group") +
+  scale_fill_brewer(palette = "Set1") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+```{r}
+ggplot(meth_modified) +
+  geom_bar(aes(x = grade, fill = gender)) +
+  labs(title = "Counts of Gender by Grade") +
+  scale_fill_brewer(palette = "Set6")
+
+```
+```{r}
+ggplot(meth_modified) +
+  geom_bar(aes(x = grade, fill = gender)) +
+  facet_wrap(~age_group) +
+  labs(title = "Counts of Gender by Grade and Age Group") +
+  scale_fill_brewer(palette = "Set4") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+```{r}
+ggplot(meth_modified) +
+  geom_bar(aes(x = age_group, fill = gender)) +
+  facet_wrap(~arith) +
+  labs(
+    title = "Counts of Gender by Age Group and Arithmetic Score",
+    subtitle = "Is this plot arrangement easy to grasp?"
+  ) +
+  scale_fill_brewer(palette = "Set1") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+```{r}
+ggplot(meth_modified) +
+  geom_bar(aes(x = arith, fill = gender)) +
+  facet_wrap(~age_group) +
+  labs(
+    title = "Counts of Gender by Arithmetic Score and Age Group",
+    subtitle = "Swapped the Facets"
+  ) +
+  scale_fill_brewer(palette = "Set3") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+```{r}
+gf_histogram(~amas, data = meth_modified) %>%
+  gf_labs(
+    title = "AMAS Scores",
+    caption = "ggformula"
+  )
+
+
+```
+```{r}
+gf_histogram(~amas,
+  data = meth_modified,
+  bins = 100
+) %>%
+  gf_labs(
+    title = "AMAS Scores",
+    caption = "ggformula"
+  )
+
+```
+```{r}
+meth_modified %>%
+  ggplot() +
+  geom_histogram(aes(x = rcmas), bins = 100) +
+  labs(
+    title = "RCMAS Scores",
+    caption = "ggplot"
+  )
+
+
+```
+```{r}
+meth_modified %>%
+  ggplot() +
+  geom_histogram(aes(x = amas, fill = grade),
+    colour = "black", alpha = 0.3
+  ) +
+  labs(title = "AMAS filled by Grade", caption = "ggplot")
+
+```
+```{r}
+meth_modified %>% ggplot() +
+  geom_histogram(aes(amas, fill = grade),
+    colour = "black", alpha = 0.3
+  ) +
+  facet_wrap(facets = vars(grade)) +
+  labs(
+    title = "AMAS by Filled and Facetted by Grade",
+    caption = "ggplot"
+  ) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+```{r}
+meth_modified %>% ggplot() +
+  geom_histogram(aes(amas, fill = grade),
+    colour = "black", alpha = 0.3
+  ) +
+  facet_wrap(facets = vars(grade), scales = "free_y") +
+  labs(
+    title = "AMAS by Filled and Facetted by Grade",
+    subtitle = "Free y-scale",
+    caption = "ggplot"
+  ) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+```
+```{r}
+# In tried something on my own!!
+#i got help from https://www.rdocumentation.org/packages/shinyr/versions/0.4.2
+ui <- fluidPage(
+  titlePanel("Interactive Histogram of Math Anxiety Data"),
+  sidebarLayout(
+    sidebarPanel(
+      selectInput("variable",
+                  "Choose variable:",
+                  choices = c("Age" = "age", "AMAS" = "amas", "RCMAS" = "rcmas")),
+      sliderInput("bins",
+                  "Number of bins:",
+                  min = 10,
+                  max = 50,
+                  value = 30)
+    ),
+    mainPanel(
+      plotOutput("distPlot")
+    )
+  )
+)
+
+server <- function(input, output) {
+  output$distPlot <- renderPlot({
+    meth_modified %>%
+      ggplot(aes(x = .data[[input$variable]])) +
+      geom_histogram(bins = input$bins, fill = "steelblue", color = "white", alpha = 0.7) +
+      labs(
+        title = paste("Histogram of", input$variable),
+        x = input$variable,
+        y = "Count"
+      ) +
+      theme_minimal()
+  })
+}
+
+shinyApp(ui = ui, server = server)
+
+```
+```{r}
+ggplot(meth_modified, aes(x = gender, y = amas, fill = gender)) +
+  geom_boxplot() +
+  labs(title = "AMAS Scores by Gender",
+       x = "Gender",
+       y = "AMAS Score") +
+  theme_minimal()
+
+```
+
+```{r}
+meth_modified
+
+```
+
+
+I am not sure why meth_modified isn't loading the other variables
+
+Recreate a cleaned dataset version with NA replacements and factor conversions for consistency.
+
+```{r}
+meth_modified2 <- meth %>%
+  naniar::replace_with_na_all(condition = ~ .x %in% common_na_numbers) %>%
+  naniar::replace_with_na_all(condition = ~ .x %in% common_na_strings) %>%
+  mutate(
+    gender = as.factor(gender),
+    grade = as.factor(grade)
+  ) %>%
+    dplyr::relocate(where(is.factor), .before = age)
+    glimpse(meth_modified2)
+
+```
+```{r}
+ggplot(meth_modified2, aes(x = gender, y = amas, fill = gender)) +
+  geom_boxplot() +
+  labs(title = "AMAS Scores by Gender",
+       x = "Gender",
+       y = "AMAS Score") +
+  theme_minimal()
+
+```
+```{r}
+meth_modified2 %>%
+  group_by(gender) %>%
+  dplyr::summarise(across(
+    .cols = c(age, amas, rcmas, arith),
+    .fns = list(
+      mean = ~ mean(., na.rm = T),
+      sd = sd,
+      min = min, max = max
+    )
+  ))
+
+```
+```{r}
+ggplot(meth_modified2, aes(x = grade, y = arith, fill = grade)) +
+  geom_boxplot() +
+  labs(title = "Arithmetic Performance by Grade",
+       x = "Grade",
+       y = "Arith Score") +
+  theme_minimal()
+
+```
+```{r}
+ggplot(meth_modified2, aes(x = grade, y = rcmas, fill = grade)) +
+  geom_boxplot() +
+  labs(title = "RCMAS Scores by Grade",
+       x = "Grade",
+       y = "RCMAS Score") +
+  theme_minimal()
+
+```
+```{r}
+ggplot(meth_modified2, aes(x = grade, y = amas, fill = grade)) +
+  geom_violin(trim = FALSE) +
+  geom_boxplot(width = 0.1, fill = "white") +  # Optional: overlay boxplot for quartiles
+  labs(title = "AMAS Scores Distribution by Grade",
+       x = "Grade",
+       y = "AMAS Score") +
+  theme_minimal()
+
+```
+```{r}
+ggplot(meth_modified2, aes(x = gender, y = arith, fill = gender)) +
+  geom_violin(trim = FALSE) +
+  geom_boxplot(width = 0.1, fill = "white") +  # Optional: overlay boxplot
+  labs(title = "Arithmetic Performance Distribution by Gender",
+       x = "Gender",
+       y = "Arith Score") +
+  theme_minimal()
+
+```
+```{r}
+ggplot(meth_modified2, aes(x = amas, y = arith)) +
+  geom_point() +
+  geom_smooth(method = "lm", color = "blue") +
+  labs(title = "Arithmetic Performance vs. AMAS",
+       x = "AMAS Score",
+       y = "Arith Score") +
+  theme_minimal()
+
+```
+```{r}
+ggplot(meth_modified2, aes(x = amas, y = rcmas)) +
+  geom_point() +
+  geom_smooth(method = "lm", color = "blue") +
+  labs(title = "RCMAS vs. AMAS",
+       x = "AMAS Score",
+       y = "RCMAS Score") +
+  theme_minimal()
+
+```
+```{r}
+ggplot(meth_modified2, aes(x = age, y = arith)) +
+  geom_point() +
+  geom_smooth(method = "lm", color = "blue") +
+  labs(title = "Arithmetic Performance vs. Age (Years)",
+       x = "Age (Years)",
+       y = "Arith Score") +
+  theme_minimal()
+
+```
+```{r}
+ggplot(meth_modified2, aes(x = gender, y = amas, fill = gender)) +
+  geom_boxplot() +
+  scale_fill_manual(values = c('Boy' = 'skyblue', 'Girl' = 'lightcoral')) +
+  labs(title = 'Math Anxiety (AMAS) Distribution by Gender',
+       x = 'Gender',
+       y = 'AMAS Score (Math Anxiety)') +
+  theme_minimal()
+
+```
+
+```{r}
+ggplot(meth_modified2, aes(x = grade, y = arith, fill = grade)) +
+  geom_boxplot() +
+  scale_fill_manual(values = c('Primary' = 'lightgreen', 'Secondary' = 'gold')) +
+  labs(title = 'Arithmetic Score (Arith) Distribution by Grade',
+       x = 'Grade Level',
+       y = 'Arithmetic Score (0-8)') +
+  theme_minimal()
+
+```
+```{r}
+ggplot(meth_modified2, aes(x = amas, y = arith, color = grade)) +
+  geom_point(alpha = 0.4) +
+  geom_smooth(method = 'lm', se = FALSE) +
+  scale_color_manual(values = c('Primary' = 'darkgreen', 'Secondary' = 'darkred')) +
+  labs(title = 'Relationship between Math Anxiety and Performance by Grade',
+       x = 'AMAS Score (Math Anxiety)',
+       y = 'Arithmetic Score (0-8)',
+       color = 'Grade Level') +
+  theme_minimal()
+
+```
+```{r}
+ggplot(meth_modified2, aes(x = amas)) +
+  geom_histogram(bins = 20, fill = 'darkblue', color = 'black') +
+  geom_density(aes(y = after_stat(density) * (max(meth_modified2$amas) - min(meth_modified2$amas)) / 20), color = 'black', linewidth = 1) +
+  geom_vline(aes(xintercept = mean(amas)), color = 'red', linetype = 'dashed') +
+  annotate('text', x = mean(meth_modified2$amas) + 2, y = 50, label = paste('Mean:', round(mean(meth_modified2$amas), 2))) +
+  labs(title = 'Distribution of Math Anxiety (AMAS) Score',
+       x = 'AMAS Score',
+       y = 'Count') +
+  theme_minimal()
+
+```
+```{r}
+ggplot(meth_modified2, aes(x = rcmas)) +
+  geom_histogram(bins = 20, fill = 'darkgreen', color = 'black') +
+  geom_density(aes(y = after_stat(density) * (max(meth_modified2$rcmas) - min(meth_modified2$rcmas)) / 20), color = 'black', linewidth = 1) +
+  geom_vline(aes(xintercept = mean(rcmas)), color = 'red', linetype = 'dashed') +
+  annotate('text', x = mean(meth_modified2$rcmas) + 2, y = 50, label = paste('Mean:', round(mean(meth_modified2$rcmas), 2))) +
+  labs(title = 'Distribution of General Anxiety (RCMAS) Score',
+       x = 'RCMAS Score',
+       y = 'Count') +
+  theme_minimal()
+
+
+```
+```{r}
+mean_scores <- meth_modified2 %>%
+  group_by(grade) %>%
+  summarise(amas = mean(amas), rcmas = mean(rcmas)) %>%
+  pivot_longer(cols = c(amas, rcmas), names_to = 'Anxiety_Type', values_to = 'Mean_Score')
+
+ggplot(mean_scores, aes(x = grade, y = Mean_Score, fill = Anxiety_Type)) +
+  geom_bar(stat = 'identity', position = 'dodge') +
+  scale_fill_manual(values = c('amas' = 'darkorange', 'rcmas' = 'grey')) +
+  labs(title = 'Mean Math vs. General Anxiety by Grade Level',
+       x = 'Grade Level',
+       y = 'Mean Anxiety Score',
+       fill = 'Anxiety Type') +
+  theme_minimal()
+
+```
+```{r}
+ggplot(meth_modified2, aes(x = grade, y = rcmas, fill = grade)) +
+  geom_boxplot() +
+  scale_fill_manual(values = c('Primary' = 'darkgreen', 'Secondary' = 'gold')) +
+  labs(title = 'RCMAS Distribution by Grade',
+       x = 'Grade Level',
+       y = 'RCMAS Score (General Anxiety)') +
+  theme_minimal()
+
+```
+```{r}
+ggplot(meth_modified2, aes(x = gender, y = rcmas, fill = gender)) +
+  geom_boxplot() +
+  scale_fill_manual(values = c('Boy' = 'skyblue', 'Girl' = 'lightcoral')) +
+  labs(title = 'RCMAS Distribution by Gender',
+       x = 'Gender',
+       y = 'RCMAS Score (General Anxiety)') +
+  theme_minimal()
+
+```
+```{r}
+arith_means <- meth_modified2 %>%
+  group_by(grade, gender) %>%
+  summarise(arith = mean(arith), .groups = 'drop')
+
+ggplot(arith_means, aes(x = grade, y = arith, fill = gender)) +
+  geom_bar(stat = 'identity', position = 'dodge') +
+  scale_fill_manual(values = c('Boy' = 'dodgerblue', 'Girl' = 'red')) +
+  labs(title = 'Mean Arithmetic Score (Arith) by Grade and Gender',
+       x = 'Grade Level',
+       y = 'Mean Arithmetic Score (0-8)',
+       fill = 'Gender') +
+  ylim(0, 8) +
+  theme_minimal()
+
+```
+
+## Hypothesis
+
+This section outlines potential hypotheses from data patterns, ready for future testing.
+
+1.  Math anxiety causes poor arithmetic performance: High AMAS likely leads to low Arith scores, not vice versa. Test this with long-term studies or programs that reduce anxiety and check for performance gains.
+
+2.  Gender moderates anxiety-performance link: The negative AMAS-Arith tie hits girls harder, thanks to stereotype threats boosting anxiety's effects. This fits the AMAS gender gap despite similar Arith scores.
+
+3.  Math anxiety mediates grade performance drop: AMAS partly explains falling Arith from primary to secondary, as tougher lessons raise anxiety and hurt scores, matching slight AMAS rises and Arith falls.
+
+4.  Different paths for math vs general anxiety: AMAS grows with math stressors like tests, while RCMAS stays steady as a personal trait. This explains higher AMAS overall, without grade or gender shifts in RCMAS.
+
+5.  Age nonlinearly predicts math anxiety: No straight-line pattern, but peaks hit during shifts like ages 10-12 entering secondary school, due to puberty or school changes. The steady gender gap shows it's ongoing yet variable.
+
+6.  General and math anxiety interact: High RCMAS worsens AMAS in secondary students amid tougher demands, compounding Arith impacts. This comes from small rises in both anxieties there.
+
+7.  Sociocultural factors drive gender gap: Things like parent hopes or media views of math as male boost girls' AMAS, unrelated to performance. Add factors like income or culture to datasets for deeper looks.
+
+## Insights
+
+This section shares key takeaways and wider implications from the data and visuals.
+
+### Expanded Inferences
+
+1.  Girls face more math anxiety: Box plots show higher medians, wider ranges, and upper outliers for girls' AMAS. Means are 22.93 vs 21.17 for boys, lasting across ages, hinting at early social roots like stereotypes causing self-doubt. Scatter plots add that despite similar Arith trends, girls' higher AMAS gives them a tougher start, possibly worsened by teacher biases.
+
+2.  Secondary students lag in arithmetic: Box plots reveal lower medians and shifts for secondary Arith, around 4-5 vs 5-6 in primary. Scatters confirm clustering at low scores with same AMAS, suggesting buildup from abstract tasks and slight AMAS bumps (22.25 vs 21.85). Bar charts show equal drops for both genders, pointing to system issues like harder curricula or less support, creating an education "math cliff."
+
+3.  General anxiety steady across grades: Box plots have overlapping medians and ranges, matching stats with little change (slight secondary uptick). Unlike AMAS, RCMAS seems innate, tied to home or genes (mean 19.24, SD 7.57), not school stress. Bar charts keep it below AMAS, so interventions should target math triggers separately, as RCMAS isn't the main academic hurdle.
+
+4.  Math anxiety tops general by grade: Bar charts put mean AMAS over RCMAS in both levels (\~21.85 vs lower in primary, \~22.25 vs still lower in secondary). Histograms back higher AMAS mean (21.98, range 4-45) vs RCMAS (19.24, 1-41). This points to AMAS as a task-specific reaction disrupting focus, per attentional theory, especially in pressured secondary settings favoring math focused fixes over general ones.
+
+5.  Anxiety scores skewed right: Histograms peak at means but tail high (up to 45 AMAS, 41 RCMAS), signaling a few very anxious kids. AMAS skews more, implying varied experiences with outliers from failures (SDs 6.60 vs 7.57). Scatters link high tails to low Arith, suggesting screen for risks above thresholds like AMAS 30 to catch issues early.
+
+6.  Anxiety hurts performance negatively: Scatters show downhill trends in Arith vs AMAS across grades, primaries a bit higher. Correlation around -0.3 means each AMAS point drops Arith 0.1-0.2, possibly two-way: anxiety blocks focus or flops feed fear. Secondary slopes seem steeper from demands, tying to grade drops and calling for models to sort causes.
+
+7.  Math anxiety trends developmentally: Line plots keep girls 1-2 points above boys, with flat or wobbly age bins (3.7-187.5 months, mean 124.65). This suggests early formation from experiences over growth, with nonlinear dips or peaks at milestones. Wide range hints extremes like low in young naivety, high in older stress; steady gender calls for kid-friendly programs soon.
+
+8.  General anxiety uniform by gender and grade: Box plots lack gaps or shifts, unlike AMAS. This evenness across groups marks RCMAS as a core trait, not swayed by school or demo changes. While AMAS fluctuates, RCMAS stability (from histograms, bars) ties to temperament, so don't mix anxieties in fixes—high RCMAS may flag other problems but not explain scores.
+
+9.  Arithmetic similar by gender, drops by grade: Bar charts show close boy-girl Arith means per grade, but both fall in secondary (\~5.5-6 to \~4-5). Despite girls' higher AMAS, this hints they compensate (like extra effort) at a hidden cost, risking future avoidance. Uniform drop blames environment like content gaps, with scatters showing subtle high-AMAS underperformance in girls.
+
+10. Summary stats overview: 599 clean entries, 323 boys/276 girls, 401 primary/198 secondary; m
