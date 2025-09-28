@@ -1,0 +1,81 @@
+---
+title: "messy"
+format: html
+---
+```{r}
+#| label: setup
+#| echo: false 
+library (tidyverse)
+library(mosaic) # Our all-in-one package
+library(skimr) # Looking at data
+library(visdat) # Mapping missing data
+library(naniar) # Missing data visualization and munging
+library(janitor) # Clean the data
+library(tinytable) # Printing Tables for our data
+```
+```{r}
+MessyPenguins <- readr::read_delim("../data/Messy_Penguins.csv")
+MessyPenguins %>% 
+
+janitor::clean_names(case = "snake")
+```
+
+```{r}
+base::names(MessyPenguins)
+dplyr::glimpse(MessyPenguins)
+base::dim(MessyPenguins)
+utils::str(MessyPenguins)
+
+```
+```{r}
+visdat::vis_dat(MessyPenguins)
+```
+```{r}
+visdat::vis_miss(MessyPenguins)
+```
+
+```{r}
+messyPenguins_modified <- MessyPenguins %>% 
+replace_with_na_all(condition = ~ .x %in% c(" ")) %>% tidyr::drop_na()
+```
+
+```{r}
+messyPenguins_modified <- messyPenguins_modified %>%
+  mutate(
+    species = as.factor(species),
+    island = as.factor(island),
+    sex = as.factor(sex)
+  ) %>%
+  # arrange the Qual variables first, Quant next
+  dplyr::relocate(where(is.factor),)
+
+glimpse(messyPenguins_modified)
+```
+
+```{r}
+messyPenguins_modified %>% tt ()
+```
+```{r}
+library(ggformula)
+messyPenguins_modified %>% 
+  filter(species == "Adelie" | sex == "male") %>% 
+  gf_line(body_mass ~ species, color = ~ sex) %>% 
+  gf_labs(
+    title = "Body Mass vs Species",
+    x = "Species",
+    y = "Body Mass (g)"
+  ) %>% 
+  gf_theme(theme_light())
+```
+```{r}
+library(ggformula)
+messyPenguins_modified %>% 
+  filter(species == "Adelie" | sex == "male") %>% 
+  gf_bar(body_mass ~ species, color = ~ sex) %>% 
+  gf_labs(
+    title = "Body Mass vs Species",
+    x = "Species",
+    y = "Body Mass (g)"
+  ) %>% 
+  gf_theme(theme_light())
+```

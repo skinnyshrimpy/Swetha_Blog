@@ -1,0 +1,78 @@
+---
+title: "horrormovies"
+format: html
+---
+
+```{r}
+#| label: setup
+library (tidyverse)
+library(mosaic) # Our all-in-one package
+library(skimr) # Looking at data
+library(visdat) # Mapping missing data
+library(naniar) # Missing data visualization and munging
+library(janitor) # Clean the data
+library(tinytable) # Printing Tables for our data
+```
+
+```{r}
+HorrorMoviesdata <- readr::read_delim("~/R Studio/Swetha_Stat/Swetha_Blog/posts/Data/HorrorMoviedata.csv")
+HorrorMoviesdata %>% 
+
+janitor::clean_names(case = "snake")
+```
+
+```{r}
+base::names(HorrorMoviesdata)
+dplyr::glimpse(HorrorMoviesdata)
+base::dim(HorrorMoviesdata)
+utils::str(HorrorMoviesdata)
+```
+
+```{r}
+visdat::vis_dat(HorrorMoviesdata)
+```
+
+```{r}
+Horrormoviesdata_modified <- HorrorMoviesdata %>% tidyr::drop_na()
+```
+
+```{r}
+Horrormoviesdata_modified
+```
+
+```{r}
+Horrormoviesdata_modified <- Horrormoviesdata_modified %>%
+  mutate(
+    Movie = as.factor(Movie),
+    `This film is a sequel.` = as.factor(`This film is a sequel.`),
+    `This film has at least one sequel` = as.factor(`This film has at least one sequel`)
+  ) %>%
+  dplyr::relocate(where(is.factor), .after = Ranking)
+
+glimpse(Horrormoviesdata_modified)
+
+```
+
+```{r}
+Horrormoviesdata_modified %>% tt ()
+```
+
+```{r}
+## Counting by the obvious factor variables
+Horrormoviesdata_modified %>%
+  dplyr::count(`This film has at least one sequel`) %>%
+  tt()
+```
+
+```{r}
+Horrormoviesdata_modified %>%
+  count(across(where(is.factor))) %>%
+  tally()
+```
+
+```{r}
+# Single Variable, Single Summary
+## if any na's out there it'll give as na
+Horrormoviesdata_modified %>%
+  dplyr::summarise(mean_Ranking = mean(Ranking, na.rm = T))
+```

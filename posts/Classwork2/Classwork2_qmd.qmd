@@ -1,0 +1,104 @@
+---
+title: "Classwork2"
+author: "SwethaKV"
+format: html
+---
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+## Running Code
+
+When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+1 + 1
+```
+
+You can add options to executable code like this 
+
+```{r}
+#| echo: false
+2 * 2
+```
+
+The `echo: false` option disables the printing of code (only output is displayed).
+##instaIntro
+I am going to do werid things in R 
+
+## setup R pakages 
+```{r}
+#| label: setup
+#| echo: false 
+library (tidyverse)
+library(mosaic) # Our all-in-one package
+library(skimr) # Looking at data
+library(visdat) # Mapping missing data
+library(naniar) # Missing data visualization and munging
+library(janitor) # Clean the data
+library(tinytable) # Printing Tables for our data
+```
+```{r}
+fastfood <- readr::read_csv("https://vincentarelbundock.github.io/Rdatasets/csv/openintro/fastfood.csv") %>% 
+##shift control m
+janitor::clean_names(case = "snake")
+
+# it'll read the file called fast food read csv will u lot of things abd glimpse and dim is enough. you need a name - need names for columns.
+```
+```{r}
+base::names(fastfood)
+dplyr::glimpse(fastfood)
+base::dim(fastfood)
+utils::str(fastfood)
+```
+```{r}
+# Looking for misisng data. Full data reperesented as MAT
+# Missing data - grye area - unable to do the job properly
+# Imputation data is if something 35 and 37 then the middle 36. -not legit-
+#cubics spline - non linear
+#remove data means it'll remove all the whole row but dplyr has the way only remvoe the data. 
+#wouldn't tht be more confusing 
+visdat::vis_dat(fastfood)
+```
+```{r}
+visdat::vis_miss(fastfood)
+```
+
+## removing missing data
+```{r}
+fastfood_modified <- fastfood %>% tidyr::drop_na() 
+```
+
+```{r}
+fastfood_modified
+```
+```{r}
+fastfood_modified <- fastfood_modified %>%
+  mutate(
+    restaurant = as.factor(restaurant),
+    salad = as.factor(salad),
+    item = as.factor(item)
+  ) %>%
+  rename("dish" = item) %>% # rename item to dish
+
+  # arrange the Qual variables first, Quant next
+  dplyr::relocate(where(is.factor), .after = rownames)
+
+glimpse(fastfood_modified)
+```
+```{r}
+fastfood_modified %>% tt ()
+```
+```{r}
+## remove columns entirely 
+fastfood_modified2 <- fastfood %>% 
+  dplyr::select(-c(vit_a))
+fastfood_modified2
+```
+```{r}
+## remove columns entirely 
+fastfood_modified3 <- fastfood %>% 
+  dplyr::select(-c(vit_a, vit_c))
+fastfood_modified3
+```
