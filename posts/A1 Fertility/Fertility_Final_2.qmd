@@ -1,0 +1,20 @@
+---
+title: "Fertility_Final_2"
+format: html
+---
+
+# 1. Fertility Data set
+
+## Setting up R Packages
+
+```{r}
+library(tidyverse)
+library(janitor)
+library(dplyr)
+library(naniar)
+library(skimr)
+library(crosstable)
+library(tinytable)
+library(ggformula)
+library(mosaic)
+``

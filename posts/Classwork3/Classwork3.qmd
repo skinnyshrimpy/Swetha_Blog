@@ -1,0 +1,329 @@
+---
+title: "Classwork3"
+author: "SwethaKV"
+format: html
+---
+```{r}
+#| label: setup
+#| echo: false 
+library (tidyverse)
+library(mosaic) # Our all-in-one package
+library(skimr) # Looking at data
+library(visdat) # Mapping missing data
+library(naniar) # Missing data visualization and munging
+library(janitor) # Clean the data
+library(tinytable) # Printing Tables for our data
+library(crosstable)
+library(ggformula)
+```
+```{r}
+docVisits <- read_csv("https://vincentarelbundock.github.io/Rdatasets/csv/AER/DoctorVisits.csv") 
+```
+```{r}
+base::names(docVisits)
+dplyr::glimpse(docVisits)
+base::dim(docVisits)
+utils::str(docVisits)
+skimr::skim(docVisits)
+```
+```{r}
+docVisits_modified <- docVisits %>%
+  # Replace common NA strings and numbers with actual NA
+  naniar::replace_with_na_all(condition = ~ .x %in% common_na_strings) %>%
+  naniar::replace_with_na_all(condition = ~ .x %in% common_na_numbers) %>%
+  # Clean variable names
+  janitor::clean_names(case = "snake") %>% # clean names
+
+  # Convert character variables to factors
+  mutate(
+    gender = as_factor(gender),
+    private = as_factor(private),
+    freepoor = as_factor(freepoor),
+    freerepat = as_factor(freerepat),
+    nchronic = as_factor(nchronic),
+    lchronic = as_factor(lchronic)
+  ) %>%
+  # arrange the character variables first
+  dplyr::relocate(where(is.factor), .after = rownames)
+
+
+docVisits_modified %>% glimpse()
+```
+```{r}
+docVisits_modified %>%
+  DT::datatable(
+    caption = htmltools::tags$caption(
+      style = "caption-side: top; text-align: left; color: black; font-size: 150%;",
+      "Doctor Visits Dataset (Clean)"
+    ),
+    options = list(pageLength = 10, autoWidth = TRUE)
+  ) %>%
+  DT::formatStyle(
+    columns = names(docVisits_modified),
+    fontFamily = "Roboto Condensed",
+    fontSize = "12px"
+  )
+```
+```{r}
+## Counting by the obvious factor variables
+docVisits_modified %>%
+  dplyr::count(gender) %>%
+  tt()
+```
+```{r}
+docVisits_modified %>%
+  dplyr::count(private) %>%
+  tt()
+```
+```{r}
+docVisits_modified %>%
+  dplyr::count(across(.cols = c(gender, private))) %>%
+  tt()
+```
+```{r}
+## don't do this!!!
+docVisits %>%
+  count(across(where(is.character))) %>%
+  tt()
+```
+```{r}
+docVisits_modified %>%
+  count(across(where(is.factor))) %>% 
+  tt()
+```
+
+```{r}
+docVisits_modified %>%
+  count(across(where(is.factor))) %>%
+  tally()
+
+```
+```{r}
+# Single Variable, Single Summary
+## if any na's out there it'll give as na
+docVisits %>%
+  dplyr::summarise(mean_income = mean(income, na.rm = T))
+```
+```{r}
+# Single Variable, Multiple Summaries
+## not a lot poeple are sick
+## remove the enteries in na na.rm = ture.
+docVisits_modified %>%
+  dplyr::summarise(
+    mean_visits = mean(visits, na.rm = T),
+    sd_visits = sd(visits, na.rm = T),
+    min_visits = min(visits, na.rm = T),
+    max_visits = max(visits, na.rm = T)
+  )
+```
+```{r}
+# Multiple Variables, Multiple Summaries
+## across vist and income i want summarise .fns my summaries choose columns .functions they re mean median sd min max what summaries u want for ? 4 fns
+## why not variables?
+
+docVisits_modified %>%
+  dplyr::summarise(across(
+    .cols = c(visits, income), # select columns
+
+    .fns = list(
+      mean = ~ mean(., na.rm = T),
+      sd = sd,
+      min = min, max = max
+    )
+  ))
+```
+```{r}
+docVisits_modified %>%
+  group_by(gender) %>%
+  summarize(average_visits = mean(visits), count = n())
+```
+```{r}
+## and then group by two things
+docVisits_modified %>%
+  group_by(freepoor, nchronic) %>%
+  summarise(
+    mean_income = mean(income),
+    average_visits = mean(visits),
+    count = n()
+  )
+```
+```{r}
+# library(crosstable)
+crosstable(visits + income ~ gender + freepoor,
+  data = docVisits_modified
+) %>%
+  crosstable::as_flextable()
+```
+```{r}
+set.seed(1947)
+diamonds %>%
+  slice_sample(n = 150, weight_by = cut) %>%
+  gf_point(price ~ carat | clarity ,
+    colour = ~cut,
+    shape = ~cut,
+    size = 2, data = .
+  ) %>%
+  gf_labs(
+    title = "Plot Title = DIAMONDS ARE FOREVER",
+    subtitle = "Plot Subtitle = AND A GIRL'S BEST FRIEND",
+    caption = "Plot Caption = From the diamonds dataset",
+    x = "x-Axis Title = CARAT",
+    y = "y-Axis Title = PRICE"
+  ) %>%
+  # Use same name for scales to merge legends
+  gf_refine(
+    scale_color_brewer(
+      name = "Legend = DIAMOND QUALITY",
+      palette = "Set1"
+    ),
+    scale_shape_manual(
+      name = "Legend = DIAMOND QUALITY",
+      values = c(15:21)
+    )
+  ) %>%
+  gf_annotate("text",
+    x = 1.0, y = 16000,
+    label = "These DIAMONDS are\n Super Affordable!!",
+    fontface = "bold",
+    size = 2
+  ) %>%
+  gf_annotate("curve",
+    x = 0.9,
+    y = 14500,
+    yend = 8000,
+    xend = 0.95,
+    linewidth = 0.5,
+    curvature = 0.5,
+    arrow = arrow(length = unit(0.25, "cm"))
+  )
+
+```
+```{r}
+diamonds %>% dplyr::count(clarity)
+diamonds
+```
+```{r}
+diamonds %>% gf_bar( ~ clarity | cut , fill = ~ clarity)
+```
+```{r}
+diamonds %>% mutate(price_range = ifelse(price > 5000 , "expensive" , "Not Expensive")) %>% 
+gf_bar(~ clarity | cut , fill = ~ price_range )
+```
+```{r}
+taxi <- read_csv("https://vincentarelbundock.github.io/Rdatasets/csv/modeldata/taxi.csv")
+
+taxi_modified <- taxi %>%
+  naniar::replace_with_na_all(condition = ~ .x %in% common_na_strings) %>%
+  naniar::replace_with_na_all(condition = ~ .x %in% common_na_numbers) %>%
+  janitor::clean_names(case = "snake") %>%
+  janitor::remove_empty()
+
+taxi_modified
+```
+```{r}
+## Convert `dow`, `local`, `month`, and `hour` into ordered factors
+taxi_modified <- taxi_modified %>%
+  dplyr::mutate(
+
+    ## Variable "tip"
+    tip = base::factor(tip,
+      levels = c("yes", "no"),
+      labels = c("yes", "no"),
+      ordered = TRUE
+    ),
+
+    ## Variable "company"
+    company = base::factor(company), # Any order is OK.
+
+    ## Variable "dow"
+    dow = base::factor(dow,
+      levels = c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"),
+      labels = c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"),
+      ordered = TRUE
+    ),
+
+    ## Variable "local"
+    local = base::factor(local,
+      levels = c("yes", "no"),
+      labels = c("yes", "no"),
+      ordered = TRUE
+    ),
+
+    ## Variable "month"
+    month = base::factor(month,
+      levels = c("Jan", "Feb", "Mar", "Apr"),
+      labels = c("Jan", "Feb", "Mar", "Apr"),
+      ordered = TRUE
+    ),
+
+    ## Variable "hour"
+    hour = base::factor(hour,
+      levels = c(0:23), labels = c(0:23),
+      ordered = TRUE
+    )
+  ) %>%
+  dplyr::relocate(where(is.factor), .after = rownames) # Move all factors to the left
+
+taxi_modified %>% glimpse()
+```
+```{r}
+RColorBrewer::display.brewer.all()
+taxi_modified %>%
+  gf_bar(~local,
+    fill = ~tip,
+    position = "dodge"
+  ) %>%
+  gf_labs(title = "Plot 2A: Dodged Bar Chart") %>%
+  gf_refine(scale_fill_brewer(palette = "Set1"))
+```
+```{r}
+## Showing "per capita" percentages
+## Better labelling of Y-axis
+taxi_modified %>%
+  gf_props(~company, fill = ~tip, position = "fill") %>%
+  gf_labs(
+    title = "Plot 3D: Filled Bar Chart",
+    subtitle = "Shows Per group differences in Proportions!"
+  ) %>%
+  gf_theme(theme(axis.text.x = element_text(size = 6, angle = 45, hjust = 1))) %>%
+  gf_refine(scale_fill_brewer(palette = "Set1"))
+```
+```{r}
+data("diamonds", package = "ggplot2")
+glimpse(diamonds)
+```
+```{r}
+diamonds_modified <- diamonds %>%
+  janitor::clean_names(case = "snake") %>%
+  janitor::remove_empty(which = c("rows", "cols")) # Empty columns and rows if any
+diamonds_modified %>% glimpse()
+```
+```{r}
+glimpse(diamonds_modified)
+skim(diamonds_modified)
+inspect(diamonds_modified)
+```
+```{r}
+gf_histogram(~price | cut, 
+             fill = ~cut, 
+             colour = "black", 
+             bins = 3000,  # total number of bins
+             data = diamonds_modified) %>%
+  gf_labs(
+    title = "Plot 1A: Diamond Prices",
+    caption = "ggformula"
+  )
+
+```
+
+```{r}
+data("diamonds", package = "ggplot2")
+diamonds %>% gf_boxplot(clarity ~ depth, orientation = "y", fill = "pink" ,)
+```
+```{r}
+data("diamonds", package = "ggplot2")
+diamonds %>% gf_boxplot(carat ~ cut, orientation = "x", fill = "beige" ,)
+```
+
+
+

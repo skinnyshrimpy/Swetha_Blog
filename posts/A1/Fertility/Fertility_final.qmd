@@ -1,0 +1,315 @@
+---
+title: "Fertility_final"
+format: html
+---
+
+# 1. Fertility Data set
+
+## Setting up R Packages
+
+```{r}
+library(tidyverse)
+library(janitor)
+library(dplyr)
+library(naniar)
+library(skimr)
+library(crosstable)
+library(tinytable)
+library(ggformula)
+library(mosaic)
+```
+
+## Read Data
+
+```{r}
+Fertility <- readr::read_csv("Fertility.csv") %>% 
+janitor::clean_names(case="snake")
+Fertility
+
+```
+
+## Examine Data
+
+```{r}
+base::names(Fertility)
+```
+
+```{r}
+dplyr::glimpse(Fertility)
+```
+
+```{r}
+base::dim(Fertility)
+```
+
+```{r}
+utils::str(Fertility)
+```
+
+## Viewing Missing Data
+
+Viewing missing data was not working for the whole data set, so we used slice sample of 100000. The data set did not have any missing data.
+
+```{r}
+Fertility_sample <- Fertility %>% dplyr::slice_sample(n = 100000) 
+visdat::vis_dat(Fertility_sample)
+```
+
+```{r}
+visdat::vis_miss(Fertility_sample)
+```
+
+## New column for labeling ethnicity
+
+We created a new column for ethnicity since the data set did not directly indicate whether a person was Caucasian. Based on the data dictionary, all "no" responses were Caucasian. To make the data easier to understand, we added a column to clearly show the ethnicity of a person.
+
+```{r}
+Fertility %>% filter(afam == "no", hispanic == "no", other == "no")
+```
+
+```{r}
+Fertility_ethnicity <- Fertility %>%
+  mutate(ethnicity = case_when(
+    afam == "yes" ~ "African-American",
+    hispanic == "yes" ~ "Hispanic",
+    other == "yes" ~ "Other",
+    afam == "no" & hispanic == "no" & other == "no" ~ "Caucasian"
+  ))
+
+Fertility_ethnicity
+```
+
+## Converting Characters to Factors
+
+```{r}
+Fertility_ethnicity_factor <- Fertility_ethnicity %>%
+  mutate(across(where(is.character), as.factor)) %>% 
+  relocate(where(is.factor), .after = rownames)
+glimpse(Fertility_ethnicity_factor)
+```
+
+## Summaries: Examining the Data
+
+### Counting by the gender factor variables
+
+```{r}
+Fertility_ethnicity_factor %>%
+  dplyr::count(across(.cols = c (gender1 , gender2)))
+```
+
+```{r}
+Fertility_ethnicity_factor %>% 
+  group_by(morekids) %>% 
+  summarise(average_age=mean(age),count=n()) %>% tt()
+```
+
+```{r}
+crosstable(morekids ~ gender2 + gender1,
+  data = Fertility_ethnicity_factor
+) %>%
+  crosstable::as_flextable()
+```
+
+```{r}
+crosstable(ethnicity ~ morekids,
+  data = Fertility_ethnicity_factor
+) %>%
+  crosstable::as_flextable()
+```
+
+```{r}
+Fertility_ethnicity_factor %>% 
+  group_by(morekids) %>% 
+  summarize(average_workhours = mean(work)) %>% tt()
+```
+
+## Visualizing the data
+
+### 1. More Kids vs Gender Composition
+
+-   Hypothesis: Families with two daughters (female.female) could have more children.
+
+#### Dodge Bar Graph
+
+```{r}
+Fertility_ethnicity_factor %>%
+  gf_bar(~interaction(gender1,gender2),
+    fill = ~morekids,
+    position = "dodge"
+  ) %>%
+  gf_labs(
+    title = "Morekids vs Gender Composition",
+    subtitle = "How morekids is being effected based on current gender of kids",
+    x="Gender of First Two Children",
+    y="Count of Families"
+  ) %>%
+  gf_refine(scale_fill_brewer(palette = "Set1"))
+
+```
+
+#### Fill Bar Graph
+
+```{r}
+Fertility_ethnicity_factor %>%
+  gf_bar(~interaction(gender1,gender2),
+    fill = ~morekids,
+    position = "fill"
+  ) %>%
+  gf_labs(
+    title = "Morekids vs Gender Composition",
+    subtitle = "How morekids is being effected based on current gender of kids",
+    x="Gender of First Two Children",
+    y="Count of yes and no"
+  ) %>%
+  gf_refine(scale_fill_brewer(palette = "Set1"))
+```
+
+-   *Inferences*
+
+    -   Families with two girls are most likely to have more children.
+
+    -   Families with one boy and one girl are least likely to continue growing their family.
+
+    -   Families with two boys also show a high chance of having more kids.
+
+### 2. More kids vs Work Weeks
+
+-   Hypothesis: Women who worked less number of weeks would have more kids.
+
+#### Histogram
+
+```{r}
+gf_histogram(~work,
+  data = Fertility_ethnicity_factor,
+  bins = 26,                
+  fill = ~morekids,         
+  position = "dodge"        
+) %>%
+  gf_labs(
+    title = "Distribution of Work Weeks by More Kids",
+    subtitle = "Number of Work Weeks in 1979 for Mothers with or without more kids",
+    x = "Work weeks in 1979",
+    y = "Count of yes or no",
+  )
+
+```
+
+#### Line graph
+
+```{r}
+Fertility_ethnicity_factor %>%
+  count(morekids, work) %>% 
+  gf_line(n ~ work, color = ~morekids, linewidth = 0.8) %>%
+  gf_labs(
+    title = "Distribution of Work Weeks by More Kids",
+    subtitle = "Number of Work Weeks in 1979 for Mothers with or without more kids",
+    x = "Work weeks in 1979",
+    y = "Count of yes or no"
+  )
+```
+
+#### Box Plot
+
+```{r}
+Fertility_ethnicity_factor %>% 
+  gf_boxplot(morekids ~ work, orientation = "y", fill=~morekids, color = "black") %>%
+  gf_labs(y = "More kids", 
+          x = "Work weeks in 1979", 
+          title = "Distribution of Work Weeks by More Kids",
+          subtitle = "Number of Work Weeks in 1979 for Mothers with or without more kids")
+```
+
+-   *Inferences*
+
+    -   Most individuals either worked a full year (52 weeks) or did not work at all (0 weeks)
+    -   *Not working* *mothers* dominates - The largest group is those who worked *0 weeks*.
+    -   *Working full year (52 weeks)* is the second largest group.
+    -   Mothers who worked between 2-50 weeks is a minority.
+    -   The difference between “more kids” and “no kids”:
+        -   People with *no kids* lean more towards full-time work.
+        -   People with *kids* lean more towards not working at all or working fewer weeks.
+
+Overall insight: The *"no more kids"* category *is the largest overall* especially among *non working mothers*. This shows most people in 1979 had only 2 kids.
+
+### 2. More kids vs Age
+
+-   Hypothesis: Older women would have more kids.
+
+#### Density Distribution Graph
+
+```{r}
+Fertility_ethnicity_factor %>%
+  gf_density(~age, color = ~morekids, fill = ~morekids) %>%
+  gf_labs(
+    title = "Distribution of Age by More Kids",
+    subtitle = "Ages of Mothers with or without more kids",
+    x = "Age of Mothers",
+    y = "Density",
+    color = "More Kids",
+    fill = "More Kids"
+  )
+```
+
+```{r}
+Fertility_ethnicity_factor %>% 
+  gf_boxplot(morekids ~ age, orientation = "y", fill=~morekids, color = "black") %>%
+  gf_labs(y = "Morekids", x = "Age of Mothers", 
+          title = "Distribution of Age by More Kids",
+          subtitle = "Ages of Mothers with or without more kids")
+
+```
+
+-   *Inferences*
+
+    -   The possibility of having more kids increases with age as seen as in the density distribution graph.
+
+    -   The age of people who have more kids (median 31) is only *slightly higher* than the age of people who do not have more kids (median 30)
+
+    -   The group that responded "no" (they do not want more kids) has a slightly wider Interquartile Range.
+
+        -   50% of mothers in the "no" category are *more spread out in age* from 28 to 32 years
+        -   50% of people in the "yes" group are *more clustered in age* from 30 to 32 years
+
+    -   Outliers: A few mothers who have more kids are *younger* than others (around age 22-23).
+
+### 1. More Kids vs Ethnicity
+
+#### Dodge Bar Graph
+
+```{r}
+Fertility_ethnicity_factor %>%
+  count(ethnicity, morekids) %>%  
+  gf_col(n ~ ethnicity, fill = ~morekids, position = "dodge") %>%  
+  gf_labs(
+    title = "Ethnic Group Distribution by More Kids",
+    subtitle = "Count of Respondents who have More Children ",
+    x = "Ethnic Group",
+    y = "Number of People",
+    fill = "More Kids"
+  ) %>%
+  gf_refine(scale_fill_brewer(palette = "Set2"))
+
+```
+
+#### Fill Bar Graph
+
+```{r}
+Fertility_ethnicity_factor %>%
+  count(ethnicity, morekids) %>%  
+  gf_col(n ~ ethnicity, fill = ~morekids, position = "fill") %>%  
+  gf_labs(
+    title = "Ethnic Group Distribution by More Kids",
+    subtitle = "Count of Respondents who have More Children ",
+    x = "Ethnic Group",
+    y = "Number of People",
+    fill = "More Kids"
+  ) %>%
+  gf_refine(scale_fill_brewer(palette = "Set2"))
+```
+
+-   *Inferences*
+    -   The Caucasian group is much larger than all other ethnic groups in the survey, as seen in the first graph.
+    -   *African-Americans and Hispanics* have the highest proportion of respondents who have more kids.
+    -   The Caucasian group and the Other group have a lower proportion of having more kids.
+
+------------------------------------------------------------------------

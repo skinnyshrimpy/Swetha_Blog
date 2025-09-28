@@ -192,7 +192,7 @@ window.Quarto = {
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(2)</span></div><div class="category" data-category="YW5hbHlzaXM=">analysis <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Y29kZQ==">code <span class="quarto-category-count">(1)</span></div><div class="category" data-category="bmV3cw==">news <span class="quarto-category-count">(2)</span></div></div></div>
+    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(12)</span></div><div class="category" data-category="YW5hbHlzaXM=">analysis <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Y29kZQ==">code <span class="quarto-category-count">(1)</span></div><div class="category" data-category="bmV3cw==">news <span class="quarto-category-count">(2)</span></div></div></div>
 <!-- main -->
 <main class="content quarto-banner-title-block column-page-left" id="quarto-document-content">
 
@@ -206,7 +206,235 @@ window.Quarto = {
 
 <div class="quarto-listing quarto-listing-container-default" id="listing-listing">
 <div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="bmV3cyUyQ2NvZGUlMkNhbmFseXNpcw==" data-listing-date-sort="1757874600000" data-listing-file-modified-sort="1757942613527" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="9">
+<div class="quarto-post image-right" data-index="0" data-listing-file-modified-sort="1759057773561" data-listing-reading-time-sort="8" data-listing-word-count-sort="1425">
+<div class="thumbnail"><a href="./posts/A1/Fertility/Fertility_final.html" class="no-external">
+
+<p class="card-img-top"><img src="posts\A1\Fertility\Fertility_final_files\figure-html\unnamed-chunk-7-1.png"  class="thumbnail-image card-img"/></p>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/A1/Fertility/Fertility_final.html" class="no-external">Fertility_final</a>
+</h3>
+<div class="delink listing-description"><a href="./posts/A1/Fertility/Fertility_final.html" class="no-external">
+Viewing missing data was not working for the whole data set, so we used slice sample of 100000. The data set did not have any missing data.
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/A1/Fertility/Fertility_final.html" class="no-external">
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="1" data-listing-file-modified-sort="1759056550915" data-listing-reading-time-sort="1" data-listing-word-count-sort="12">
+<div class="thumbnail"><a href="./posts/A1/Fertility/Fertility_final_1.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/A1/Fertility/Fertility_final_1.html" class="no-external">Fertility_final_1</a>
+</h3>
+<div class="delink listing-description"><a href="./posts/A1/Fertility/Fertility_final_1.html" class="no-external">
+
+
+<section id="setting-up-r-packages" class="level2">
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu">library</span>(tidyverse)</span></code></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔…</code></pre></div><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><span class="fu"></span></span></code></pre></div><div class="cell-output cell-output-stderr"><pre><code></code></pre></div><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><span class="fu"></span></span><span id="cb5-2"><span class="fu"></span></span><span id="cb5-3"><span class="fu"></span></span></code></pre></div><div class="cell-output cell-output-stderr"><pre><code></code></pre></div><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><span class="fu"></span></span></code></pre></div><div class="cell-output cell-output-stderr"><pre><code></code></pre></div><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><span class="fu"></span></span></code></pre></div><div class="cell-output cell-output-stderr"><pre><code></code></pre></div><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><span class="fu"></span></span></code></pre></div><div class="cell-output cell-output-stderr"><pre><code></code></pre></div><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><span class="fu"></span></span></code></pre></div><div class="cell-output cell-output-stderr"><pre><code></code></pre></div></div></section><section id="read-data" class="level2"><div class="cell"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><span class="ot"></span><span class="sc"></span><span class="fu"></span><span class="st"></span><span class="sc"></span></span><span id="cb15-2"><span class="sc"></span><span class="fu"></span><span class="at"></span><span class="st"></span></span></code></pre></div><div class="cell-output cell-output-stderr"><pre><code></code></pre></div><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"></span></code></pre></div><div class="cell-output cell-output-stdout"><pre><code></code></pre></div></div></section>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/A1/Fertility/Fertility_final_1.html" class="no-external">
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="2" data-listing-file-modified-sort="1759056816178" data-listing-reading-time-sort="1" data-listing-word-count-sort="5">
+<div class="thumbnail"><a href="./posts/A1 Fertility/Fertility_Final_2.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/A1 Fertility/Fertility_Final_2.html" class="no-external">Fertility_Final_2</a>
+</h3>
+<div class="delink listing-description"><a href="./posts/A1 Fertility/Fertility_Final_2.html" class="no-external">
+library(tidyverse) library(janitor) library(dplyr) library(naniar) library(skimr) library(crosstable) library(tinytable) library(ggformula) library(mosaic) ``
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/A1 Fertility/Fertility_Final_2.html" class="no-external">
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="3" data-listing-file-modified-sort="1758004069153" data-listing-reading-time-sort="2" data-listing-word-count-sort="304">
+<div class="thumbnail"><a href="./posts/Classwork2/Classwork2_qmd.html" class="no-external">
+
+<p class="card-img-top"><img src="posts\Classwork2\Classwork2_qmd_files\figure-html\unnamed-chunk-5-1.png"  class="thumbnail-image card-img"/></p>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/Classwork2/Classwork2_qmd.html" class="no-external">Classwork2</a>
+</h3>
+<div class="delink listing-description"><a href="./posts/Classwork2/Classwork2_qmd.html" class="no-external">
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see https://quarto.org.
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/Classwork2/Classwork2_qmd.html" class="no-external">
+<div class="listing-author">
+SwethaKV
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="4" data-listing-file-modified-sort="1759057896866" data-listing-reading-time-sort="7" data-listing-word-count-sort="1306">
+<div class="thumbnail"><a href="./posts/Classwork3/Classwork3.html" class="no-external">
+
+<p class="card-img-top"><img src="posts\Classwork3\Classwork3_files\figure-html\unnamed-chunk-17-1.png"  class="thumbnail-image card-img"/></p>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/Classwork3/Classwork3.html" class="no-external">Classwork3</a>
+</h3>
+<div class="delink listing-description"><a href="./posts/Classwork3/Classwork3.html" class="no-external">
+<strong>Variable type: character</strong>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/Classwork3/Classwork3.html" class="no-external">
+<div class="listing-author">
+SwethaKV
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="5" data-listing-file-modified-sort="1758008651823" data-listing-reading-time-sort="1" data-listing-word-count-sort="76">
+<div class="thumbnail"><a href="./posts/Classwork3.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/Classwork3.html" class="no-external">Classwork3</a>
+</h3>
+<div class="delink listing-description"><a href="./posts/Classwork3.html" class="no-external">
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see https://quarto.org.
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/Classwork3.html" class="no-external">
+<div class="listing-author">
+SwethaKV
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="6" data-listing-file-modified-sort="1758552185030" data-listing-reading-time-sort="1" data-listing-word-count-sort="136">
+<div class="thumbnail"><a href="./posts/Horrormovies/horrormovies.html" class="no-external">
+
+<p class="card-img-top"><img src="posts\Horrormovies\horrormovies_files\figure-html\unnamed-chunk-3-1.png"  class="thumbnail-image card-img"/></p>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/Horrormovies/horrormovies.html" class="no-external">horrormovies</a>
+</h3>
+<div class="delink listing-description"><a href="./posts/Horrormovies/horrormovies.html" class="no-external">
+
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu">library</span> (tidyverse)</span></code></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔…</code></pre></div><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><span class="fu"></span><span class="co"></span></span></code></pre></div><div class="cell-output cell-output-stderr"><pre><code></code></pre></div><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><span class="fu"></span><span class="co"></span></span></code></pre></div><div class="cell-output cell-output-stderr"><pre><code></code></pre></div><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><span class="fu"></span><span class="co"></span></span><span id="cb7-2"><span class="fu"></span><span class="co"></span></span></code></pre></div><div class="cell-output cell-output-stderr"><pre><code></code></pre></div><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><span class="fu"></span><span class="co"></span></span></code></pre></div><div class="cell-output cell-output-stderr"><pre><code></code></pre></div><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><span class="fu"></span><span class="co"></span></span></code></pre></div><div class="cell-output cell-output-stderr"><pre><code></code></pre></div>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/Horrormovies/horrormovies.html" class="no-external">
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="7" data-listing-file-modified-sort="1758470070751" data-listing-reading-time-sort="1" data-listing-word-count-sort="35">
+<div class="thumbnail"><a href="./posts/Indianfood/Indianfood.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/Indianfood/Indianfood.html" class="no-external">Indianfood</a>
+</h3>
+<div class="delink listing-description"><a href="./posts/Indianfood/Indianfood.html" class="no-external">
+
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.2
+✔ ggplot2 …</code></pre></div>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/Indianfood/Indianfood.html" class="no-external">
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="8" data-listing-file-modified-sort="1758049517936" data-listing-reading-time-sort="1" data-listing-word-count-sort="199">
+<div class="thumbnail"><a href="./posts/Messy/messy.html" class="no-external">
+
+<p class="card-img-top"><img src="posts\Messy\messy_files\figure-html\unnamed-chunk-3-1.png"  class="thumbnail-image card-img"/></p>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/Messy/messy.html" class="no-external">messy</a>
+</h3>
+<div class="delink listing-description"><a href="./posts/Messy/messy.html" class="no-external">
+
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.2
+✔ ggplot2 …</code></pre></div>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/Messy/messy.html" class="no-external">
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="9" data-listing-file-modified-sort="1758709015615" data-listing-reading-time-sort="1" data-listing-word-count-sort="38">
+<div class="thumbnail"><a href="./posts/ufo/ufo.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/ufo/ufo.html" class="no-external">ufo</a>
+</h3>
+<div class="delink listing-description"><a href="./posts/ufo/ufo.html" class="no-external">
+
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu">library</span> (tidyverse)</span></code></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔…</code></pre></div><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><span class="fu"></span><span class="co"></span></span></code></pre></div><div class="cell-output cell-output-stderr"><pre><code></code></pre></div><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><span class="fu"></span><span class="co"></span></span></code></pre></div><div class="cell-output cell-output-stderr"><pre><code></code></pre></div><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><span class="fu"></span><span class="co"></span></span><span id="cb7-2"><span class="fu"></span><span class="co"></span></span></code></pre></div><div class="cell-output cell-output-stderr"><pre><code></code></pre></div><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><span class="fu"></span><span class="co"></span></span></code></pre></div><div class="cell-output cell-output-stderr"><pre><code></code></pre></div><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><span class="fu"></span><span class="co"></span></span></code></pre></div><div class="cell-output cell-output-stderr"><pre><code></code></pre></div><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><span class="fu"></span></span><span id="cb13-2"><span class="fu"></span></span></code></pre></div>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/ufo/ufo.html" class="no-external">
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="10" data-categories="bmV3cyUyQ2NvZGUlMkNhbmFseXNpcw==" data-listing-date-sort="1757874600000" data-listing-file-modified-sort="1757942613527" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="9">
 <div class="thumbnail"><a href="./posts/post-with-code/index.html" class="no-external">
 
 <img loading="lazy" src="./posts/post-with-code/image.jpg" class="thumbnail-image">
@@ -240,7 +468,7 @@ Harlow Malloc
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="1" data-categories="bmV3cw==" data-listing-date-sort="1757615400000" data-listing-file-modified-sort="1757942613521" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="32">
+<div class="quarto-post image-right" data-index="11" data-categories="bmV3cw==" data-listing-date-sort="1757615400000" data-listing-file-modified-sort="1757942613521" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="32">
 <div class="thumbnail"><a href="./posts/welcome/index.html" class="no-external">
 
 <p class="card-img-top"><img src="posts\welcome\thumbnail.jpg"  class="thumbnail-image card-img"/></p>
