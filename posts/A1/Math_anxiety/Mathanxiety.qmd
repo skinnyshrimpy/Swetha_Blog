@@ -1,5 +1,7 @@
 ---
-title: "Mathanxiety"
+title: "A1 Mathanxiety Dataset"
+Categories: [Math Anxiety]
+Author: "Swetha, Diya, Aanya and Abhinav"
 format: html
 ---
 
@@ -22,8 +24,6 @@ library(tinytable)
 library(ggformula)
 library(DT)
 library(ggridges)
-library(shiny)
-library(shinydashboard)
 library(ggridges)
 library(corrplot)
 library(TeachHist)
@@ -718,45 +718,7 @@ meth_modified %>% ggplot() +
 
 
 ```
-```{r}
-# In tried something on my own!!
-#i got help from https://www.rdocumentation.org/packages/shinyr/versions/0.4.2
-ui <- fluidPage(
-  titlePanel("Interactive Histogram of Math Anxiety Data"),
-  sidebarLayout(
-    sidebarPanel(
-      selectInput("variable",
-                  "Choose variable:",
-                  choices = c("Age" = "age", "AMAS" = "amas", "RCMAS" = "rcmas")),
-      sliderInput("bins",
-                  "Number of bins:",
-                  min = 10,
-                  max = 50,
-                  value = 30)
-    ),
-    mainPanel(
-      plotOutput("distPlot")
-    )
-  )
-)
 
-server <- function(input, output) {
-  output$distPlot <- renderPlot({
-    meth_modified %>%
-      ggplot(aes(x = .data[[input$variable]])) +
-      geom_histogram(bins = input$bins, fill = "steelblue", color = "white", alpha = 0.7) +
-      labs(
-        title = paste("Histogram of", input$variable),
-        x = input$variable,
-        y = "Count"
-      ) +
-      theme_minimal()
-  })
-}
-
-shinyApp(ui = ui, server = server)
-
-```
 ```{r}
 ggplot(meth_modified, aes(x = gender, y = amas, fill = gender)) +
   geom_boxplot() +
