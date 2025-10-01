@@ -3,13 +3,12 @@
     "listing": "/index.html",
     "items": [
       "/posts/Classwork3/Classwork3.knit.html",
-      "/posts/Indianfood/Indianfood.html",
-      "/posts/Messy/messy.html",
       "/posts/A1/Fertility/Fertility_final.html",
       "/posts/A1/Math_anxiety/MathAnxiety_V2.html",
       "/posts/A1/ufo/ufo.html",
       "/posts/Classwork3/Classwork3.html",
-      "/posts/Classwork2/Classwork2_qmd.html"
+      "/posts/Classwork2/Classwork2_qmd.html",
+      "/posts/Messy/messy.html"
     ]
   }
 ]
