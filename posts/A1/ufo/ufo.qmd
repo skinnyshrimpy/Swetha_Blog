@@ -1,7 +1,8 @@
 ---
 title: "A1 UFO Dataset"
-Categories: [UFO]
-Author: "Swetha KV, Diya Bijoy, Abhinav R, Aanya Pandith"
+author: "Swetha KV, Diya Bijoy, Abhinav R, Aanya Pandith"
+date: "2025-09-28"
+categories: [UFO]
 format: html
 ---
 # 2. UFO Data set

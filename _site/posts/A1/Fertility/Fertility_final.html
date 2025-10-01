@@ -6,6 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Swetha KV, Diya Bijoy, Abhinav R, Aanya Pandith">
+<meta name="dcterms.date" content="2025-09-28">
 
 <title>A1 Fertility Dataset – Swetha_Blog</title>
 <style>
@@ -154,13 +156,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
       <h1 class="title">A1 Fertility Dataset</h1>
-                      </div>
+                                <div class="quarto-categories">
+                <div class="quarto-category">Fertility</div>
+              </div>
+                  </div>
   </div>
     
   
   <div class="quarto-title-meta">
 
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Swetha KV, Diya Bijoy, Abhinav R, Aanya Pandith </p>
+            </div>
+    </div>
       
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">September 28, 2025</p>
+      </div>
+    </div>
     
       
     </div>
@@ -443,27 +460,30 @@ $ work     &lt;dbl&gt; 0, 30, 0, 0, 22, 40, 0, 52, 0, 0, 0, 52, 52, 52, 8, 7, 0,
 <div class="cell">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>Fertility_ethnicity <span class="ot">&lt;-</span> Fertility <span class="sc">%&gt;%</span></span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ethnicity =</span> <span class="fu">case_when</span>(</span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>    afam <span class="sc">==</span> <span class="st">"yes"</span> <span class="sc">~</span> <span class="st">"African-American"</span>,</span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>    hispanic <span class="sc">==</span> <span class="st">"yes"</span> <span class="sc">~</span> <span class="st">"Hispanic"</span>,</span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>    other <span class="sc">==</span> <span class="st">"yes"</span> <span class="sc">~</span> <span class="st">"Other"</span>,</span>
-<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>    afam <span class="sc">==</span> <span class="st">"no"</span> <span class="sc">&amp;</span> hispanic <span class="sc">==</span> <span class="st">"no"</span> <span class="sc">&amp;</span> other <span class="sc">==</span> <span class="st">"no"</span> <span class="sc">~</span> <span class="st">"Caucasian"</span></span>
-<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>  ))</span>
-<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>Fertility_ethnicity</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>    afam <span class="sc">==</span> <span class="st">"yes"</span> <span class="sc">&amp;</span> hispanic <span class="sc">==</span> <span class="st">"no"</span> <span class="sc">&amp;</span> other <span class="sc">==</span> <span class="st">"no"</span> <span class="sc">~</span> <span class="st">"AFAM"</span>,</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>    afam <span class="sc">==</span> <span class="st">"no"</span> <span class="sc">&amp;</span> hispanic <span class="sc">==</span> <span class="st">"yes"</span> <span class="sc">&amp;</span> other <span class="sc">==</span> <span class="st">"no"</span> <span class="sc">~</span> <span class="st">"Hispanic"</span>,</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>    afam <span class="sc">==</span> <span class="st">"no"</span> <span class="sc">&amp;</span> hispanic <span class="sc">==</span> <span class="st">"no"</span> <span class="sc">&amp;</span> other <span class="sc">==</span> <span class="st">"yes"</span> <span class="sc">~</span> <span class="st">"Other"</span>,</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>    afam <span class="sc">==</span> <span class="st">"no"</span> <span class="sc">&amp;</span> hispanic <span class="sc">==</span> <span class="st">"no"</span> <span class="sc">&amp;</span> other <span class="sc">==</span> <span class="st">"no"</span> <span class="sc">~</span> <span class="st">"Caucasian"</span>,</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>     afam <span class="sc">==</span> <span class="st">"yes"</span> <span class="sc">&amp;</span> hispanic <span class="sc">==</span> <span class="st">"yes"</span> <span class="sc">&amp;</span> other <span class="sc">==</span> <span class="st">"no"</span> <span class="sc">~</span> <span class="st">"AFAMHispanic"</span>,</span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>     afam <span class="sc">==</span> <span class="st">"yes"</span> <span class="sc">&amp;</span> hispanic <span class="sc">==</span> <span class="st">"no"</span> <span class="sc">&amp;</span> other <span class="sc">==</span> <span class="st">"yes"</span> <span class="sc">~</span> <span class="st">"AFAMOther"</span>,</span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>     afam <span class="sc">==</span> <span class="st">"no"</span> <span class="sc">&amp;</span> hispanic <span class="sc">==</span> <span class="st">"yes"</span> <span class="sc">&amp;</span> other <span class="sc">==</span> <span class="st">"yes"</span> <span class="sc">~</span> <span class="st">"HispanicOther"</span></span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>  ))</span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>Fertility_ethnicity</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 254,654 × 10
-   rownames morekids gender1 gender2   age afam  hispanic other  work ethnicity 
-      &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;     
- 1        1 no       male    female     27 no    no       no        0 Caucasian 
- 2        2 no       female  male       30 no    no       no       30 Caucasian 
- 3        3 no       male    female     27 no    no       no        0 Caucasian 
- 4        4 no       male    female     35 yes   no       no        0 African-A…
- 5        5 no       female  female     30 no    no       no       22 Caucasian 
- 6        6 no       male    female     26 no    no       no       40 Caucasian 
- 7        7 no       female  male       29 no    no       no        0 Caucasian 
- 8        8 no       male    male       33 no    no       no       52 Caucasian 
- 9        9 no       female  male       29 no    no       no        0 Caucasian 
-10       10 no       male    female     27 no    no       no        0 Caucasian 
+   rownames morekids gender1 gender2   age afam  hispanic other  work ethnicity
+      &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;    
+ 1        1 no       male    female     27 no    no       no        0 Caucasian
+ 2        2 no       female  male       30 no    no       no       30 Caucasian
+ 3        3 no       male    female     27 no    no       no        0 Caucasian
+ 4        4 no       male    female     35 yes   no       no        0 AFAM     
+ 5        5 no       female  female     30 no    no       no       22 Caucasian
+ 6        6 no       male    female     26 no    no       no       40 Caucasian
+ 7        7 no       female  male       29 no    no       no        0 Caucasian
+ 8        8 no       male    male       33 no    no       no       52 Caucasian
+ 9        9 no       female  male       29 no    no       no        0 Caucasian
+10       10 no       male    female     27 no    no       no        0 Caucasian
 # ℹ 254,644 more rows</code></pre>
 </div>
 </div>
@@ -485,7 +505,7 @@ $ gender2   &lt;fct&gt; female, male, female, female, female, female, male, male
 $ afam      &lt;fct&gt; no, no, no, yes, no, no, no, no, no, no, no, no, no, no, no,…
 $ hispanic  &lt;fct&gt; no, no, no, no, no, no, no, no, no, no, no, no, no, no, no, …
 $ other     &lt;fct&gt; no, no, no, no, no, no, no, no, no, no, no, no, no, no, no, …
-$ ethnicity &lt;fct&gt; Caucasian, Caucasian, Caucasian, African-American, Caucasian…
+$ ethnicity &lt;fct&gt; Caucasian, Caucasian, Caucasian, AFAM, Caucasian, Caucasian,…
 $ age       &lt;dbl&gt; 27, 30, 27, 35, 30, 26, 29, 33, 29, 27, 28, 28, 35, 34, 32, …
 $ work      &lt;dbl&gt; 0, 30, 0, 0, 22, 40, 0, 52, 0, 0, 0, 52, 52, 52, 8, 7, 0, 40…</code></pre>
 </div>
@@ -517,8 +537,8 @@ $ work      &lt;dbl&gt; 0, 30, 0, 0, 22, 40, 0, 52, 0, 0, 0, 52, 52, 52, 8, 7, 0
 
     <script>
 
-      function styleCell_8wubmi0z4i2ez5tcehfj(i, j, css_id) {
-          var table = document.getElementById("tinytable_8wubmi0z4i2ez5tcehfj");
+      function styleCell_s6lek4e7lczfgefxfm9c(i, j, css_id) {
+          var table = document.getElementById("tinytable_s6lek4e7lczfgefxfm9c");
           var cell = table.querySelector(`[data-row="${i}"][data-col="${j}"]`);
           if (cell) {
               console.log(`Styling cell at (${i}, ${j}) with class ${css_id}`);
@@ -527,8 +547,8 @@ $ work      &lt;dbl&gt; 0, 30, 0, 0, 22, 40, 0, 52, 0, 0, 0, 52, 52, 52, 8, 7, 0
               console.warn(`Cell at (${i}, ${j}) not found.`);
           }
       }
-      function spanCell_8wubmi0z4i2ez5tcehfj(i, j, rowspan, colspan) {
-        var table = document.getElementById("tinytable_8wubmi0z4i2ez5tcehfj");
+      function spanCell_s6lek4e7lczfgefxfm9c(i, j, rowspan, colspan) {
+        var table = document.getElementById("tinytable_s6lek4e7lczfgefxfm9c");
         const targetCell = table.querySelector(`[data-row="${i}"][data-col="${j}"]`);
         if (!targetCell) {
           console.warn(`Cell at (${i}, ${j}) not found.`);
@@ -559,14 +579,14 @@ $ work      &lt;dbl&gt; 0, 30, 0, 0, 22, 40, 0, 52, 0, 0, 0, 52, 52, 52, 8, 7, 0
       window.addEventListener('load', function () {
           var cellsToStyle = [
             // tinytable style arrays after
-          { positions: [ { i: '2', j: 0 }, { i: '2', j: 1 }, { i: '2', j: 2 },  ], css_id: 'tinytable_css_vkvsqk5lz3f82dzlgpp2',}, 
-          { positions: [ { i: '0', j: 0 }, { i: '0', j: 1 }, { i: '0', j: 2 },  ], css_id: 'tinytable_css_45cwvu4xl666c4ldstu9',}, 
+          { positions: [ { i: '2', j: 0 }, { i: '2', j: 1 }, { i: '2', j: 2 },  ], css_id: 'tinytable_css_pwrhqtq4n8wirb597ifh',}, 
+          { positions: [ { i: '0', j: 0 }, { i: '0', j: 1 }, { i: '0', j: 2 },  ], css_id: 'tinytable_css_tf1ka7q19jsf77aotbg3',}, 
           ];
 
           // Loop over the arrays to style the cells
           cellsToStyle.forEach(function (group) {
               group.positions.forEach(function (cell) {
-                  styleCell_8wubmi0z4i2ez5tcehfj(cell.i, cell.j, group.css_id);
+                  styleCell_s6lek4e7lczfgefxfm9c(cell.i, cell.j, group.css_id);
               });
           });
       });
@@ -574,11 +594,11 @@ $ work      &lt;dbl&gt; 0, 30, 0, 0, 22, 40, 0, 52, 0, 0, 0, 52, 52, 52, 8, 7, 0
 
     <style>
       /* tinytable css entries after */
-      .table td.tinytable_css_vkvsqk5lz3f82dzlgpp2, .table th.tinytable_css_vkvsqk5lz3f82dzlgpp2 { border-bottom: solid #d3d8dc 0.1em; }
-      .table td.tinytable_css_45cwvu4xl666c4ldstu9, .table th.tinytable_css_45cwvu4xl666c4ldstu9 { border-top: solid #d3d8dc 0.1em; border-bottom: solid #d3d8dc 0.05em; }
+      .table td.tinytable_css_pwrhqtq4n8wirb597ifh, .table th.tinytable_css_pwrhqtq4n8wirb597ifh { border-bottom: solid #d3d8dc 0.1em; }
+      .table td.tinytable_css_tf1ka7q19jsf77aotbg3, .table th.tinytable_css_tf1ka7q19jsf77aotbg3 { border-top: solid #d3d8dc 0.1em; border-bottom: solid #d3d8dc 0.05em; }
     </style>
     <div class="container">
-      <table class="table table-borderless" id="tinytable_8wubmi0z4i2ez5tcehfj" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
+      <table class="table table-borderless" id="tinytable_s6lek4e7lczfgefxfm9c" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
         <thead>
         
               <tr>
@@ -611,7 +631,7 @@ $ work      &lt;dbl&gt; 0, 30, 0, 0, 22, 40, 0, 52, 0, 0, 0, 52, 52, 52, 8, 7, 0
 <span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
 <span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>  crosstable<span class="sc">::</span><span class="fu">as_flextable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div class="tabwid"><style>.cl-bfd31354{table-layout:auto;}.cl-bfc8f0c2{font-family:'Arial';font-size:11pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-bfc8f0e0{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-bfcc3048{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-bfcc3052{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-bfcd82fe{background-color:transparent;vertical-align: middle;border-bottom: 1pt solid rgba(0, 0, 0, 1.00);border-top: 1.5pt solid rgba(0, 0, 0, 1.00);border-left: 1pt solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-bfcd82ff{background-color:transparent;vertical-align: middle;border-bottom: 1pt solid rgba(0, 0, 0, 1.00);border-top: 1.5pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-bfcd8308{background-color:transparent;vertical-align: middle;border-bottom: 1pt solid rgba(0, 0, 0, 1.00);border-top: 1.5pt solid rgba(0, 0, 0, 1.00);border-left: 1pt solid rgba(0, 0, 0, 1.00);border-right: 1pt solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-bfcd8309{background-color:transparent;vertical-align: middle;border-bottom: 1pt solid rgba(0, 0, 0, 1.00);border-top: 1.5pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 1pt solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-bfcd8312{background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(0, 0, 0, 1.00);border-top: 1pt solid rgba(0, 0, 0, 1.00);border-left: 1pt solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-bfcd8313{background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(0, 0, 0, 1.00);border-top: 1pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-bfcd831c{background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(0, 0, 0, 1.00);border-top: 1pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 1pt solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-bfcd831d{background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 1pt solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-bfcd8326{background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-bfcd8327{background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 1pt solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-bfcd8328{background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 1pt solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-bfcd8329{background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-bfcd832a{background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 1pt solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style><table data-quarto-disable-processing="true" class="cl-bfd31354"><thead><tr style="overflow-wrap:break-word;"><th colspan="2" class="cl-bfcd82fe"><p class="cl-bfcc3048"><span class="cl-bfc8f0c2">gender1</span></p></th><th colspan="2" class="cl-bfcd82fe"><p class="cl-bfcc3048"><span class="cl-bfc8f0c2">female</span></p></th><th colspan="2" class="cl-bfcd8308"><p class="cl-bfcc3048"><span class="cl-bfc8f0c2">male</span></p></th></tr><tr style="overflow-wrap:break-word;"><th colspan="2" class="cl-bfcd8312"><p class="cl-bfcc3048"><span class="cl-bfc8f0c2">gender2</span></p></th><th class="cl-bfcd8312"><p class="cl-bfcc3048"><span class="cl-bfc8f0c2">female</span></p></th><th class="cl-bfcd8313"><p class="cl-bfcc3048"><span class="cl-bfc8f0c2">male</span></p></th><th class="cl-bfcd8312"><p class="cl-bfcc3048"><span class="cl-bfc8f0c2">female</span></p></th><th class="cl-bfcd831c"><p class="cl-bfcc3048"><span class="cl-bfc8f0c2">male</span></p></th></tr></thead><tbody><tr style="overflow-wrap:break-word;"><td rowspan="2" class="cl-bfcd831d"><p class="cl-bfcc3052"><span class="cl-bfc8f0e0">morekids</span></p></td><td class="cl-bfcd8326"><p class="cl-bfcc3052"><span class="cl-bfc8f0e0">no</span></p></td><td class="cl-bfcd8327"><p class="cl-bfcc3052"><span class="cl-bfc8f0e0">35057 (22.22%)</span></p></td><td class="cl-bfcd8326"><p class="cl-bfcc3052"><span class="cl-bfc8f0e0">40987 (25.98%)</span></p></td><td class="cl-bfcd8327"><p class="cl-bfcc3052"><span class="cl-bfc8f0e0">41304 (26.18%)</span></p></td><td class="cl-bfcd8328"><p class="cl-bfcc3052"><span class="cl-bfc8f0e0">40394 (25.61%)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-bfcd8329"><p class="cl-bfcc3052"><span class="cl-bfc8f0e0">yes</span></p></td><td class="cl-bfcd831d"><p class="cl-bfcc3052"><span class="cl-bfc8f0e0">25889 (26.71%)</span></p></td><td class="cl-bfcd8329"><p class="cl-bfcc3052"><span class="cl-bfc8f0e0">21737 (22.43%)</span></p></td><td class="cl-bfcd831d"><p class="cl-bfcc3052"><span class="cl-bfc8f0e0">21881 (22.58%)</span></p></td><td class="cl-bfcd832a"><p class="cl-bfcc3052"><span class="cl-bfc8f0e0">27405 (28.28%)</span></p></td></tr></tbody></table></div>
+<div class="tabwid"><style>.cl-15dd6c0a{table-layout:auto;}.cl-15b8f4e2{font-family:'Arial';font-size:11pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-15b8f514{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-15c81620{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-15c8163e{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-15c8b29c{background-color:transparent;vertical-align: middle;border-bottom: 1pt solid rgba(0, 0, 0, 1.00);border-top: 1.5pt solid rgba(0, 0, 0, 1.00);border-left: 1pt solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-15c8b2ba{background-color:transparent;vertical-align: middle;border-bottom: 1pt solid rgba(0, 0, 0, 1.00);border-top: 1.5pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-15c8b2c4{background-color:transparent;vertical-align: middle;border-bottom: 1pt solid rgba(0, 0, 0, 1.00);border-top: 1.5pt solid rgba(0, 0, 0, 1.00);border-left: 1pt solid rgba(0, 0, 0, 1.00);border-right: 1pt solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-15c8b2ce{background-color:transparent;vertical-align: middle;border-bottom: 1pt solid rgba(0, 0, 0, 1.00);border-top: 1.5pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 1pt solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-15c8b2d8{background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(0, 0, 0, 1.00);border-top: 1pt solid rgba(0, 0, 0, 1.00);border-left: 1pt solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-15c8b2e2{background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(0, 0, 0, 1.00);border-top: 1pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-15c8b2ec{background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(0, 0, 0, 1.00);border-top: 1pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 1pt solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-15c8b2f6{background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 1pt solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-15c8b300{background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-15c8b301{background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 1pt solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-15c8b30a{background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 1pt solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-15c8b314{background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-15c8b315{background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 1pt solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style><table data-quarto-disable-processing="true" class="cl-15dd6c0a"><thead><tr style="overflow-wrap:break-word;"><th colspan="2" class="cl-15c8b29c"><p class="cl-15c81620"><span class="cl-15b8f4e2">gender1</span></p></th><th colspan="2" class="cl-15c8b29c"><p class="cl-15c81620"><span class="cl-15b8f4e2">female</span></p></th><th colspan="2" class="cl-15c8b2c4"><p class="cl-15c81620"><span class="cl-15b8f4e2">male</span></p></th></tr><tr style="overflow-wrap:break-word;"><th colspan="2" class="cl-15c8b2d8"><p class="cl-15c81620"><span class="cl-15b8f4e2">gender2</span></p></th><th class="cl-15c8b2d8"><p class="cl-15c81620"><span class="cl-15b8f4e2">female</span></p></th><th class="cl-15c8b2e2"><p class="cl-15c81620"><span class="cl-15b8f4e2">male</span></p></th><th class="cl-15c8b2d8"><p class="cl-15c81620"><span class="cl-15b8f4e2">female</span></p></th><th class="cl-15c8b2ec"><p class="cl-15c81620"><span class="cl-15b8f4e2">male</span></p></th></tr></thead><tbody><tr style="overflow-wrap:break-word;"><td rowspan="2" class="cl-15c8b2f6"><p class="cl-15c8163e"><span class="cl-15b8f514">morekids</span></p></td><td class="cl-15c8b300"><p class="cl-15c8163e"><span class="cl-15b8f514">no</span></p></td><td class="cl-15c8b301"><p class="cl-15c8163e"><span class="cl-15b8f514">35057 (22.22%)</span></p></td><td class="cl-15c8b300"><p class="cl-15c8163e"><span class="cl-15b8f514">40987 (25.98%)</span></p></td><td class="cl-15c8b301"><p class="cl-15c8163e"><span class="cl-15b8f514">41304 (26.18%)</span></p></td><td class="cl-15c8b30a"><p class="cl-15c8163e"><span class="cl-15b8f514">40394 (25.61%)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-15c8b314"><p class="cl-15c8163e"><span class="cl-15b8f514">yes</span></p></td><td class="cl-15c8b2f6"><p class="cl-15c8163e"><span class="cl-15b8f514">25889 (26.71%)</span></p></td><td class="cl-15c8b314"><p class="cl-15c8163e"><span class="cl-15b8f514">21737 (22.43%)</span></p></td><td class="cl-15c8b2f6"><p class="cl-15c8163e"><span class="cl-15b8f514">21881 (22.58%)</span></p></td><td class="cl-15c8b315"><p class="cl-15c8163e"><span class="cl-15b8f514">27405 (28.28%)</span></p></td></tr></tbody></table></div>
 </div>
 </div>
 <div class="cell">
@@ -620,20 +640,29 @@ $ work      &lt;dbl&gt; 0, 30, 0, 0, 22, 40, 0, 52, 0, 0, 0, 52, 52, 52, 8, 7, 0
 <span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
 <span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>  crosstable<span class="sc">::</span><span class="fu">as_flextable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div class="tabwid"><style>.cl-c005db40{table-layout:auto;}.cl-bffb0c6a{font-family:'Arial';font-size:11pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-bffb0c7e{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-bffdf704{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-bffdf718{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-bffe1338{background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(0, 0, 0, 1.00);border-top: 1.5pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-bffe1342{background-color:transparent;vertical-align: middle;border-bottom: 1pt solid rgba(0, 0, 0, 1.00);border-top: 1.5pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-bffe134c{background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(0, 0, 0, 1.00);border-top: 1pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-bffe134d{background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-bffe134e{background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style><table data-quarto-disable-processing="true" class="cl-c005db40"><thead><tr style="overflow-wrap:break-word;"><th rowspan="2" class="cl-bffe1338"><p class="cl-bffdf704"><span class="cl-bffb0c6a">label</span></p></th><th rowspan="2" class="cl-bffe1338"><p class="cl-bffdf704"><span class="cl-bffb0c6a">variable</span></p></th><th colspan="2" class="cl-bffe1342"><p class="cl-bffdf704"><span class="cl-bffb0c6a">morekids</span></p></th></tr><tr style="overflow-wrap:break-word;"><th class="cl-bffe134c"><p class="cl-bffdf704"><span class="cl-bffb0c6a">no</span></p></th><th class="cl-bffe134c"><p class="cl-bffdf704"><span class="cl-bffb0c6a">yes</span></p></th></tr></thead><tbody><tr style="overflow-wrap:break-word;"><td rowspan="4" class="cl-bffe134d"><p class="cl-bffdf718"><span class="cl-bffb0c7e">ethnicity</span></p></td><td class="cl-bffe134e"><p class="cl-bffdf718"><span class="cl-bffb0c7e">African-American</span></p></td><td class="cl-bffe134e"><p class="cl-bffdf718"><span class="cl-bffb0c7e">7131 (54.20%)</span></p></td><td class="cl-bffe134e"><p class="cl-bffdf718"><span class="cl-bffb0c7e">6025 (45.80%)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-bffe134e"><p class="cl-bffdf718"><span class="cl-bffb0c7e">Caucasian</span></p></td><td class="cl-bffe134e"><p class="cl-bffdf718"><span class="cl-bffb0c7e">137344 (63.58%)</span></p></td><td class="cl-bffe134e"><p class="cl-bffdf718"><span class="cl-bffb0c7e">78689 (36.42%)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-bffe134e"><p class="cl-bffdf718"><span class="cl-bffb0c7e">Hispanic</span></p></td><td class="cl-bffe134e"><p class="cl-bffdf718"><span class="cl-bffb0c7e">9084 (48.57%)</span></p></td><td class="cl-bffe134e"><p class="cl-bffdf718"><span class="cl-bffb0c7e">9617 (51.43%)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-bffe134d"><p class="cl-bffdf718"><span class="cl-bffb0c7e">Other</span></p></td><td class="cl-bffe134d"><p class="cl-bffdf718"><span class="cl-bffb0c7e">4183 (61.84%)</span></p></td><td class="cl-bffe134d"><p class="cl-bffdf718"><span class="cl-bffb0c7e">2581 (38.16%)</span></p></td></tr></tbody></table></div>
+<div class="tabwid"><style>.cl-165bf87c{table-layout:auto;}.cl-164865b4{font-family:'Arial';font-size:11pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-164865c8{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-165176c2{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-165176d6{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-1651c172{background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(0, 0, 0, 1.00);border-top: 1.5pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-1651c17c{background-color:transparent;vertical-align: middle;border-bottom: 1pt solid rgba(0, 0, 0, 1.00);border-top: 1.5pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-1651c186{background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(0, 0, 0, 1.00);border-top: 1pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-1651c190{background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-1651c19a{background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style><table data-quarto-disable-processing="true" class="cl-165bf87c"><thead><tr style="overflow-wrap:break-word;"><th rowspan="2" class="cl-1651c172"><p class="cl-165176c2"><span class="cl-164865b4">label</span></p></th><th rowspan="2" class="cl-1651c172"><p class="cl-165176c2"><span class="cl-164865b4">variable</span></p></th><th colspan="2" class="cl-1651c17c"><p class="cl-165176c2"><span class="cl-164865b4">morekids</span></p></th></tr><tr style="overflow-wrap:break-word;"><th class="cl-1651c186"><p class="cl-165176c2"><span class="cl-164865b4">no</span></p></th><th class="cl-1651c186"><p class="cl-165176c2"><span class="cl-164865b4">yes</span></p></th></tr></thead><tbody><tr style="overflow-wrap:break-word;"><td rowspan="6" class="cl-1651c190"><p class="cl-165176d6"><span class="cl-164865c8">ethnicity</span></p></td><td class="cl-1651c19a"><p class="cl-165176d6"><span class="cl-164865c8">AFAM</span></p></td><td class="cl-1651c19a"><p class="cl-165176d6"><span class="cl-164865c8">7027 (54.22%)</span></p></td><td class="cl-1651c19a"><p class="cl-165176d6"><span class="cl-164865c8">5933 (45.78%)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-1651c19a"><p class="cl-165176d6"><span class="cl-164865c8">AFAMHispanic</span></p></td><td class="cl-1651c19a"><p class="cl-165176d6"><span class="cl-164865c8">104 (53.06%)</span></p></td><td class="cl-1651c19a"><p class="cl-165176d6"><span class="cl-164865c8">92 (46.94%)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-1651c19a"><p class="cl-165176d6"><span class="cl-164865c8">Caucasian</span></p></td><td class="cl-1651c19a"><p class="cl-165176d6"><span class="cl-164865c8">137344 (63.58%)</span></p></td><td class="cl-1651c19a"><p class="cl-165176d6"><span class="cl-164865c8">78689 (36.42%)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-1651c19a"><p class="cl-165176d6"><span class="cl-164865c8">Hispanic</span></p></td><td class="cl-1651c19a"><p class="cl-165176d6"><span class="cl-164865c8">5562 (50.03%)</span></p></td><td class="cl-1651c19a"><p class="cl-165176d6"><span class="cl-164865c8">5555 (49.97%)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-1651c19a"><p class="cl-165176d6"><span class="cl-164865c8">HispanicOther</span></p></td><td class="cl-1651c19a"><p class="cl-165176d6"><span class="cl-164865c8">3522 (46.44%)</span></p></td><td class="cl-1651c19a"><p class="cl-165176d6"><span class="cl-164865c8">4062 (53.56%)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-1651c190"><p class="cl-165176d6"><span class="cl-164865c8">Other</span></p></td><td class="cl-1651c190"><p class="cl-165176d6"><span class="cl-164865c8">4183 (61.84%)</span></p></td><td class="cl-1651c190"><p class="cl-165176d6"><span class="cl-164865c8">2581 (38.16%)</span></p></td></tr></tbody></table></div>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>Fertility_ethnicity_factor <span class="sc">%&gt;%</span> </span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(morekids) <span class="sc">%&gt;%</span> </span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">average_workhours =</span> <span class="fu">mean</span>(work)) <span class="sc">%&gt;%</span> <span class="fu">tt</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">crosstable</span>(ethnicity <span class="sc">~</span> gender1 <span class="sc">+</span> gender2,</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> Fertility_ethnicity_factor</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>  crosstable<span class="sc">::</span><span class="fu">as_flextable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="tabwid"><style>.cl-171c546e{table-layout:auto;}.cl-170a43fa{font-family:'Arial';font-size:11pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-170a4418{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-1711b4a0{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-1711b4be{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-1711f910{background-color:transparent;vertical-align: middle;border-bottom: 1pt solid rgba(0, 0, 0, 1.00);border-top: 1.5pt solid rgba(0, 0, 0, 1.00);border-left: 1pt solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-1711f924{background-color:transparent;vertical-align: middle;border-bottom: 1pt solid rgba(0, 0, 0, 1.00);border-top: 1.5pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-1711f925{background-color:transparent;vertical-align: middle;border-bottom: 1pt solid rgba(0, 0, 0, 1.00);border-top: 1.5pt solid rgba(0, 0, 0, 1.00);border-left: 1pt solid rgba(0, 0, 0, 1.00);border-right: 1pt solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-1711f92e{background-color:transparent;vertical-align: middle;border-bottom: 1pt solid rgba(0, 0, 0, 1.00);border-top: 1.5pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 1pt solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-1711f938{background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(0, 0, 0, 1.00);border-top: 1pt solid rgba(0, 0, 0, 1.00);border-left: 1pt solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-1711f942{background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(0, 0, 0, 1.00);border-top: 1pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-1711f94c{background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(0, 0, 0, 1.00);border-top: 1pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 1pt solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-1711f94d{background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 1pt solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-1711f956{background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-1711f960{background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 1pt solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-1711f96a{background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 1pt solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-1711f974{background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-1711f97e{background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 1pt solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style><table data-quarto-disable-processing="true" class="cl-171c546e"><thead><tr style="overflow-wrap:break-word;"><th colspan="2" class="cl-1711f910"><p class="cl-1711b4a0"><span class="cl-170a43fa">gender2</span></p></th><th colspan="2" class="cl-1711f910"><p class="cl-1711b4a0"><span class="cl-170a43fa">female</span></p></th><th colspan="2" class="cl-1711f925"><p class="cl-1711b4a0"><span class="cl-170a43fa">male</span></p></th></tr><tr style="overflow-wrap:break-word;"><th colspan="2" class="cl-1711f938"><p class="cl-1711b4a0"><span class="cl-170a43fa">gender1</span></p></th><th class="cl-1711f938"><p class="cl-1711b4a0"><span class="cl-170a43fa">female</span></p></th><th class="cl-1711f942"><p class="cl-1711b4a0"><span class="cl-170a43fa">male</span></p></th><th class="cl-1711f938"><p class="cl-1711b4a0"><span class="cl-170a43fa">female</span></p></th><th class="cl-1711f94c"><p class="cl-1711b4a0"><span class="cl-170a43fa">male</span></p></th></tr></thead><tbody><tr style="overflow-wrap:break-word;"><td rowspan="6" class="cl-1711f94d"><p class="cl-1711b4be"><span class="cl-170a4418">ethnicity</span></p></td><td class="cl-1711f956"><p class="cl-1711b4be"><span class="cl-170a4418">AFAM</span></p></td><td class="cl-1711f960"><p class="cl-1711b4be"><span class="cl-170a4418">3141 (24.24%)</span></p></td><td class="cl-1711f956"><p class="cl-1711b4be"><span class="cl-170a4418">3267 (25.21%)</span></p></td><td class="cl-1711f960"><p class="cl-1711b4be"><span class="cl-170a4418">3223 (24.87%)</span></p></td><td class="cl-1711f96a"><p class="cl-1711b4be"><span class="cl-170a4418">3329 (25.69%)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-1711f956"><p class="cl-1711b4be"><span class="cl-170a4418">AFAMHispanic</span></p></td><td class="cl-1711f960"><p class="cl-1711b4be"><span class="cl-170a4418">47 (23.98%)</span></p></td><td class="cl-1711f956"><p class="cl-1711b4be"><span class="cl-170a4418">54 (27.55%)</span></p></td><td class="cl-1711f960"><p class="cl-1711b4be"><span class="cl-170a4418">39 (19.90%)</span></p></td><td class="cl-1711f96a"><p class="cl-1711b4be"><span class="cl-170a4418">56 (28.57%)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-1711f956"><p class="cl-1711b4be"><span class="cl-170a4418">Caucasian</span></p></td><td class="cl-1711f960"><p class="cl-1711b4be"><span class="cl-170a4418">51638 (23.90%)</span></p></td><td class="cl-1711f956"><p class="cl-1711b4be"><span class="cl-170a4418">53465 (24.75%)</span></p></td><td class="cl-1711f960"><p class="cl-1711b4be"><span class="cl-170a4418">53215 (24.63%)</span></p></td><td class="cl-1711f96a"><p class="cl-1711b4be"><span class="cl-170a4418">57715 (26.72%)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-1711f956"><p class="cl-1711b4be"><span class="cl-170a4418">Hispanic</span></p></td><td class="cl-1711f960"><p class="cl-1711b4be"><span class="cl-170a4418">2718 (24.45%)</span></p></td><td class="cl-1711f956"><p class="cl-1711b4be"><span class="cl-170a4418">2806 (25.24%)</span></p></td><td class="cl-1711f960"><p class="cl-1711b4be"><span class="cl-170a4418">2708 (24.36%)</span></p></td><td class="cl-1711f96a"><p class="cl-1711b4be"><span class="cl-170a4418">2885 (25.95%)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-1711f956"><p class="cl-1711b4be"><span class="cl-170a4418">HispanicOther</span></p></td><td class="cl-1711f960"><p class="cl-1711b4be"><span class="cl-170a4418">1830 (24.13%)</span></p></td><td class="cl-1711f956"><p class="cl-1711b4be"><span class="cl-170a4418">1880 (24.79%)</span></p></td><td class="cl-1711f960"><p class="cl-1711b4be"><span class="cl-170a4418">1863 (24.56%)</span></p></td><td class="cl-1711f96a"><p class="cl-1711b4be"><span class="cl-170a4418">2011 (26.52%)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-1711f974"><p class="cl-1711b4be"><span class="cl-170a4418">Other</span></p></td><td class="cl-1711f94d"><p class="cl-1711b4be"><span class="cl-170a4418">1572 (23.24%)</span></p></td><td class="cl-1711f974"><p class="cl-1711b4be"><span class="cl-170a4418">1713 (25.33%)</span></p></td><td class="cl-1711f94d"><p class="cl-1711b4be"><span class="cl-170a4418">1676 (24.78%)</span></p></td><td class="cl-1711f97e"><p class="cl-1711b4be"><span class="cl-170a4418">1803 (26.66%)</span></p></td></tr></tbody></table></div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>Fertility_ethnicity_factor <span class="sc">%&gt;%</span> </span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(morekids) <span class="sc">%&gt;%</span> </span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">average_workhours =</span> <span class="fu">mean</span>(work)) <span class="sc">%&gt;%</span> <span class="fu">tt</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <!-- preamble start -->
 
     <script>
 
-      function styleCell_zi221ssqrm363r05slou(i, j, css_id) {
-          var table = document.getElementById("tinytable_zi221ssqrm363r05slou");
+      function styleCell_as4dabrg4g0rrpxmbntc(i, j, css_id) {
+          var table = document.getElementById("tinytable_as4dabrg4g0rrpxmbntc");
           var cell = table.querySelector(`[data-row="${i}"][data-col="${j}"]`);
           if (cell) {
               console.log(`Styling cell at (${i}, ${j}) with class ${css_id}`);
@@ -642,8 +671,8 @@ $ work      &lt;dbl&gt; 0, 30, 0, 0, 22, 40, 0, 52, 0, 0, 0, 52, 52, 52, 8, 7, 0
               console.warn(`Cell at (${i}, ${j}) not found.`);
           }
       }
-      function spanCell_zi221ssqrm363r05slou(i, j, rowspan, colspan) {
-        var table = document.getElementById("tinytable_zi221ssqrm363r05slou");
+      function spanCell_as4dabrg4g0rrpxmbntc(i, j, rowspan, colspan) {
+        var table = document.getElementById("tinytable_as4dabrg4g0rrpxmbntc");
         const targetCell = table.querySelector(`[data-row="${i}"][data-col="${j}"]`);
         if (!targetCell) {
           console.warn(`Cell at (${i}, ${j}) not found.`);
@@ -674,14 +703,14 @@ $ work      &lt;dbl&gt; 0, 30, 0, 0, 22, 40, 0, 52, 0, 0, 0, 52, 52, 52, 8, 7, 0
       window.addEventListener('load', function () {
           var cellsToStyle = [
             // tinytable style arrays after
-          { positions: [ { i: '2', j: 0 }, { i: '2', j: 1 },  ], css_id: 'tinytable_css_fod98l8wxoz5r1acjvju',}, 
-          { positions: [ { i: '0', j: 0 }, { i: '0', j: 1 },  ], css_id: 'tinytable_css_rxqgla8i9yrfd1wl7n3r',}, 
+          { positions: [ { i: '2', j: 0 }, { i: '2', j: 1 },  ], css_id: 'tinytable_css_ngdtf7j7d5ps1opy52go',}, 
+          { positions: [ { i: '0', j: 0 }, { i: '0', j: 1 },  ], css_id: 'tinytable_css_qg0n0itqw4j9eq7g2war',}, 
           ];
 
           // Loop over the arrays to style the cells
           cellsToStyle.forEach(function (group) {
               group.positions.forEach(function (cell) {
-                  styleCell_zi221ssqrm363r05slou(cell.i, cell.j, group.css_id);
+                  styleCell_as4dabrg4g0rrpxmbntc(cell.i, cell.j, group.css_id);
               });
           });
       });
@@ -689,11 +718,11 @@ $ work      &lt;dbl&gt; 0, 30, 0, 0, 22, 40, 0, 52, 0, 0, 0, 52, 52, 52, 8, 7, 0
 
     <style>
       /* tinytable css entries after */
-      .table td.tinytable_css_fod98l8wxoz5r1acjvju, .table th.tinytable_css_fod98l8wxoz5r1acjvju { border-bottom: solid #d3d8dc 0.1em; }
-      .table td.tinytable_css_rxqgla8i9yrfd1wl7n3r, .table th.tinytable_css_rxqgla8i9yrfd1wl7n3r { border-top: solid #d3d8dc 0.1em; border-bottom: solid #d3d8dc 0.05em; }
+      .table td.tinytable_css_ngdtf7j7d5ps1opy52go, .table th.tinytable_css_ngdtf7j7d5ps1opy52go { border-bottom: solid #d3d8dc 0.1em; }
+      .table td.tinytable_css_qg0n0itqw4j9eq7g2war, .table th.tinytable_css_qg0n0itqw4j9eq7g2war { border-top: solid #d3d8dc 0.1em; border-bottom: solid #d3d8dc 0.05em; }
     </style>
     <div class="container">
-      <table class="table table-borderless" id="tinytable_zi221ssqrm363r05slou" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
+      <table class="table table-borderless" id="tinytable_as4dabrg4g0rrpxmbntc" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
         <thead>
         
               <tr>
@@ -729,22 +758,22 @@ $ work      &lt;dbl&gt; 0, 30, 0, 0, 22, 40, 0, 52, 0, 0, 0, 52, 52, 52, 8, 7, 0
 <section id="dodge-bar-graph" class="level4">
 <h4 class="anchored" data-anchor-id="dodge-bar-graph">Dodge Bar Graph</h4>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>Fertility_ethnicity_factor <span class="sc">%&gt;%</span></span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_bar</span>(<span class="sc">~</span><span class="fu">interaction</span>(gender1,gender2),</span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="sc">~</span>morekids,</span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">position =</span> <span class="st">"dodge"</span></span>
-<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(</span>
-<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Morekids vs Gender Composition"</span>,</span>
-<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"How morekids is being effected based on current gender of kids"</span>,</span>
-<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">x=</span><span class="st">"Gender of First Two Children"</span>,</span>
-<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">y=</span><span class="st">"Count of Families"</span></span>
-<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_refine</span>(<span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">"Set1"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>Fertility_ethnicity_factor <span class="sc">%&gt;%</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_bar</span>(<span class="sc">~</span><span class="fu">interaction</span>(gender1,gender2),</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="sc">~</span>morekids,</span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">position =</span> <span class="st">"dodge"</span></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(</span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Morekids vs Gender Composition"</span>,</span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"How morekids is being effected based on current gender of kids"</span>,</span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">x=</span><span class="st">"Gender of First Two Children"</span>,</span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">y=</span><span class="st">"Count of Families"</span></span>
+<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_refine</span>(<span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">"Set1"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Fertility_final_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Fertility_final_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -753,22 +782,22 @@ $ work      &lt;dbl&gt; 0, 30, 0, 0, 22, 40, 0, 52, 0, 0, 0, 52, 52, 52, 8, 7, 0
 <section id="fill-bar-graph" class="level4">
 <h4 class="anchored" data-anchor-id="fill-bar-graph">Fill Bar Graph</h4>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>Fertility_ethnicity_factor <span class="sc">%&gt;%</span></span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_bar</span>(<span class="sc">~</span><span class="fu">interaction</span>(gender1,gender2),</span>
-<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="sc">~</span>morekids,</span>
-<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">position =</span> <span class="st">"fill"</span></span>
-<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(</span>
-<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Morekids vs Gender Composition"</span>,</span>
-<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"How morekids is being effected based on current gender of kids"</span>,</span>
-<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">x=</span><span class="st">"Gender of First Two Children"</span>,</span>
-<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">y=</span><span class="st">"Count of yes and no"</span></span>
-<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_refine</span>(<span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">"Set1"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>Fertility_ethnicity_factor <span class="sc">%&gt;%</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_bar</span>(<span class="sc">~</span><span class="fu">interaction</span>(gender1,gender2),</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="sc">~</span>morekids,</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">position =</span> <span class="st">"fill"</span></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(</span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Morekids vs Gender Composition"</span>,</span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"How morekids is being effected based on current gender of kids"</span>,</span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">x=</span><span class="st">"Gender of First Two Children"</span>,</span>
+<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">y=</span><span class="st">"Count of yes and no"</span></span>
+<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_refine</span>(<span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">"Set1"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Fertility_final_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Fertility_final_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -791,39 +820,18 @@ $ work      &lt;dbl&gt; 0, 30, 0, 0, 22, 40, 0, 52, 0, 0, 0, 52, 52, 52, 8, 7, 0
 <section id="histogram" class="level4">
 <h4 class="anchored" data-anchor-id="histogram">Histogram</h4>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_histogram</span>(<span class="sc">~</span>work,</span>
-<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> Fertility_ethnicity_factor,</span>
-<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">bins =</span> <span class="dv">26</span>,                </span>
-<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">fill =</span> <span class="sc">~</span>morekids,         </span>
-<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">position =</span> <span class="st">"dodge"</span>        </span>
-<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
-<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(</span>
-<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Distribution of Work Weeks by More Kids"</span>,</span>
-<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Number of Work Weeks in 1979 for Mothers with or without more kids"</span>,</span>
-<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Work weeks in 1979"</span>,</span>
-<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Count of yes or no"</span>,</span>
-<span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Fertility_final_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
-<section id="line-graph" class="level4">
-<h4 class="anchored" data-anchor-id="line-graph">Line graph</h4>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>Fertility_ethnicity_factor <span class="sc">%&gt;%</span></span>
-<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(morekids, work) <span class="sc">%&gt;%</span> </span>
-<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_line</span>(n <span class="sc">~</span> work, <span class="at">color =</span> <span class="sc">~</span>morekids, <span class="at">linewidth =</span> <span class="fl">0.8</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(</span>
-<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Distribution of Work Weeks by More Kids"</span>,</span>
-<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Number of Work Weeks in 1979 for Mothers with or without more kids"</span>,</span>
-<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Work weeks in 1979"</span>,</span>
-<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Count of yes or no"</span></span>
-<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_histogram</span>(<span class="sc">~</span>work,</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> Fertility_ethnicity_factor,</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">bins =</span> <span class="dv">26</span>,                </span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">fill =</span> <span class="sc">~</span>morekids,         </span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">position =</span> <span class="st">"dodge"</span>        </span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(</span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Distribution of Work Weeks by More Kids"</span>,</span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Number of Work Weeks in 1979 for Mothers with or without more kids"</span>,</span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Work weeks in 1979"</span>,</span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Count of yes or no"</span>,</span>
+<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -833,19 +841,40 @@ $ work      &lt;dbl&gt; 0, 30, 0, 0, 22, 40, 0, 52, 0, 0, 0, 52, 52, 52, 8, 7, 0
 </div>
 </div>
 </section>
-<section id="box-plot" class="level4">
-<h4 class="anchored" data-anchor-id="box-plot">Box Plot</h4>
+<section id="line-graph" class="level4">
+<h4 class="anchored" data-anchor-id="line-graph">Line graph</h4>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>Fertility_ethnicity_factor <span class="sc">%&gt;%</span> </span>
-<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_boxplot</span>(morekids <span class="sc">~</span> work, <span class="at">orientation =</span> <span class="st">"y"</span>, <span class="at">fill=</span><span class="sc">~</span>morekids, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">y =</span> <span class="st">"More kids"</span>, </span>
-<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">x =</span> <span class="st">"Work weeks in 1979"</span>, </span>
-<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">title =</span> <span class="st">"Distribution of Work Weeks by More Kids"</span>,</span>
-<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">subtitle =</span> <span class="st">"Number of Work Weeks in 1979 for Mothers with or without more kids"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>Fertility_ethnicity_factor <span class="sc">%&gt;%</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(morekids, work) <span class="sc">%&gt;%</span> </span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_line</span>(n <span class="sc">~</span> work, <span class="at">color =</span> <span class="sc">~</span>morekids, <span class="at">linewidth =</span> <span class="fl">0.8</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(</span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Distribution of Work Weeks by More Kids"</span>,</span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Number of Work Weeks in 1979 for Mothers with or without more kids"</span>,</span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Work weeks in 1979"</span>,</span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Count of yes or no"</span></span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
 <p><img src="Fertility_final_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="box-plot" class="level4">
+<h4 class="anchored" data-anchor-id="box-plot">Box Plot</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>Fertility_ethnicity_factor <span class="sc">%&gt;%</span> </span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_boxplot</span>(morekids <span class="sc">~</span> work, <span class="at">orientation =</span> <span class="st">"y"</span>, <span class="at">fill=</span><span class="sc">~</span>morekids, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">y =</span> <span class="st">"More kids"</span>, </span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">x =</span> <span class="st">"Work weeks in 1979"</span>, </span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">title =</span> <span class="st">"Distribution of Work Weeks by More Kids"</span>,</span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">subtitle =</span> <span class="st">"Number of Work Weeks in 1979 for Mothers with or without more kids"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Fertility_final_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -867,42 +896,66 @@ $ work      &lt;dbl&gt; 0, 30, 0, 0, 22, 40, 0, 52, 0, 0, 0, 52, 52, 52, 8, 7, 0
 <p>Overall insight: The <em>“no more kids”</em> category <em>is the largest overall</em> especially among <em>non working mothers</em>. This shows most people in 1979 had only 2 kids.</p>
 </section>
 </section>
+<section id="ethnicity-vs-gender" class="level3">
+<h3 class="anchored" data-anchor-id="ethnicity-vs-gender">3. Ethnicity vs Gender</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>Fertility_ethnicity_factor <span class="sc">%&gt;%</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_bar</span>(<span class="sc">~</span>ethnicity <span class="sc">|</span> <span class="fu">interaction</span>(gender1,gender2),</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="sc">~</span><span class="fu">interaction</span>(gender1,gender2),</span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">position =</span> <span class="st">"dodge"</span></span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(</span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Ethnicity vs Gender Composition"</span>,</span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"How morekids is being effected based on current gender of kids"</span>,</span>
+<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">x=</span><span class="st">"Gender of First Two Children"</span>,</span>
+<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">y=</span><span class="st">"Count of Families"</span></span>
+<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb47-12"><a href="#cb47-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_refine</span>(<span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">"Set2"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Fertility_final_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
 <section id="more-kids-vs-age" class="level3">
-<h3 class="anchored" data-anchor-id="more-kids-vs-age">2. More kids vs Age</h3>
+<h3 class="anchored" data-anchor-id="more-kids-vs-age">3. More kids vs Age</h3>
 <ul>
 <li>Hypothesis: Older women would have more kids.</li>
 </ul>
 <section id="density-distribution-graph" class="level4">
 <h4 class="anchored" data-anchor-id="density-distribution-graph">Density Distribution Graph</h4>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>Fertility_ethnicity_factor <span class="sc">%&gt;%</span></span>
-<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_density</span>(<span class="sc">~</span>age, <span class="at">color =</span> <span class="sc">~</span>morekids, <span class="at">fill =</span> <span class="sc">~</span>morekids) <span class="sc">%&gt;%</span></span>
-<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(</span>
-<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Distribution of Age by More Kids"</span>,</span>
-<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Ages of Mothers with or without more kids"</span>,</span>
-<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Age of Mothers"</span>,</span>
-<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Density"</span>,</span>
-<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"More Kids"</span>,</span>
-<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"More Kids"</span></span>
-<span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>Fertility_ethnicity_factor <span class="sc">%&gt;%</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_density</span>(<span class="sc">~</span>age, <span class="at">color =</span> <span class="sc">~</span>morekids, <span class="at">fill =</span> <span class="sc">~</span>morekids) <span class="sc">%&gt;%</span></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(</span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Distribution of Age by More Kids"</span>,</span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Ages of Mothers with or without more kids"</span>,</span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Age of Mothers"</span>,</span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Density"</span>,</span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"More Kids"</span>,</span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"More Kids"</span></span>
+<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Fertility_final_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Fertility_final_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>Fertility_ethnicity_factor <span class="sc">%&gt;%</span> </span>
-<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_boxplot</span>(morekids <span class="sc">~</span> age, <span class="at">orientation =</span> <span class="st">"y"</span>, <span class="at">fill=</span><span class="sc">~</span>morekids, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">y =</span> <span class="st">"Morekids"</span>, <span class="at">x =</span> <span class="st">"Age of Mothers"</span>, </span>
-<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">title =</span> <span class="st">"Distribution of Age by More Kids"</span>,</span>
-<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">subtitle =</span> <span class="st">"Ages of Mothers with or without more kids"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>Fertility_ethnicity_factor <span class="sc">%&gt;%</span> </span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_boxplot</span>(morekids <span class="sc">~</span> age, <span class="at">orientation =</span> <span class="st">"y"</span>, <span class="at">fill=</span><span class="sc">~</span>morekids, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">y =</span> <span class="st">"Morekids"</span>, <span class="at">x =</span> <span class="st">"Age of Mothers"</span>, </span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">title =</span> <span class="st">"Distribution of Age by More Kids"</span>,</span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">subtitle =</span> <span class="st">"Ages of Mothers with or without more kids"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Fertility_final_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Fertility_final_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -927,21 +980,21 @@ $ work      &lt;dbl&gt; 0, 30, 0, 0, 22, 40, 0, 52, 0, 0, 0, 52, 52, 52, 8, 7, 0
 <section id="dodge-bar-graph-1" class="level4">
 <h4 class="anchored" data-anchor-id="dodge-bar-graph-1">Dodge Bar Graph</h4>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>Fertility_ethnicity_factor <span class="sc">%&gt;%</span></span>
-<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(ethnicity, morekids) <span class="sc">%&gt;%</span>  </span>
-<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_col</span>(n <span class="sc">~</span> ethnicity, <span class="at">fill =</span> <span class="sc">~</span>morekids, <span class="at">position =</span> <span class="st">"dodge"</span>) <span class="sc">%&gt;%</span>  </span>
-<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(</span>
-<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Ethnic Group Distribution by More Kids"</span>,</span>
-<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Count of Respondents who have More Children "</span>,</span>
-<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Ethnic Group"</span>,</span>
-<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Number of People"</span>,</span>
-<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"More Kids"</span></span>
-<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_refine</span>(<span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">"Set2"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>Fertility_ethnicity_factor <span class="sc">%&gt;%</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(ethnicity, morekids) <span class="sc">%&gt;%</span>  </span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_col</span>(n <span class="sc">~</span> ethnicity, <span class="at">fill =</span> <span class="sc">~</span>morekids, <span class="at">position =</span> <span class="st">"dodge"</span>) <span class="sc">%&gt;%</span>  </span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(</span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Ethnic Group Distribution by More Kids"</span>,</span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Count of Respondents who have More Children "</span>,</span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Ethnic Group"</span>,</span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Number of People"</span>,</span>
+<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"More Kids"</span></span>
+<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb50-11"><a href="#cb50-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_refine</span>(<span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">"Set2"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Fertility_final_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Fertility_final_files/figure-html/unnamed-chunk-26-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -950,21 +1003,21 @@ $ work      &lt;dbl&gt; 0, 30, 0, 0, 22, 40, 0, 52, 0, 0, 0, 52, 52, 52, 8, 7, 0
 <section id="fill-bar-graph-1" class="level4">
 <h4 class="anchored" data-anchor-id="fill-bar-graph-1">Fill Bar Graph</h4>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>Fertility_ethnicity_factor <span class="sc">%&gt;%</span></span>
-<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(ethnicity, morekids) <span class="sc">%&gt;%</span>  </span>
-<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_col</span>(n <span class="sc">~</span> ethnicity, <span class="at">fill =</span> <span class="sc">~</span>morekids, <span class="at">position =</span> <span class="st">"fill"</span>) <span class="sc">%&gt;%</span>  </span>
-<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(</span>
-<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Ethnic Group Distribution by More Kids"</span>,</span>
-<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Count of Respondents who have More Children "</span>,</span>
-<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Ethnic Group"</span>,</span>
-<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Number of People"</span>,</span>
-<span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"More Kids"</span></span>
-<span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb49-11"><a href="#cb49-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_refine</span>(<span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">"Set2"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>Fertility_ethnicity_factor <span class="sc">%&gt;%</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(ethnicity, morekids) <span class="sc">%&gt;%</span>  </span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_col</span>(n <span class="sc">~</span> ethnicity, <span class="at">fill =</span> <span class="sc">~</span>morekids, <span class="at">position =</span> <span class="st">"fill"</span>) <span class="sc">%&gt;%</span>  </span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(</span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Ethnic Group Distribution by More Kids"</span>,</span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Count of Respondents who have More Children "</span>,</span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Ethnic Group"</span>,</span>
+<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Number of People"</span>,</span>
+<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"More Kids"</span></span>
+<span id="cb51-10"><a href="#cb51-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb51-11"><a href="#cb51-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_refine</span>(<span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">"Set2"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Fertility_final_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Fertility_final_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>

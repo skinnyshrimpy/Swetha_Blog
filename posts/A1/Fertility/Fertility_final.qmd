@@ -1,10 +1,10 @@
 ---
 title: "A1 Fertility Dataset"
-Categories: [Fertility]
-Author: "Swetha KV, Diya Bijoy, Abhinav R, Aanya Pandith"
+author: "Swetha KV, Diya Bijoy, Abhinav R, Aanya Pandith"
+date: "2025-09-28"
+categories: [Fertility]
 format: html
 ---
-
 # 1. Fertility Data set
 
 ## Setting up R Packages
