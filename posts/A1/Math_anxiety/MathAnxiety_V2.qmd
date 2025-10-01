@@ -1,0 +1,551 @@
+---
+title: "Fertility Dataset"
+author: "Swetha KV, Diya Bijoy, Abhinav R, Aanya Pandith"
+date: "2025-09-28"
+categories: [Math Anxiety]
+---quarti
+
+# Math Anxiety Data set
+
+Math, math, math… for some an absolute nightmare for others the holy grail of existence. Let’s break it down
+
+![](MathAnx.jpg)
+
+## Data Cleaning
+
+This section handles loading the dataset, cleaning missing values, and initial transformations like converting variables to factors.
+
+Load necessary libraries for data manipulation, visualization, and interactive elements.
+
+### **Setting up R Packages**
+
+```{r}
+library(tidyverse)
+library(mosaic)
+library(skimr)
+library(visdat)
+library(naniar)
+library(janitor)
+library(tinytable)
+library(ggformula)
+library(DT)
+library(ggridges)
+library(corrplot)
+library(TeachHist)
+library(crosstable)
+library(RColorBrewer)
+```
+
+### **Read Data**
+
+```{r}
+meth <- readr::read_delim("MathAnxiety.csv",
+                          delim = ";",
+                          locale = locale(decimal_mark = ",")) %>% 
+  janitor::clean_names("snake") 
+meth
+```
+
+### *Data dictionary*
+
+*Age*: The age of the child in months.
+
+*Gender*: The gender of the child (Boy or Girl).
+
+*Grade*: The educational level of the child (Primary or Secondary).
+
+*AMAS*: The score on the Abbreviated Math Anxiety Scale, where a higher score indicates greater math anxiety.
+
+*RCMAS*: The score on the Revised Children's Manifest Anxiety Scale, measuring general anxiety.
+
+*Arith*: The score on an arithmetic test.
+
+## Examine Data
+
+This section inspects the dataset structure, summaries, counts, and missing values through various diagnostic functions.
+
+```{r}
+summary(meth)
+```
+
+```{r}
+skimr::skim(meth)
+```
+
+Show the structure of the dataset including data types.
+
+```{r}
+str(meth)
+```
+
+Count occurrences by gender.
+
+```{r}
+count(meth, gender)
+```
+
+Return the dimensions of the dataset.
+
+```{r}
+dim(meth)
+```
+
+List the column names of the dataset.
+
+```{r}
+base::names(meth)
+```
+
+Provide a glimpse of the dataset showing types and sample value
+
+```{r}
+dplyr::glimpse(meth)
+```
+
+Replace common NA representations with actual NA values in the dataset.
+
+```{r}
+meth_modified <- meth %>%
+  naniar::replace_with_na_all(data = ., condition = ~ .x %in% common_na_numbers) %>%
+  naniar::replace_with_na_all(data = ., condition = ~ .x %in% common_na_strings)
+glimpse(meth_modified)
+```
+
+## Viewing Missing Data
+
+```{r}
+visdat::vis_miss(meth_modified)
+visdat::vis_dat(meth_modified)
+```
+
+## Munging
+
+This section performs further data wrangling, such as binning age and factoring variables.
+
+Convert gender and grade to factors and relocate them before age for better organization.
+
+```{r}
+meth_modified <- meth_modified %>%
+  mutate(
+    gender = as.factor(gender),
+    grade = as.factor(grade),
+  ) %>%
+  dplyr::relocate(where(is.factor), .before = age)
+glimpse(meth_modified)
+```
+
+```{r}
+meth_modified %>%
+  head(10) %>%
+  dplyr::rename(
+    "Gender" = gender,
+    "Grade" = grade,
+    "Age (months)" = age,
+    "AMAS (Math Anxiety)" = amas,
+    "RCMAS (General Anxiety)" = rcmas,
+    "Arithmetic Score" = arith
+  ) %>%
+  tt()
+```
+
+## Summaries: Examining the Data
+
+```{r}
+meth_modified %>% dplyr::count(across(.cols = c(gender, grade)))
+```
+
+```{r}
+meth_modified %>%
+  dplyr::summarise(
+    mean_amas = mean(amas, na.rm = T),
+    sd_amas = sd(amas, na.rm = T),
+    min_amas = min(amas, na.rm = T),
+    max_amas = max(amas, na.rm = T)
+  )
+```
+
+```{r}
+meth_modified %>%
+  dplyr::summarise(across(
+    .cols = c(amas, rcmas), 
+
+    .fns = list(
+      mean = ~ mean(., na.rm = T),
+      sd = sd,
+      min = min, max = max
+    )
+  ))
+```
+
+```{r}
+meth_modified %>%
+  dplyr::summarise(
+    mean_arith = mean(arith, na.rm = T),
+    sd_arith = sd(arith, na.rm = T),
+    min_arith = min(arith, na.rm = T),
+    max_arith = max(arith, na.rm = T)
+  )
+```
+
+```{r}
+meth_modified %>%
+  dplyr::summarise(
+    mean_age = mean(age, na.rm = T),
+    sd_age = sd(age, na.rm = T),
+    min_age = min(age, na.rm = T),
+    max_age = max(age, na.rm = T)
+  )
+```
+
+```{r}
+meth_modified %>%
+  group_by(gender) %>%
+  dplyr::summarise(across(
+    .cols = c(age, amas, rcmas, arith),
+
+    .fns = list(
+      mean = ~ mean(., na.rm = T),
+      sd = sd,
+      min = min, max = max
+    )
+  ))
+```
+
+```{r}
+crosstable(age + rcmas + amas + arith ~ gender,
+  data = meth_modified
+) %>%
+  crosstable::as_flextable()
+```
+
+```{r}
+meth_modified %>%
+  group_by(gender) %>%
+  dplyr::summarise(across(
+    .cols = c(age, amas, rcmas, arith),
+
+    .fns = list(
+      mean = ~ mean(., na.rm = T),
+      sd = sd,
+      min = min, max = max
+    )
+  ))
+```
+
+```{r}
+meth_modified %>%
+  group_by(grade) %>%
+  dplyr::summarise(across(
+    .cols = c(age, amas, rcmas, arith),
+
+    .fns = list(
+      mean = ~ mean(., na.rm = T),
+      sd = sd,
+      min = min, max = max
+    )
+  ))
+```
+
+```{r}
+gf_histogram(~age, data = meth_modified) %>%
+  gf_labs(title = "Histogram of Age")
+```
+
+```{r}
+gf_histogram(~amas, data = meth_modified) %>%
+  gf_labs(title = "Histogram of AMAS")
+```
+
+```{r}
+gf_histogram(~rcmas, data = meth_modified) %>%
+  gf_labs(title = "Histogram of RCMAS")
+```
+
+```{r}
+gf_bar(~grade, data = meth_modified) %>%
+  gf_labs(title = "Bar Plot of Grade")
+```
+
+```{r}
+gf_bar(~gender, data = meth_modified) %>%
+  gf_labs(title = "Bar Plot of Gender")
+```
+
+## Visualizing the data
+
+### Grade Count for both Genders
+
+```{r}
+meth_modified %>%
+  gf_bar(~grade,
+         fill=~gender,
+         position = "dodge") +
+  labs(title = "Dodged Bar Chart", x ="Grade", y ="Count") +
+  scale_fill_brewer(palette = "Set2")
+```
+
+Why is the count reducing in secondary grade? Assuming lesser students have enrolled for Secondary grade compared to Primary grade.
+
+```{r}
+meth_modified %>%
+  gf_bar(~grade,
+         fill=~gender,
+         position = "stack") +
+  labs(title = "Stacked Bar Chart", x ="Grade", y ="Count") +
+  scale_fill_brewer(palette = "Set2")
+```
+
+Comparing Count of Girl's Grade
+
+```{r}
+meth_modified %>%
+  gf_bar(~grade,
+         fill=~gender,
+         position = "fill") +
+  labs(title = "Filled Bar Chart", x ="Grade", y ="Count") +
+  scale_fill_brewer(palette = "Set2")
+```
+
+### AMAS Scores based on Gender & Grade
+
+```{r}
+meth_modified %>% 
+  gf_histogram(~amas| grade~gender,
+               bins = 5,
+               fill = "steelblue",
+               color="white") %>% 
+  gf_labs(title="Histogram of AMAS Scores",
+          subtitle ="Faceted by Grade and Gender",
+          x="AMAS Score",
+          y="Count")
+```
+
+```{r}
+meth_modified %>% 
+  gf_histogram(~amas | grade,
+               fill=~grade,
+               colour="black") %>%
+  gf_labs(
+    title = "AMAS by Filled and Faceted by Grade")
+```
+
+```{r}
+meth_modified %>% 
+  gf_boxplot(amas~gender | grade,
+             fill=~gender,
+             orientation = "x") %>% 
+  gf_labs(title = "Boxplots of AMAS Scores by Grade",
+       subtitle = "Faceted by Grade",
+       x = "Gender",
+       y = "AMAS Score")
+```
+
+#### Inferences:-
+
+1.  Girls face more math anxiety: Box plots show higher medians, wider ranges. For girls, means are higher in both Primary & Secondary Grades.
+
+### RCMAS Scores based on Gender & Grade
+
+```{r}
+meth_modified %>% 
+  gf_histogram(~rcmas| grade~gender,
+               bins = 5,
+               fill = "steelblue",
+               color="white") %>% 
+  gf_labs(title="Histogram of RCMAS Scores",
+          subtitle ="Faceted by Grade and Gender",
+          x="RCMAS Score",
+          y="Count")
+```
+
+```{r}
+meth_modified %>% 
+  gf_histogram(~rcmas | grade,
+               fill=~grade,
+               colour="black") %>%
+  gf_labs(
+    title = "AMAS by Filled and Faceted by Grade")
+```
+
+```{r}
+meth_modified %>% 
+  gf_boxplot(rcmas~gender | grade,
+             fill=~gender,
+             orientation = "x") %>% 
+  gf_labs(title = "Boxplots of RCMAS Scores by Grade",
+       subtitle = "Faceted by Grade",
+       x = "Gender",
+       y = "RCMAS Score")
+```
+
+#### Overall Inferences
+
+-   Anxiety appears to be higher for Girls than for Boys
+
+-   Anxiety appears to be highest in Primary Girls
+
+-   Anxiety appears to be lowest in Secondary Boys
+
+### Arith Scores based on Gender & Grade
+
+```{r}
+meth_modified %>%
+  gf_bar(~arith | grade,
+               fill = ~gender,
+               position="dodge",
+               color="black") %>% 
+  gf_labs(title = "Dodged Bar Graph of Arith Scores",
+       subtitle = "Faceted by Grade",
+       x = "Arith Score",
+       y = "Count") %>% 
+  gf_refine(scale_color_brewer(palette = "Set 2"))
+```
+
+#### Inferences:
+
+1.  In general, girls have a lower arith score than boys.
+2.  In Primary Grade, it is seen that the difference between girls and boys score is less when compared to Secondary grade where the gap is bigger.
+
+```{r}
+meth_modified %>%
+  gf_bar(~arith | grade,
+               fill = ~gender,
+               position="fill",
+               color="black") %>% 
+  gf_labs(title = "Filled Bar Graph of Arith Scores",
+       subtitle = "Faceted by Grade",
+       x = "Arith Score",
+       y = "Count") %>% 
+  gf_refine(scale_color_brewer(palette = "Set 2"))
+```
+
+```{r}
+meth_modified %>% 
+  gf_bar(~arith | grade,
+               fill=~grade,
+               colour="black") %>%
+  gf_labs(
+    title = "Arith by Filled and Faceted by Grade",
+    x="Arith Scores",
+    y="Count")
+```
+
+#### Inferences:
+
+Primary Grade have higher arith scores than Secondary Grade.
+
+```{r}
+meth_modified %>% 
+  gf_boxplot(arith ~gender | grade,
+             fill=~gender,
+             orientation = "x") %>% 
+  gf_labs(title = "Boxplots of Arith Scores by Grade",
+       subtitle = "Faceted by Grade",
+       x = "Gender",
+       y = "Arith Score")
+```
+
+#### Inferences:
+
+1.  Primary grades ranges from 5 to 7 & Median is 6, while Secondary grades ranges from 3 to 6 & median is 4.
+2.  Secondary students lag in arithmetic: Box plots shows lower medians and wider ranges for Secondary Grade.
+
+### Arith Scores based on Age, Grade & Gender
+
+```{r}
+meth_modified %>%
+  gf_point(arith ~ age | gender, color = ~ grade) %>%
+  gf_labs(
+    title = "Scatter Plot of Age vs Arithmetic Score",
+    subtitle = "Faceted by Gender, Colored by Grade",
+    x = "Age",
+    y = "Arithmetic Score",
+    color = "Grade"
+  ) %>%
+  gf_refine(scale_color_brewer(palette = "Spectral")) %>% 
+  gf_theme(theme_dark())
+```
+
+#### Inferences:-
+
+1.  Scatter plots shows similar Arith trends across both genders, but girls tend to have higher AMAS.
+
+```{r}
+meth_modified %>% 
+  gf_boxplot(arith ~ grade | gender, orientation = "x", fill=~grade, color = "black") %>%
+ gf_labs(
+    x = "Grade",
+    y = "Arithmetic Score",
+    title = "Arithmetic Scores by Grade",
+    subtitle = "Faceted by Gender"
+  ) %>%
+  gf_refine(scale_fill_brewer(palette = "Set3")) %>%
+  gf_theme(theme_dark())
+
+```
+
+### Density Plot based on Age, Gender & Grade
+
+```{r}
+meth_modified %>%
+  gf_density(~ age | gender, fill = ~ grade, color="black") %>%
+  gf_labs(
+    title = "Density Plots of Age",
+    subtitle = "Faceted by Gender, Filled by Grade",
+    x = "Age",
+    y = "Density",
+    color = "Grade"
+  ) %>% 
+  gf_refine(scale_color_brewer(palette = "Set 3")) %>% 
+  gf_theme(theme_light())
+```
+
+### Comparing AMAS & RCMAS
+
+```{r}
+meth_modified %>%
+  gf_point(rcmas ~ amas, color = ~ gender, shape = ~ gender) %>%
+  gf_labs(
+    title = "Scatter Plot of Amas vs Rcmas",
+    subtitle = "Colored by Gender",
+    x = "Amas Score",
+    y = "Rcmas Score"
+  ) %>%
+  gf_refine(scale_color_brewer(palette = "Set1")) %>% 
+  gf_theme(theme_light())
+```
+
+#### Inferences:
+
+1.  In general, both Genders have higher amas and lower rcmas
+
+```{r}
+meth_modified %>%
+  gf_boxplot(rcmas ~ amas | gender~grade, fill =~gender, orientation = "y") %>%
+  gf_labs(
+    title = "Scatter Plot of Amas vs Rcmas",
+    subtitle = "Colored by Grade",
+    x = "Amas Score",
+    y = "Rcmas Score"
+  ) %>%
+  gf_refine(scale_color_brewer(palette = "Set2")) %>% 
+  gf_theme(theme_light())
+```
+
+#### Inferences:
+
+1.  As seen in the boxplot graphs, Boys tend to have a wider range of RCMAS than girls.
+2.  Comparing Primary and Secondary Boys -
+    -   Primary Boys have lower general anxiety (rcmas) and higher math anxiety (amas).
+    -   Secondary Boys have higher general anxiety (rcmas) and lower math anxiety (amas).
+3.  Comparing Primary and Secondary Girls -
+    -   Primary Girls have higher general anxiety(rcmas) and lower math anxiety (amas)
+    -   Secondary Girls have lower general anxiety (rcmas) and higher math anxiety (amas)
+4.  Comparing Primary Boys and Girls -
+    -   Boys have lesser median but wider range for math anxiety (amas)
+    -   Girls have higher median but narrower range for math anxiety (amas)
+    -   Boys & Girls have same range for general anxiety (rcmas)
+5.  Comparing Secondary Boys & Girls -
+    -   Boys have lesser median and narrower range for math anxiety (amas)
+    -   Girls have higher median and wider range for math anxiety (amas)
+    -   Boys have wider range of general anxiety compared to girls (rcmas)

@@ -1,7 +1,7 @@
 ---
 title: "A1 Fertility Dataset"
 Categories: [Fertility]
-Author: "Swetha, Diya, Aanya and Abhinav"
+Author: "Swetha KV, Diya Bijoy, Abhinav R, Aanya Pandith"
 format: html
 ---
 
@@ -72,12 +72,15 @@ Fertility %>% filter(afam == "no", hispanic == "no", other == "no")
 ```{r}
 Fertility_ethnicity <- Fertility %>%
   mutate(ethnicity = case_when(
-    afam == "yes" ~ "African-American",
-    hispanic == "yes" ~ "Hispanic",
-    other == "yes" ~ "Other",
-    afam == "no" & hispanic == "no" & other == "no" ~ "Caucasian"
+    afam == "yes" & hispanic == "no" & other == "no" ~ "AFAM",
+    afam == "no" & hispanic == "yes" & other == "no" ~ "Hispanic",
+    afam == "no" & hispanic == "no" & other == "yes" ~ "Other",
+    afam == "no" & hispanic == "no" & other == "no" ~ "Caucasian",
+     afam == "yes" & hispanic == "yes" & other == "no" ~ "AFAMHispanic",
+     afam == "yes" & hispanic == "no" & other == "yes" ~ "AFAMOther",
+     afam == "no" & hispanic == "yes" & other == "yes" ~ "HispanicOther"
   ))
-
+  
 Fertility_ethnicity
 ```
 
@@ -114,6 +117,12 @@ crosstable(morekids ~ gender2 + gender1,
 
 ```{r}
 crosstable(ethnicity ~ morekids,
+  data = Fertility_ethnicity_factor
+) %>%
+  crosstable::as_flextable()
+```
+```{r}
+crosstable(ethnicity ~ gender1 + gender2,
   data = Fertility_ethnicity_factor
 ) %>%
   crosstable::as_flextable()
@@ -233,7 +242,25 @@ Fertility_ethnicity_factor %>%
 
 Overall insight: The *"no more kids"* category *is the largest overall* especially among *non working mothers*. This shows most people in 1979 had only 2 kids.
 
-### 2. More kids vs Age
+### 3. Ethnicity vs Gender
+
+```{r}
+Fertility_ethnicity_factor %>%
+  gf_bar(~ethnicity | interaction(gender1,gender2),
+    fill = ~interaction(gender1,gender2),
+    position = "dodge"
+  ) %>%
+  gf_labs(
+    title = "Ethnicity vs Gender Composition",
+    subtitle = "How morekids is being effected based on current gender of kids",
+    x="Gender of First Two Children",
+    y="Count of Families"
+  ) %>%
+  gf_refine(scale_fill_brewer(palette = "Set2"))
+
+```
+
+### 3. More kids vs Age
 
 -   Hypothesis: Older women would have more kids.
 
