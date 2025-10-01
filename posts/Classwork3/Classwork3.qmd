@@ -1,6 +1,8 @@
 ---
-title: "Classwork3"
-author: "SwethaKV"
+title: "Classwork 3"
+author: "Swetha KV"
+date: "2025-09-22"
+categories: [Classwork 3]
 format: html
 ---
 ```{r}
