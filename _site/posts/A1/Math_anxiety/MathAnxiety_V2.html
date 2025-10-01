@@ -6,10 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Swetha KV, Diya Bijoy, Abhinav, Aanya Pandith">
+<meta name="author" content="Swetha KV, Diya Bijoy, Abhinav R, Aanya Pandith">
 <meta name="dcterms.date" content="2025-09-28">
 
-<title>Fertility Dataset – Swetha_Blog</title>
+<title>A1 Math Anxiety Dataset – Swetha_Blog</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -155,7 +155,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Fertility Dataset</h1>
+      <h1 class="title">A1 Math Anxiety Dataset</h1>
                                 <div class="quarto-categories">
                 <div class="quarto-category">Math Anxiety</div>
               </div>
@@ -168,7 +168,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Author</div>
       <div class="quarto-title-meta-contents">
-               <p>Swetha KV, Diya Bijoy, Abhinav, Aanya Pandith </p>
+               <p>Swetha KV, Diya Bijoy, Abhinav R, Aanya Pandith </p>
             </div>
     </div>
       
@@ -205,84 +205,119 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="setting-up-r-packages" class="level3">
 <h3 class="anchored" data-anchor-id="setting-up-r-packages"><strong>Setting up R Packages</strong></h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggformula)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-✔ dplyr     1.1.4     ✔ readr     2.1.5
-✔ forcats   1.0.0     ✔ stringr   1.5.2
-✔ ggplot2   4.0.0     ✔ tibble    3.3.0
-✔ lubridate 1.9.4     ✔ tidyr     1.3.1
-✔ purrr     1.1.0     
-── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-✖ dplyr::filter() masks stats::filter()
-✖ dplyr::lag()    masks stats::lag()
-ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+<pre><code>Loading required package: ggplot2</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mosaic)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Registered S3 method overwritten by 'mosaic':
-  method                           from   
-  fortify.SpatialPolygonsDataFrame ggplot2
-
-The 'mosaic' package masks several functions from core packages in order to add 
-additional features.  The original behavior of these functions should not be affected by this.
-
-Attaching package: 'mosaic'
-
-The following object is masked from 'package:Matrix':
-
-    mean
-
-The following objects are masked from 'package:dplyr':
-
-    count, do, tally
-
-The following object is masked from 'package:purrr':
-
-    cross
-
-The following object is masked from 'package:ggplot2':
-
-    stat
-
-The following objects are masked from 'package:stats':
-
-    binom.test, cor, cor.test, cov, fivenum, IQR, median, prop.test,
-    quantile, sd, t.test, var
-
-The following objects are masked from 'package:base':
-
-    max, mean, min, prod, range, sample, sum</code></pre>
+<pre><code>Loading required package: scales</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(skimr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: ggridges</code></pre>
+</div>
 <div class="cell-output cell-output-stderr">
 <pre><code>
-Attaching package: 'skimr'
-
-The following object is masked from 'package:mosaic':
-
-    n_missing</code></pre>
+New to ggformula?  Try the tutorials: 
+    learnr::run_tutorial("introduction", package = "ggformula")
+    learnr::run_tutorial("refining", package = "ggformula")</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(visdat)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(naniar)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(janitor)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>
-Attaching package: 'naniar'
-
-The following object is masked from 'package:skimr':
-
-    n_complete</code></pre>
+Attaching package: 'janitor'</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(janitor)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'janitor'
-
-The following objects are masked from 'package:stats':
+<pre><code>The following objects are masked from 'package:stats':
 
     chisq.test, fisher.test</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tinytable)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mosaic)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Registered S3 method overwritten by 'mosaic':
+  method                           from   
+  fortify.SpatialPolygonsDataFrame ggplot2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+The 'mosaic' package masks several functions from core packages in order to add 
+additional features.  The original behavior of these functions should not be affected by this.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'mosaic'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:dplyr':
+
+    count, do, tally</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:Matrix':
+
+    mean</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:scales':
+
+    rescale</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:ggplot2':
+
+    stat</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:stats':
+
+    binom.test, cor, cor.test, cov, fivenum, IQR, median, prop.test,
+    quantile, sd, t.test, var</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:base':
+
+    max, mean, min, prod, range, sample, sum</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(naniar)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(skimr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'skimr'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:naniar':
+
+    n_complete</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:mosaic':
+
+    n_missing</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ forcats   1.0.0     ✔ stringr   1.5.2
+✔ lubridate 1.9.4     ✔ tibble    3.3.0
+✔ purrr     1.1.0     ✔ tidyr     1.3.1
+✔ readr     2.1.5     </code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ readr::col_factor() masks scales::col_factor()
+✖ mosaic::count()     masks dplyr::count()
+✖ purrr::cross()      masks mosaic::cross()
+✖ purrr::discard()    masks scales::discard()
+✖ mosaic::do()        masks dplyr::do()
+✖ tidyr::expand()     masks Matrix::expand()
+✖ dplyr::filter()     masks stats::filter()
+✖ dplyr::lag()        masks stats::lag()
+✖ tidyr::pack()       masks Matrix::pack()
+✖ mosaic::stat()      masks ggplot2::stat()
+✖ mosaic::tally()     masks dplyr::tally()
+✖ tidyr::unpack()     masks Matrix::unpack()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tinytable)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>
 Attaching package: 'tinytable'
@@ -291,15 +326,8 @@ The following object is masked from 'package:ggplot2':
 
     theme_void</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggformula)</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DT)</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggridges)</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(corrplot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>corrplot 0.95 loaded</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(TeachHist)</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(crosstable)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(visdat)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(crosstable)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>
 Attaching package: 'crosstable'
@@ -308,16 +336,17 @@ The following object is masked from 'package:purrr':
 
     compact</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="read-data" class="level3">
-<h3 class="anchored" data-anchor-id="read-data"><strong>Read Data</strong></h3>
+</section>
+<section id="read-data" class="level2">
+<h2 class="anchored" data-anchor-id="read-data">Read Data</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>meth <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_delim</span>(<span class="st">"MathAnxiety.csv"</span>,</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>                          <span class="at">delim =</span> <span class="st">";"</span>,</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>                          <span class="at">locale =</span> <span class="fu">locale</span>(<span class="at">decimal_mark =</span> <span class="st">","</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  janitor<span class="sc">::</span><span class="fu">clean_names</span>(<span class="st">"snake"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>meth <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_delim</span>(<span class="st">"MathAnxiety.csv"</span>,</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>                          <span class="at">delim =</span> <span class="st">";"</span>,</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>                          <span class="at">locale =</span> <span class="fu">locale</span>(<span class="at">decimal_mark =</span> <span class="st">","</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  janitor<span class="sc">::</span><span class="fu">clean_names</span>(<span class="st">"snake"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Rows: 599 Columns: 6
 ── Column specification ────────────────────────────────────────────────────────
@@ -328,7 +357,7 @@ dbl (4): Age, AMAS, RCMAS, Arith
 ℹ Use `spec()` to retrieve the full column specification for this data.
 ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>meth</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>meth</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 599 × 6
      age gender grade      amas rcmas arith
@@ -347,21 +376,52 @@ dbl (4): Age, AMAS, RCMAS, Arith
 </div>
 </div>
 </section>
-<section id="data-dictionary" class="level3">
-<h3 class="anchored" data-anchor-id="data-dictionary"><em>Data dictionary</em></h3>
-<p><em>Age</em>: The age of the child in months.</p>
-<p><em>Gender</em>: The gender of the child (Boy or Girl).</p>
-<p><em>Grade</em>: The educational level of the child (Primary or Secondary).</p>
-<p><em>AMAS</em>: The score on the Abbreviated Math Anxiety Scale, where a higher score indicates greater math anxiety.</p>
-<p><em>RCMAS</em>: The score on the Revised Children’s Manifest Anxiety Scale, measuring general anxiety.</p>
-<p><em>Arith</em>: The score on an arithmetic test.</p>
-</section>
+<section id="data-dictionary" class="level2">
+<h2 class="anchored" data-anchor-id="data-dictionary">Data Dictionary</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Age</td>
+<td>The age of the child in months.</td>
+</tr>
+<tr class="even">
+<td>Gender</td>
+<td>The gender of the child (Boy or Girl).</td>
+</tr>
+<tr class="odd">
+<td>Grade</td>
+<td>The educational level of the child (Primary or Secondary).</td>
+</tr>
+<tr class="even">
+<td>AMAS</td>
+<td>The score on the Abbreviated Math Anxiety Scale, where a higher score indicates greater math anxiety.</td>
+</tr>
+<tr class="odd">
+<td>RCMAS</td>
+<td>The score on the Revised Children’s Manifest Anxiety Scale, measuring general anxiety</td>
+</tr>
+<tr class="even">
+<td>Arith</td>
+<td>The score on an arithmetic test.</td>
+</tr>
+</tbody>
+</table>
 </section>
 <section id="examine-data" class="level2">
 <h2 class="anchored" data-anchor-id="examine-data">Examine Data</h2>
 <p>This section inspects the dataset structure, summaries, counts, and missing values through various diagnostic functions.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(meth)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(meth)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>      age           gender             grade                amas      
  Min.   :  3.7   Length:599         Length:599         Min.   : 4.00  
@@ -380,7 +440,7 @@ dbl (4): Age, AMAS, RCMAS, Arith
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>skimr<span class="sc">::</span><span class="fu">skim</span>(meth)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>skimr<span class="sc">::</span><span class="fu">skim</span>(meth)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
 <caption>Data summary</caption>
@@ -559,7 +619,7 @@ dbl (4): Age, AMAS, RCMAS, Arith
 </div>
 <p>Show the structure of the dataset including data types.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(meth)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(meth)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>spc_tbl_ [599 × 6] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
  $ age   : num [1:599] 138 141 138 143 136 ...
@@ -582,7 +642,7 @@ dbl (4): Age, AMAS, RCMAS, Arith
 </div>
 <p>Count occurrences by gender.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">count</span>(meth, gender)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">count</span>(meth, gender)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 2
   gender     n
@@ -593,21 +653,21 @@ dbl (4): Age, AMAS, RCMAS, Arith
 </div>
 <p>Return the dimensions of the dataset.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(meth)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(meth)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 599   6</code></pre>
 </div>
 </div>
 <p>List the column names of the dataset.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">names</span>(meth)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">names</span>(meth)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "age"    "gender" "grade"  "amas"   "rcmas"  "arith" </code></pre>
 </div>
 </div>
 <p>Provide a glimpse of the dataset showing types and sample value</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">glimpse</span>(meth)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">glimpse</span>(meth)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 599
 Columns: 6
@@ -621,10 +681,10 @@ $ arith  &lt;dbl&gt; 6, 6, 5, 7, 1, 1, 4, 7, 2, 6, 2, 5, 2, 6, 2, 7, 2, 4, 7, 3,
 </div>
 <p>Replace common NA representations with actual NA values in the dataset.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="ot">&lt;-</span> meth <span class="sc">%&gt;%</span></span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  naniar<span class="sc">::</span><span class="fu">replace_with_na_all</span>(<span class="at">data =</span> ., <span class="at">condition =</span> <span class="sc">~</span> .x <span class="sc">%in%</span> common_na_numbers) <span class="sc">%&gt;%</span></span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  naniar<span class="sc">::</span><span class="fu">replace_with_na_all</span>(<span class="at">data =</span> ., <span class="at">condition =</span> <span class="sc">~</span> .x <span class="sc">%in%</span> common_na_strings)</span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(meth_modified)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="ot">&lt;-</span> meth <span class="sc">%&gt;%</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>  naniar<span class="sc">::</span><span class="fu">replace_with_na_all</span>(<span class="at">data =</span> ., <span class="at">condition =</span> <span class="sc">~</span> .x <span class="sc">%in%</span> common_na_numbers) <span class="sc">%&gt;%</span></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>  naniar<span class="sc">::</span><span class="fu">replace_with_na_all</span>(<span class="at">data =</span> ., <span class="at">condition =</span> <span class="sc">~</span> .x <span class="sc">%in%</span> common_na_strings)</span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(meth_modified)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 599
 Columns: 6
@@ -640,7 +700,7 @@ $ arith  &lt;dbl&gt; 6, 6, 5, 7, 1, 1, 4, 7, 2, 6, 2, 5, 2, 6, 2, 7, 2, 4, 7, 3,
 <section id="viewing-missing-data" class="level2">
 <h2 class="anchored" data-anchor-id="viewing-missing-data">Viewing Missing Data</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>visdat<span class="sc">::</span><span class="fu">vis_miss</span>(meth_modified)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>visdat<span class="sc">::</span><span class="fu">vis_miss</span>(meth_modified)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -648,7 +708,7 @@ $ arith  &lt;dbl&gt; 6, 6, 5, 7, 1, 1, 4, 7, 2, 6, 2, 5, 2, 6, 2, 7, 2, 4, 7, 3,
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>visdat<span class="sc">::</span><span class="fu">vis_dat</span>(meth_modified)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>visdat<span class="sc">::</span><span class="fu">vis_dat</span>(meth_modified)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -663,13 +723,13 @@ $ arith  &lt;dbl&gt; 6, 6, 5, 7, 1, 1, 4, 7, 2, 6, 2, 5, 2, 6, 2, 7, 2, 4, 7, 3,
 <p>This section performs further data wrangling, such as binning age and factoring variables.</p>
 <p>Convert gender and grade to factors and relocate them before age for better organization.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="ot">&lt;-</span> meth_modified <span class="sc">%&gt;%</span></span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">gender =</span> <span class="fu">as.factor</span>(gender),</span>
-<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">grade =</span> <span class="fu">as.factor</span>(grade),</span>
-<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">relocate</span>(<span class="fu">where</span>(is.factor), <span class="at">.before =</span> age)</span>
-<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(meth_modified)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="ot">&lt;-</span> meth_modified <span class="sc">%&gt;%</span></span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">gender =</span> <span class="fu">as.factor</span>(gender),</span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">grade =</span> <span class="fu">as.factor</span>(grade),</span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">relocate</span>(<span class="fu">where</span>(is.factor), <span class="at">.before =</span> age)</span>
+<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(meth_modified)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 599
 Columns: 6
@@ -682,24 +742,24 @@ $ arith  &lt;dbl&gt; 6, 6, 5, 7, 1, 1, 4, 7, 2, 6, 2, 5, 2, 6, 2, 7, 2, 4, 7, 3,
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="sc">%&gt;%</span></span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">10</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">rename</span>(</span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Gender"</span> <span class="ot">=</span> gender,</span>
-<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Grade"</span> <span class="ot">=</span> grade,</span>
-<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Age (months)"</span> <span class="ot">=</span> age,</span>
-<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"AMAS (Math Anxiety)"</span> <span class="ot">=</span> amas,</span>
-<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"RCMAS (General Anxiety)"</span> <span class="ot">=</span> rcmas,</span>
-<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Arithmetic Score"</span> <span class="ot">=</span> arith</span>
-<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tt</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="sc">%&gt;%</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">10</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">rename</span>(</span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Gender"</span> <span class="ot">=</span> gender,</span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Grade"</span> <span class="ot">=</span> grade,</span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Age (months)"</span> <span class="ot">=</span> age,</span>
+<span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"AMAS (Math Anxiety)"</span> <span class="ot">=</span> amas,</span>
+<span id="cb54-8"><a href="#cb54-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"RCMAS (General Anxiety)"</span> <span class="ot">=</span> rcmas,</span>
+<span id="cb54-9"><a href="#cb54-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Arithmetic Score"</span> <span class="ot">=</span> arith</span>
+<span id="cb54-10"><a href="#cb54-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb54-11"><a href="#cb54-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tt</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <!-- preamble start -->
 
     <script>
 
-      function styleCell_bxylqn5imsh34z8y3xq4(i, j, css_id) {
-          var table = document.getElementById("tinytable_bxylqn5imsh34z8y3xq4");
+      function styleCell_oj7qs7n4in9xgl2os1os(i, j, css_id) {
+          var table = document.getElementById("tinytable_oj7qs7n4in9xgl2os1os");
           var cell = table.querySelector(`[data-row="${i}"][data-col="${j}"]`);
           if (cell) {
               console.log(`Styling cell at (${i}, ${j}) with class ${css_id}`);
@@ -708,8 +768,8 @@ $ arith  &lt;dbl&gt; 6, 6, 5, 7, 1, 1, 4, 7, 2, 6, 2, 5, 2, 6, 2, 7, 2, 4, 7, 3,
               console.warn(`Cell at (${i}, ${j}) not found.`);
           }
       }
-      function spanCell_bxylqn5imsh34z8y3xq4(i, j, rowspan, colspan) {
-        var table = document.getElementById("tinytable_bxylqn5imsh34z8y3xq4");
+      function spanCell_oj7qs7n4in9xgl2os1os(i, j, rowspan, colspan) {
+        var table = document.getElementById("tinytable_oj7qs7n4in9xgl2os1os");
         const targetCell = table.querySelector(`[data-row="${i}"][data-col="${j}"]`);
         if (!targetCell) {
           console.warn(`Cell at (${i}, ${j}) not found.`);
@@ -740,14 +800,14 @@ $ arith  &lt;dbl&gt; 6, 6, 5, 7, 1, 1, 4, 7, 2, 6, 2, 5, 2, 6, 2, 7, 2, 4, 7, 3,
       window.addEventListener('load', function () {
           var cellsToStyle = [
             // tinytable style arrays after
-          { positions: [ { i: '10', j: 0 }, { i: '10', j: 1 }, { i: '10', j: 2 }, { i: '10', j: 3 }, { i: '10', j: 4 }, { i: '10', j: 5 },  ], css_id: 'tinytable_css_6vrc64n5vc0w543ldo3w',}, 
-          { positions: [ { i: '0', j: 0 }, { i: '0', j: 1 }, { i: '0', j: 2 }, { i: '0', j: 3 }, { i: '0', j: 4 }, { i: '0', j: 5 },  ], css_id: 'tinytable_css_q3xy37okle7783lk6us1',}, 
+          { positions: [ { i: '10', j: 0 }, { i: '10', j: 1 }, { i: '10', j: 2 }, { i: '10', j: 3 }, { i: '10', j: 4 }, { i: '10', j: 5 },  ], css_id: 'tinytable_css_trhii46xg970i2arjo6w',}, 
+          { positions: [ { i: '0', j: 0 }, { i: '0', j: 1 }, { i: '0', j: 2 }, { i: '0', j: 3 }, { i: '0', j: 4 }, { i: '0', j: 5 },  ], css_id: 'tinytable_css_4ulyjxrhnhxgs8mi1rt2',}, 
           ];
 
           // Loop over the arrays to style the cells
           cellsToStyle.forEach(function (group) {
               group.positions.forEach(function (cell) {
-                  styleCell_bxylqn5imsh34z8y3xq4(cell.i, cell.j, group.css_id);
+                  styleCell_oj7qs7n4in9xgl2os1os(cell.i, cell.j, group.css_id);
               });
           });
       });
@@ -755,11 +815,11 @@ $ arith  &lt;dbl&gt; 6, 6, 5, 7, 1, 1, 4, 7, 2, 6, 2, 5, 2, 6, 2, 7, 2, 4, 7, 3,
 
     <style>
       /* tinytable css entries after */
-      .table td.tinytable_css_6vrc64n5vc0w543ldo3w, .table th.tinytable_css_6vrc64n5vc0w543ldo3w { border-bottom: solid #d3d8dc 0.1em; }
-      .table td.tinytable_css_q3xy37okle7783lk6us1, .table th.tinytable_css_q3xy37okle7783lk6us1 { border-top: solid #d3d8dc 0.1em; border-bottom: solid #d3d8dc 0.05em; }
+      .table td.tinytable_css_trhii46xg970i2arjo6w, .table th.tinytable_css_trhii46xg970i2arjo6w { border-bottom: solid #d3d8dc 0.1em; }
+      .table td.tinytable_css_4ulyjxrhnhxgs8mi1rt2, .table th.tinytable_css_4ulyjxrhnhxgs8mi1rt2 { border-top: solid #d3d8dc 0.1em; border-bottom: solid #d3d8dc 0.05em; }
     </style>
     <div class="container">
-      <table class="table table-borderless" id="tinytable_bxylqn5imsh34z8y3xq4" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
+      <table class="table table-borderless" id="tinytable_oj7qs7n4in9xgl2os1os" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
         <thead>
         
               <tr>
@@ -863,7 +923,7 @@ $ arith  &lt;dbl&gt; 6, 6, 5, 7, 1, 1, 4, 7, 2, 6, 2, 5, 2, 6, 2, 7, 2, 4, 7, 3,
 <section id="summaries-examining-the-data" class="level2">
 <h2 class="anchored" data-anchor-id="summaries-examining-the-data">Summaries: Examining the Data</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">count</span>(<span class="fu">across</span>(<span class="at">.cols =</span> <span class="fu">c</span>(gender, grade)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">count</span>(<span class="fu">across</span>(<span class="at">.cols =</span> <span class="fu">c</span>(gender, grade)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 4 × 3
   gender grade         n
@@ -875,13 +935,13 @@ $ arith  &lt;dbl&gt; 6, 6, 5, 7, 1, 1, 4, 7, 2, 6, 2, 5, 2, 6, 2, 7, 2, 4, 7, 3,
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="sc">%&gt;%</span></span>
-<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(</span>
-<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_amas =</span> <span class="fu">mean</span>(amas, <span class="at">na.rm =</span> T),</span>
-<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">sd_amas =</span> <span class="fu">sd</span>(amas, <span class="at">na.rm =</span> T),</span>
-<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">min_amas =</span> <span class="fu">min</span>(amas, <span class="at">na.rm =</span> T),</span>
-<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">max_amas =</span> <span class="fu">max</span>(amas, <span class="at">na.rm =</span> T)</span>
-<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="sc">%&gt;%</span></span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(</span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_amas =</span> <span class="fu">mean</span>(amas, <span class="at">na.rm =</span> T),</span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">sd_amas =</span> <span class="fu">sd</span>(amas, <span class="at">na.rm =</span> T),</span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">min_amas =</span> <span class="fu">min</span>(amas, <span class="at">na.rm =</span> T),</span>
+<span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">max_amas =</span> <span class="fu">max</span>(amas, <span class="at">na.rm =</span> T)</span>
+<span id="cb57-7"><a href="#cb57-7" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 4
   mean_amas sd_amas min_amas max_amas
@@ -890,16 +950,16 @@ $ arith  &lt;dbl&gt; 6, 6, 5, 7, 1, 1, 4, 7, 2, 6, 2, 5, 2, 6, 2, 7, 2, 4, 7, 3,
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="sc">%&gt;%</span></span>
-<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(<span class="fu">across</span>(</span>
-<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">.cols =</span> <span class="fu">c</span>(amas, rcmas), </span>
-<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">.fns =</span> <span class="fu">list</span>(</span>
-<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">mean =</span> <span class="sc">~</span> <span class="fu">mean</span>(., <span class="at">na.rm =</span> T),</span>
-<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">sd =</span> sd,</span>
-<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">min =</span> min, <span class="at">max =</span> max</span>
-<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a>  ))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="sc">%&gt;%</span></span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(<span class="fu">across</span>(</span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">.cols =</span> <span class="fu">c</span>(amas, rcmas), </span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">.fns =</span> <span class="fu">list</span>(</span>
+<span id="cb59-6"><a href="#cb59-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">mean =</span> <span class="sc">~</span> <span class="fu">mean</span>(., <span class="at">na.rm =</span> T),</span>
+<span id="cb59-7"><a href="#cb59-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">sd =</span> sd,</span>
+<span id="cb59-8"><a href="#cb59-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">min =</span> min, <span class="at">max =</span> max</span>
+<span id="cb59-9"><a href="#cb59-9" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb59-10"><a href="#cb59-10" aria-hidden="true" tabindex="-1"></a>  ))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 8
   amas_mean amas_sd amas_min amas_max rcmas_mean rcmas_sd rcmas_min rcmas_max
@@ -908,13 +968,13 @@ $ arith  &lt;dbl&gt; 6, 6, 5, 7, 1, 1, 4, 7, 2, 6, 2, 5, 2, 6, 2, 7, 2, 4, 7, 3,
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="sc">%&gt;%</span></span>
-<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(</span>
-<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_arith =</span> <span class="fu">mean</span>(arith, <span class="at">na.rm =</span> T),</span>
-<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">sd_arith =</span> <span class="fu">sd</span>(arith, <span class="at">na.rm =</span> T),</span>
-<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">min_arith =</span> <span class="fu">min</span>(arith, <span class="at">na.rm =</span> T),</span>
-<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">max_arith =</span> <span class="fu">max</span>(arith, <span class="at">na.rm =</span> T)</span>
-<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="sc">%&gt;%</span></span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(</span>
+<span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_arith =</span> <span class="fu">mean</span>(arith, <span class="at">na.rm =</span> T),</span>
+<span id="cb61-4"><a href="#cb61-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">sd_arith =</span> <span class="fu">sd</span>(arith, <span class="at">na.rm =</span> T),</span>
+<span id="cb61-5"><a href="#cb61-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">min_arith =</span> <span class="fu">min</span>(arith, <span class="at">na.rm =</span> T),</span>
+<span id="cb61-6"><a href="#cb61-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">max_arith =</span> <span class="fu">max</span>(arith, <span class="at">na.rm =</span> T)</span>
+<span id="cb61-7"><a href="#cb61-7" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 4
   mean_arith sd_arith min_arith max_arith
@@ -923,13 +983,13 @@ $ arith  &lt;dbl&gt; 6, 6, 5, 7, 1, 1, 4, 7, 2, 6, 2, 5, 2, 6, 2, 7, 2, 4, 7, 3,
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="sc">%&gt;%</span></span>
-<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(</span>
-<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_age =</span> <span class="fu">mean</span>(age, <span class="at">na.rm =</span> T),</span>
-<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">sd_age =</span> <span class="fu">sd</span>(age, <span class="at">na.rm =</span> T),</span>
-<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">min_age =</span> <span class="fu">min</span>(age, <span class="at">na.rm =</span> T),</span>
-<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">max_age =</span> <span class="fu">max</span>(age, <span class="at">na.rm =</span> T)</span>
-<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="sc">%&gt;%</span></span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(</span>
+<span id="cb63-3"><a href="#cb63-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_age =</span> <span class="fu">mean</span>(age, <span class="at">na.rm =</span> T),</span>
+<span id="cb63-4"><a href="#cb63-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">sd_age =</span> <span class="fu">sd</span>(age, <span class="at">na.rm =</span> T),</span>
+<span id="cb63-5"><a href="#cb63-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">min_age =</span> <span class="fu">min</span>(age, <span class="at">na.rm =</span> T),</span>
+<span id="cb63-6"><a href="#cb63-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">max_age =</span> <span class="fu">max</span>(age, <span class="at">na.rm =</span> T)</span>
+<span id="cb63-7"><a href="#cb63-7" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 4
   mean_age sd_age min_age max_age
@@ -938,17 +998,17 @@ $ arith  &lt;dbl&gt; 6, 6, 5, 7, 1, 1, 4, 7, 2, 6, 2, 5, 2, 6, 2, 7, 2, 4, 7, 3,
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="sc">%&gt;%</span></span>
-<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(gender) <span class="sc">%&gt;%</span></span>
-<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(<span class="fu">across</span>(</span>
-<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">.cols =</span> <span class="fu">c</span>(age, amas, rcmas, arith),</span>
-<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">.fns =</span> <span class="fu">list</span>(</span>
-<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">mean =</span> <span class="sc">~</span> <span class="fu">mean</span>(., <span class="at">na.rm =</span> T),</span>
-<span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">sd =</span> sd,</span>
-<span id="cb52-9"><a href="#cb52-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">min =</span> min, <span class="at">max =</span> max</span>
-<span id="cb52-10"><a href="#cb52-10" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb52-11"><a href="#cb52-11" aria-hidden="true" tabindex="-1"></a>  ))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="sc">%&gt;%</span></span>
+<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(gender) <span class="sc">%&gt;%</span></span>
+<span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(<span class="fu">across</span>(</span>
+<span id="cb65-4"><a href="#cb65-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">.cols =</span> <span class="fu">c</span>(age, amas, rcmas, arith),</span>
+<span id="cb65-5"><a href="#cb65-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb65-6"><a href="#cb65-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">.fns =</span> <span class="fu">list</span>(</span>
+<span id="cb65-7"><a href="#cb65-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">mean =</span> <span class="sc">~</span> <span class="fu">mean</span>(., <span class="at">na.rm =</span> T),</span>
+<span id="cb65-8"><a href="#cb65-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">sd =</span> sd,</span>
+<span id="cb65-9"><a href="#cb65-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">min =</span> min, <span class="at">max =</span> max</span>
+<span id="cb65-10"><a href="#cb65-10" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb65-11"><a href="#cb65-11" aria-hidden="true" tabindex="-1"></a>  ))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 17
   gender age_mean age_sd age_min age_max amas_mean amas_sd amas_min amas_max
@@ -961,26 +1021,26 @@ $ arith  &lt;dbl&gt; 6, 6, 5, 7, 1, 1, 4, 7, 2, 6, 2, 5, 2, 6, 2, 7, 2, 4, 7, 3,
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">crosstable</span>(age <span class="sc">+</span> rcmas <span class="sc">+</span> amas <span class="sc">+</span> arith <span class="sc">~</span> gender,</span>
-<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> meth_modified</span>
-<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
-<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>  crosstable<span class="sc">::</span><span class="fu">as_flextable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="fu">crosstable</span>(age <span class="sc">+</span> rcmas <span class="sc">+</span> amas <span class="sc">+</span> arith <span class="sc">~</span> gender,</span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> meth_modified</span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a>  crosstable<span class="sc">::</span><span class="fu">as_flextable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div class="tabwid"><style>.cl-9e303cc0{table-layout:auto;}.cl-9e259aea{font-family:'Arial';font-size:11pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-9e259b08{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-9e29ca8e{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-9e29ca98{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-9e29efc8{background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(0, 0, 0, 1.00);border-top: 1.5pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-9e29efd2{background-color:transparent;vertical-align: middle;border-bottom: 1pt solid rgba(0, 0, 0, 1.00);border-top: 1.5pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-9e29efd3{background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(0, 0, 0, 1.00);border-top: 1pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-9e29efdc{background-color:transparent;vertical-align: middle;border-bottom: 1pt solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-9e29efe6{background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-9e29efe7{background-color:transparent;vertical-align: middle;border-bottom: 1pt solid rgba(0, 0, 0, 1.00);border-top: 1pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-9e29eff0{background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 1pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-9e29eff1{background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-9e29effa{background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style><table data-quarto-disable-processing="true" class="cl-9e303cc0"><thead><tr style="overflow-wrap:break-word;"><th rowspan="2" class="cl-9e29efc8"><p class="cl-9e29ca8e"><span class="cl-9e259aea">label</span></p></th><th rowspan="2" class="cl-9e29efc8"><p class="cl-9e29ca8e"><span class="cl-9e259aea">variable</span></p></th><th colspan="2" class="cl-9e29efd2"><p class="cl-9e29ca8e"><span class="cl-9e259aea">gender</span></p></th></tr><tr style="overflow-wrap:break-word;"><th class="cl-9e29efd3"><p class="cl-9e29ca8e"><span class="cl-9e259aea">Boy</span></p></th><th class="cl-9e29efd3"><p class="cl-9e29ca8e"><span class="cl-9e259aea">Girl</span></p></th></tr></thead><tbody><tr style="overflow-wrap:break-word;"><td rowspan="4" class="cl-9e29efdc"><p class="cl-9e29ca98"><span class="cl-9e259b08">age</span></p></td><td class="cl-9e29efe6"><p class="cl-9e29ca98"><span class="cl-9e259b08">Min / Max</span></p></td><td class="cl-9e29efe6"><p class="cl-9e29ca98"><span class="cl-9e259b08">93.1 / 187.5</span></p></td><td class="cl-9e29efe6"><p class="cl-9e29ca98"><span class="cl-9e259b08">3.7 / 180.3</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-9e29efe6"><p class="cl-9e29ca98"><span class="cl-9e259b08">Med [IQR]</span></p></td><td class="cl-9e29efe6"><p class="cl-9e29ca98"><span class="cl-9e259b08">124.9 [107.4;147.2]</span></p></td><td class="cl-9e29efe6"><p class="cl-9e29ca98"><span class="cl-9e259b08">117.8 [105.8;133.4]</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-9e29efe6"><p class="cl-9e29ca98"><span class="cl-9e259b08">Mean (std)</span></p></td><td class="cl-9e29efe6"><p class="cl-9e29ca98"><span class="cl-9e259b08">127.6 (22.9)</span></p></td><td class="cl-9e29efe6"><p class="cl-9e29ca98"><span class="cl-9e259b08">121.1 (21.1)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-9e29efdc"><p class="cl-9e29ca98"><span class="cl-9e259b08">N (NA)</span></p></td><td class="cl-9e29efdc"><p class="cl-9e29ca98"><span class="cl-9e259b08">323 (0)</span></p></td><td class="cl-9e29efdc"><p class="cl-9e29ca98"><span class="cl-9e259b08">276 (0)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td rowspan="4" class="cl-9e29efe7"><p class="cl-9e29ca98"><span class="cl-9e259b08">rcmas</span></p></td><td class="cl-9e29eff0"><p class="cl-9e29ca98"><span class="cl-9e259b08">Min / Max</span></p></td><td class="cl-9e29eff0"><p class="cl-9e29ca98"><span class="cl-9e259b08">1.0 / 41.0</span></p></td><td class="cl-9e29eff0"><p class="cl-9e29ca98"><span class="cl-9e259b08">3.0 / 38.0</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-9e29efe6"><p class="cl-9e29ca98"><span class="cl-9e259b08">Med [IQR]</span></p></td><td class="cl-9e29efe6"><p class="cl-9e29ca98"><span class="cl-9e259b08">18.0 [13.0;23.0]</span></p></td><td class="cl-9e29efe6"><p class="cl-9e29ca98"><span class="cl-9e259b08">20.0 [15.0;26.0]</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-9e29efe6"><p class="cl-9e29ca98"><span class="cl-9e259b08">Mean (std)</span></p></td><td class="cl-9e29efe6"><p class="cl-9e29ca98"><span class="cl-9e259b08">18.1 (7.5)</span></p></td><td class="cl-9e29efe6"><p class="cl-9e29ca98"><span class="cl-9e259b08">20.6 (7.4)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-9e29efdc"><p class="cl-9e29ca98"><span class="cl-9e259b08">N (NA)</span></p></td><td class="cl-9e29efdc"><p class="cl-9e29ca98"><span class="cl-9e259b08">323 (0)</span></p></td><td class="cl-9e29efdc"><p class="cl-9e29ca98"><span class="cl-9e259b08">276 (0)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td rowspan="4" class="cl-9e29efe7"><p class="cl-9e29ca98"><span class="cl-9e259b08">amas</span></p></td><td class="cl-9e29eff0"><p class="cl-9e29ca98"><span class="cl-9e259b08">Min / Max</span></p></td><td class="cl-9e29eff0"><p class="cl-9e29ca98"><span class="cl-9e259b08">4.0 / 45.0</span></p></td><td class="cl-9e29eff0"><p class="cl-9e29ca98"><span class="cl-9e259b08">9.0 / 40.0</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-9e29efe6"><p class="cl-9e29ca98"><span class="cl-9e259b08">Med [IQR]</span></p></td><td class="cl-9e29efe6"><p class="cl-9e29ca98"><span class="cl-9e259b08">21.0 [17.0;26.0]</span></p></td><td class="cl-9e29efe6"><p class="cl-9e29ca98"><span class="cl-9e259b08">23.0 [19.0;28.0]</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-9e29efe6"><p class="cl-9e29ca98"><span class="cl-9e259b08">Mean (std)</span></p></td><td class="cl-9e29efe6"><p class="cl-9e29ca98"><span class="cl-9e259b08">21.2 (6.5)</span></p></td><td class="cl-9e29efe6"><p class="cl-9e29ca98"><span class="cl-9e259b08">22.9 (6.6)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-9e29efdc"><p class="cl-9e29ca98"><span class="cl-9e259b08">N (NA)</span></p></td><td class="cl-9e29efdc"><p class="cl-9e29ca98"><span class="cl-9e259b08">323 (0)</span></p></td><td class="cl-9e29efdc"><p class="cl-9e29ca98"><span class="cl-9e259b08">276 (0)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td rowspan="4" class="cl-9e29eff1"><p class="cl-9e29ca98"><span class="cl-9e259b08">arith</span></p></td><td class="cl-9e29eff0"><p class="cl-9e29ca98"><span class="cl-9e259b08">Min / Max</span></p></td><td class="cl-9e29eff0"><p class="cl-9e29ca98"><span class="cl-9e259b08">0 / 8.0</span></p></td><td class="cl-9e29eff0"><p class="cl-9e29ca98"><span class="cl-9e259b08">0 / 8.0</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-9e29efe6"><p class="cl-9e29ca98"><span class="cl-9e259b08">Med [IQR]</span></p></td><td class="cl-9e29efe6"><p class="cl-9e29ca98"><span class="cl-9e259b08">6.0 [4.0;7.0]</span></p></td><td class="cl-9e29efe6"><p class="cl-9e29ca98"><span class="cl-9e259b08">6.0 [4.0;7.0]</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-9e29efe6"><p class="cl-9e29ca98"><span class="cl-9e259b08">Mean (std)</span></p></td><td class="cl-9e29efe6"><p class="cl-9e29ca98"><span class="cl-9e259b08">5.3 (2.1)</span></p></td><td class="cl-9e29efe6"><p class="cl-9e29ca98"><span class="cl-9e259b08">5.3 (2.1)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-9e29effa"><p class="cl-9e29ca98"><span class="cl-9e259b08">N (NA)</span></p></td><td class="cl-9e29effa"><p class="cl-9e29ca98"><span class="cl-9e259b08">323 (0)</span></p></td><td class="cl-9e29effa"><p class="cl-9e29ca98"><span class="cl-9e259b08">276 (0)</span></p></td></tr></tbody></table></div>
+<div class="tabwid"><style>.cl-6de3fdfa{table-layout:auto;}.cl-6ddbaeca{font-family:'Arial';font-size:11pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-6ddbaede{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-6ddef10c{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-6ddef116{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-6ddf0f16{background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(0, 0, 0, 1.00);border-top: 1.5pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-6ddf0f20{background-color:transparent;vertical-align: middle;border-bottom: 1pt solid rgba(0, 0, 0, 1.00);border-top: 1.5pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-6ddf0f21{background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(0, 0, 0, 1.00);border-top: 1pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-6ddf0f2a{background-color:transparent;vertical-align: middle;border-bottom: 1pt solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-6ddf0f2b{background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-6ddf0f2c{background-color:transparent;vertical-align: middle;border-bottom: 1pt solid rgba(0, 0, 0, 1.00);border-top: 1pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-6ddf0f34{background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 1pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-6ddf0f35{background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-6ddf0f3e{background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style><table data-quarto-disable-processing="true" class="cl-6de3fdfa"><thead><tr style="overflow-wrap:break-word;"><th rowspan="2" class="cl-6ddf0f16"><p class="cl-6ddef10c"><span class="cl-6ddbaeca">label</span></p></th><th rowspan="2" class="cl-6ddf0f16"><p class="cl-6ddef10c"><span class="cl-6ddbaeca">variable</span></p></th><th colspan="2" class="cl-6ddf0f20"><p class="cl-6ddef10c"><span class="cl-6ddbaeca">gender</span></p></th></tr><tr style="overflow-wrap:break-word;"><th class="cl-6ddf0f21"><p class="cl-6ddef10c"><span class="cl-6ddbaeca">Boy</span></p></th><th class="cl-6ddf0f21"><p class="cl-6ddef10c"><span class="cl-6ddbaeca">Girl</span></p></th></tr></thead><tbody><tr style="overflow-wrap:break-word;"><td rowspan="4" class="cl-6ddf0f2a"><p class="cl-6ddef116"><span class="cl-6ddbaede">age</span></p></td><td class="cl-6ddf0f2b"><p class="cl-6ddef116"><span class="cl-6ddbaede">Min / Max</span></p></td><td class="cl-6ddf0f2b"><p class="cl-6ddef116"><span class="cl-6ddbaede">93.1 / 187.5</span></p></td><td class="cl-6ddf0f2b"><p class="cl-6ddef116"><span class="cl-6ddbaede">3.7 / 180.3</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-6ddf0f2b"><p class="cl-6ddef116"><span class="cl-6ddbaede">Med [IQR]</span></p></td><td class="cl-6ddf0f2b"><p class="cl-6ddef116"><span class="cl-6ddbaede">124.9 [107.4;147.2]</span></p></td><td class="cl-6ddf0f2b"><p class="cl-6ddef116"><span class="cl-6ddbaede">117.8 [105.8;133.4]</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-6ddf0f2b"><p class="cl-6ddef116"><span class="cl-6ddbaede">Mean (std)</span></p></td><td class="cl-6ddf0f2b"><p class="cl-6ddef116"><span class="cl-6ddbaede">127.6 (22.9)</span></p></td><td class="cl-6ddf0f2b"><p class="cl-6ddef116"><span class="cl-6ddbaede">121.1 (21.1)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-6ddf0f2a"><p class="cl-6ddef116"><span class="cl-6ddbaede">N (NA)</span></p></td><td class="cl-6ddf0f2a"><p class="cl-6ddef116"><span class="cl-6ddbaede">323 (0)</span></p></td><td class="cl-6ddf0f2a"><p class="cl-6ddef116"><span class="cl-6ddbaede">276 (0)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td rowspan="4" class="cl-6ddf0f2c"><p class="cl-6ddef116"><span class="cl-6ddbaede">rcmas</span></p></td><td class="cl-6ddf0f34"><p class="cl-6ddef116"><span class="cl-6ddbaede">Min / Max</span></p></td><td class="cl-6ddf0f34"><p class="cl-6ddef116"><span class="cl-6ddbaede">1.0 / 41.0</span></p></td><td class="cl-6ddf0f34"><p class="cl-6ddef116"><span class="cl-6ddbaede">3.0 / 38.0</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-6ddf0f2b"><p class="cl-6ddef116"><span class="cl-6ddbaede">Med [IQR]</span></p></td><td class="cl-6ddf0f2b"><p class="cl-6ddef116"><span class="cl-6ddbaede">18.0 [13.0;23.0]</span></p></td><td class="cl-6ddf0f2b"><p class="cl-6ddef116"><span class="cl-6ddbaede">20.0 [15.0;26.0]</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-6ddf0f2b"><p class="cl-6ddef116"><span class="cl-6ddbaede">Mean (std)</span></p></td><td class="cl-6ddf0f2b"><p class="cl-6ddef116"><span class="cl-6ddbaede">18.1 (7.5)</span></p></td><td class="cl-6ddf0f2b"><p class="cl-6ddef116"><span class="cl-6ddbaede">20.6 (7.4)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-6ddf0f2a"><p class="cl-6ddef116"><span class="cl-6ddbaede">N (NA)</span></p></td><td class="cl-6ddf0f2a"><p class="cl-6ddef116"><span class="cl-6ddbaede">323 (0)</span></p></td><td class="cl-6ddf0f2a"><p class="cl-6ddef116"><span class="cl-6ddbaede">276 (0)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td rowspan="4" class="cl-6ddf0f2c"><p class="cl-6ddef116"><span class="cl-6ddbaede">amas</span></p></td><td class="cl-6ddf0f34"><p class="cl-6ddef116"><span class="cl-6ddbaede">Min / Max</span></p></td><td class="cl-6ddf0f34"><p class="cl-6ddef116"><span class="cl-6ddbaede">4.0 / 45.0</span></p></td><td class="cl-6ddf0f34"><p class="cl-6ddef116"><span class="cl-6ddbaede">9.0 / 40.0</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-6ddf0f2b"><p class="cl-6ddef116"><span class="cl-6ddbaede">Med [IQR]</span></p></td><td class="cl-6ddf0f2b"><p class="cl-6ddef116"><span class="cl-6ddbaede">21.0 [17.0;26.0]</span></p></td><td class="cl-6ddf0f2b"><p class="cl-6ddef116"><span class="cl-6ddbaede">23.0 [19.0;28.0]</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-6ddf0f2b"><p class="cl-6ddef116"><span class="cl-6ddbaede">Mean (std)</span></p></td><td class="cl-6ddf0f2b"><p class="cl-6ddef116"><span class="cl-6ddbaede">21.2 (6.5)</span></p></td><td class="cl-6ddf0f2b"><p class="cl-6ddef116"><span class="cl-6ddbaede">22.9 (6.6)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-6ddf0f2a"><p class="cl-6ddef116"><span class="cl-6ddbaede">N (NA)</span></p></td><td class="cl-6ddf0f2a"><p class="cl-6ddef116"><span class="cl-6ddbaede">323 (0)</span></p></td><td class="cl-6ddf0f2a"><p class="cl-6ddef116"><span class="cl-6ddbaede">276 (0)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td rowspan="4" class="cl-6ddf0f35"><p class="cl-6ddef116"><span class="cl-6ddbaede">arith</span></p></td><td class="cl-6ddf0f34"><p class="cl-6ddef116"><span class="cl-6ddbaede">Min / Max</span></p></td><td class="cl-6ddf0f34"><p class="cl-6ddef116"><span class="cl-6ddbaede">0 / 8.0</span></p></td><td class="cl-6ddf0f34"><p class="cl-6ddef116"><span class="cl-6ddbaede">0 / 8.0</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-6ddf0f2b"><p class="cl-6ddef116"><span class="cl-6ddbaede">Med [IQR]</span></p></td><td class="cl-6ddf0f2b"><p class="cl-6ddef116"><span class="cl-6ddbaede">6.0 [4.0;7.0]</span></p></td><td class="cl-6ddf0f2b"><p class="cl-6ddef116"><span class="cl-6ddbaede">6.0 [4.0;7.0]</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-6ddf0f2b"><p class="cl-6ddef116"><span class="cl-6ddbaede">Mean (std)</span></p></td><td class="cl-6ddf0f2b"><p class="cl-6ddef116"><span class="cl-6ddbaede">5.3 (2.1)</span></p></td><td class="cl-6ddf0f2b"><p class="cl-6ddef116"><span class="cl-6ddbaede">5.3 (2.1)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-6ddf0f3e"><p class="cl-6ddef116"><span class="cl-6ddbaede">N (NA)</span></p></td><td class="cl-6ddf0f3e"><p class="cl-6ddef116"><span class="cl-6ddbaede">323 (0)</span></p></td><td class="cl-6ddf0f3e"><p class="cl-6ddef116"><span class="cl-6ddbaede">276 (0)</span></p></td></tr></tbody></table></div>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="sc">%&gt;%</span></span>
-<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(gender) <span class="sc">%&gt;%</span></span>
-<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(<span class="fu">across</span>(</span>
-<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">.cols =</span> <span class="fu">c</span>(age, amas, rcmas, arith),</span>
-<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb55-6"><a href="#cb55-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">.fns =</span> <span class="fu">list</span>(</span>
-<span id="cb55-7"><a href="#cb55-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">mean =</span> <span class="sc">~</span> <span class="fu">mean</span>(., <span class="at">na.rm =</span> T),</span>
-<span id="cb55-8"><a href="#cb55-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">sd =</span> sd,</span>
-<span id="cb55-9"><a href="#cb55-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">min =</span> min, <span class="at">max =</span> max</span>
-<span id="cb55-10"><a href="#cb55-10" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb55-11"><a href="#cb55-11" aria-hidden="true" tabindex="-1"></a>  ))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="sc">%&gt;%</span></span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(gender) <span class="sc">%&gt;%</span></span>
+<span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(<span class="fu">across</span>(</span>
+<span id="cb68-4"><a href="#cb68-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">.cols =</span> <span class="fu">c</span>(age, amas, rcmas, arith),</span>
+<span id="cb68-5"><a href="#cb68-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-6"><a href="#cb68-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">.fns =</span> <span class="fu">list</span>(</span>
+<span id="cb68-7"><a href="#cb68-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">mean =</span> <span class="sc">~</span> <span class="fu">mean</span>(., <span class="at">na.rm =</span> T),</span>
+<span id="cb68-8"><a href="#cb68-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">sd =</span> sd,</span>
+<span id="cb68-9"><a href="#cb68-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">min =</span> min, <span class="at">max =</span> max</span>
+<span id="cb68-10"><a href="#cb68-10" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb68-11"><a href="#cb68-11" aria-hidden="true" tabindex="-1"></a>  ))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 17
   gender age_mean age_sd age_min age_max amas_mean amas_sd amas_min amas_max
@@ -993,17 +1053,17 @@ $ arith  &lt;dbl&gt; 6, 6, 5, 7, 1, 1, 4, 7, 2, 6, 2, 5, 2, 6, 2, 7, 2, 4, 7, 3,
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="sc">%&gt;%</span></span>
-<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(grade) <span class="sc">%&gt;%</span></span>
-<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(<span class="fu">across</span>(</span>
-<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">.cols =</span> <span class="fu">c</span>(age, amas, rcmas, arith),</span>
-<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">.fns =</span> <span class="fu">list</span>(</span>
-<span id="cb57-7"><a href="#cb57-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">mean =</span> <span class="sc">~</span> <span class="fu">mean</span>(., <span class="at">na.rm =</span> T),</span>
-<span id="cb57-8"><a href="#cb57-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">sd =</span> sd,</span>
-<span id="cb57-9"><a href="#cb57-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">min =</span> min, <span class="at">max =</span> max</span>
-<span id="cb57-10"><a href="#cb57-10" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb57-11"><a href="#cb57-11" aria-hidden="true" tabindex="-1"></a>  ))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="sc">%&gt;%</span></span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(grade) <span class="sc">%&gt;%</span></span>
+<span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(<span class="fu">across</span>(</span>
+<span id="cb70-4"><a href="#cb70-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">.cols =</span> <span class="fu">c</span>(age, amas, rcmas, arith),</span>
+<span id="cb70-5"><a href="#cb70-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-6"><a href="#cb70-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">.fns =</span> <span class="fu">list</span>(</span>
+<span id="cb70-7"><a href="#cb70-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">mean =</span> <span class="sc">~</span> <span class="fu">mean</span>(., <span class="at">na.rm =</span> T),</span>
+<span id="cb70-8"><a href="#cb70-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">sd =</span> sd,</span>
+<span id="cb70-9"><a href="#cb70-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">min =</span> min, <span class="at">max =</span> max</span>
+<span id="cb70-10"><a href="#cb70-10" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb70-11"><a href="#cb70-11" aria-hidden="true" tabindex="-1"></a>  ))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 17
   grade     age_mean age_sd age_min age_max amas_mean amas_sd amas_min amas_max
@@ -1016,8 +1076,8 @@ $ arith  &lt;dbl&gt; 6, 6, 5, 7, 1, 1, 4, 7, 2, 6, 2, 5, 2, 6, 2, 7, 2, 4, 7, 3,
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_histogram</span>(<span class="sc">~</span>age, <span class="at">data =</span> meth_modified) <span class="sc">%&gt;%</span></span>
-<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">title =</span> <span class="st">"Histogram of Age"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_histogram</span>(<span class="sc">~</span>age, <span class="at">data =</span> meth_modified) <span class="sc">%&gt;%</span></span>
+<span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">title =</span> <span class="st">"Histogram of Age"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>`stat_bin()` using `bins = 30`. Pick better value `binwidth`.</code></pre>
 </div>
@@ -1030,8 +1090,8 @@ $ arith  &lt;dbl&gt; 6, 6, 5, 7, 1, 1, 4, 7, 2, 6, 2, 5, 2, 6, 2, 7, 2, 4, 7, 3,
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_histogram</span>(<span class="sc">~</span>amas, <span class="at">data =</span> meth_modified) <span class="sc">%&gt;%</span></span>
-<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">title =</span> <span class="st">"Histogram of AMAS"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_histogram</span>(<span class="sc">~</span>amas, <span class="at">data =</span> meth_modified) <span class="sc">%&gt;%</span></span>
+<span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">title =</span> <span class="st">"Histogram of AMAS"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>`stat_bin()` using `bins = 30`. Pick better value `binwidth`.</code></pre>
 </div>
@@ -1044,8 +1104,8 @@ $ arith  &lt;dbl&gt; 6, 6, 5, 7, 1, 1, 4, 7, 2, 6, 2, 5, 2, 6, 2, 7, 2, 4, 7, 3,
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_histogram</span>(<span class="sc">~</span>rcmas, <span class="at">data =</span> meth_modified) <span class="sc">%&gt;%</span></span>
-<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">title =</span> <span class="st">"Histogram of RCMAS"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_histogram</span>(<span class="sc">~</span>rcmas, <span class="at">data =</span> meth_modified) <span class="sc">%&gt;%</span></span>
+<span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">title =</span> <span class="st">"Histogram of RCMAS"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>`stat_bin()` using `bins = 30`. Pick better value `binwidth`.</code></pre>
 </div>
@@ -1058,8 +1118,8 @@ $ arith  &lt;dbl&gt; 6, 6, 5, 7, 1, 1, 4, 7, 2, 6, 2, 5, 2, 6, 2, 7, 2, 4, 7, 3,
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_bar</span>(<span class="sc">~</span>grade, <span class="at">data =</span> meth_modified) <span class="sc">%&gt;%</span></span>
-<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">title =</span> <span class="st">"Bar Plot of Grade"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_bar</span>(<span class="sc">~</span>grade, <span class="at">data =</span> meth_modified) <span class="sc">%&gt;%</span></span>
+<span id="cb78-2"><a href="#cb78-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">title =</span> <span class="st">"Bar Plot of Grade"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1069,8 +1129,8 @@ $ arith  &lt;dbl&gt; 6, 6, 5, 7, 1, 1, 4, 7, 2, 6, 2, 5, 2, 6, 2, 7, 2, 4, 7, 3,
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_bar</span>(<span class="sc">~</span>gender, <span class="at">data =</span> meth_modified) <span class="sc">%&gt;%</span></span>
-<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">title =</span> <span class="st">"Bar Plot of Gender"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_bar</span>(<span class="sc">~</span>gender, <span class="at">data =</span> meth_modified) <span class="sc">%&gt;%</span></span>
+<span id="cb79-2"><a href="#cb79-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">title =</span> <span class="st">"Bar Plot of Gender"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1085,12 +1145,12 @@ $ arith  &lt;dbl&gt; 6, 6, 5, 7, 1, 1, 4, 7, 2, 6, 2, 5, 2, 6, 2, 7, 2, 4, 7, 3,
 <section id="grade-count-for-both-genders" class="level3">
 <h3 class="anchored" data-anchor-id="grade-count-for-both-genders">Grade Count for both Genders</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="sc">%&gt;%</span></span>
-<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_bar</span>(<span class="sc">~</span>grade,</span>
-<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">fill=</span><span class="sc">~</span>gender,</span>
-<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">position =</span> <span class="st">"dodge"</span>) <span class="sc">+</span></span>
-<span id="cb67-5"><a href="#cb67-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Dodged Bar Chart"</span>, <span class="at">x =</span><span class="st">"Grade"</span>, <span class="at">y =</span><span class="st">"Count"</span>) <span class="sc">+</span></span>
-<span id="cb67-6"><a href="#cb67-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">"Set2"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="sc">%&gt;%</span></span>
+<span id="cb80-2"><a href="#cb80-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_bar</span>(<span class="sc">~</span>grade,</span>
+<span id="cb80-3"><a href="#cb80-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">fill=</span><span class="sc">~</span>gender,</span>
+<span id="cb80-4"><a href="#cb80-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">position =</span> <span class="st">"dodge"</span>) <span class="sc">+</span></span>
+<span id="cb80-5"><a href="#cb80-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Dodged Bar Chart"</span>, <span class="at">x =</span><span class="st">"Grade"</span>, <span class="at">y =</span><span class="st">"Count"</span>) <span class="sc">+</span></span>
+<span id="cb80-6"><a href="#cb80-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">"Set2"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1101,12 +1161,12 @@ $ arith  &lt;dbl&gt; 6, 6, 5, 7, 1, 1, 4, 7, 2, 6, 2, 5, 2, 6, 2, 7, 2, 4, 7, 3,
 </div>
 <p>Why is the count reducing in secondary grade? Assuming lesser students have enrolled for Secondary grade compared to Primary grade.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="sc">%&gt;%</span></span>
-<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_bar</span>(<span class="sc">~</span>grade,</span>
-<span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">fill=</span><span class="sc">~</span>gender,</span>
-<span id="cb68-4"><a href="#cb68-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">position =</span> <span class="st">"stack"</span>) <span class="sc">+</span></span>
-<span id="cb68-5"><a href="#cb68-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Stacked Bar Chart"</span>, <span class="at">x =</span><span class="st">"Grade"</span>, <span class="at">y =</span><span class="st">"Count"</span>) <span class="sc">+</span></span>
-<span id="cb68-6"><a href="#cb68-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">"Set2"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="sc">%&gt;%</span></span>
+<span id="cb81-2"><a href="#cb81-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_bar</span>(<span class="sc">~</span>grade,</span>
+<span id="cb81-3"><a href="#cb81-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">fill=</span><span class="sc">~</span>gender,</span>
+<span id="cb81-4"><a href="#cb81-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">position =</span> <span class="st">"stack"</span>) <span class="sc">+</span></span>
+<span id="cb81-5"><a href="#cb81-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Stacked Bar Chart"</span>, <span class="at">x =</span><span class="st">"Grade"</span>, <span class="at">y =</span><span class="st">"Count"</span>) <span class="sc">+</span></span>
+<span id="cb81-6"><a href="#cb81-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">"Set2"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1117,12 +1177,12 @@ $ arith  &lt;dbl&gt; 6, 6, 5, 7, 1, 1, 4, 7, 2, 6, 2, 5, 2, 6, 2, 7, 2, 4, 7, 3,
 </div>
 <p>Comparing Count of Girl’s Grade</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="sc">%&gt;%</span></span>
-<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_bar</span>(<span class="sc">~</span>grade,</span>
-<span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">fill=</span><span class="sc">~</span>gender,</span>
-<span id="cb69-4"><a href="#cb69-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">position =</span> <span class="st">"fill"</span>) <span class="sc">+</span></span>
-<span id="cb69-5"><a href="#cb69-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Filled Bar Chart"</span>, <span class="at">x =</span><span class="st">"Grade"</span>, <span class="at">y =</span><span class="st">"Count"</span>) <span class="sc">+</span></span>
-<span id="cb69-6"><a href="#cb69-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">"Set2"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="sc">%&gt;%</span></span>
+<span id="cb82-2"><a href="#cb82-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_bar</span>(<span class="sc">~</span>grade,</span>
+<span id="cb82-3"><a href="#cb82-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">fill=</span><span class="sc">~</span>gender,</span>
+<span id="cb82-4"><a href="#cb82-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">position =</span> <span class="st">"fill"</span>) <span class="sc">+</span></span>
+<span id="cb82-5"><a href="#cb82-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Filled Bar Chart"</span>, <span class="at">x =</span><span class="st">"Grade"</span>, <span class="at">y =</span><span class="st">"Count"</span>) <span class="sc">+</span></span>
+<span id="cb82-6"><a href="#cb82-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">"Set2"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1135,15 +1195,15 @@ $ arith  &lt;dbl&gt; 6, 6, 5, 7, 1, 1, 4, 7, 2, 6, 2, 5, 2, 6, 2, 7, 2, 4, 7, 3,
 <section id="amas-scores-based-on-gender-grade" class="level3">
 <h3 class="anchored" data-anchor-id="amas-scores-based-on-gender-grade">AMAS Scores based on Gender &amp; Grade</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="sc">%&gt;%</span> </span>
-<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_histogram</span>(<span class="sc">~</span>amas<span class="sc">|</span> grade<span class="sc">~</span>gender,</span>
-<span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">bins =</span> <span class="dv">5</span>,</span>
-<span id="cb70-4"><a href="#cb70-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">fill =</span> <span class="st">"steelblue"</span>,</span>
-<span id="cb70-5"><a href="#cb70-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">color=</span><span class="st">"white"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb70-6"><a href="#cb70-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">title=</span><span class="st">"Histogram of AMAS Scores"</span>,</span>
-<span id="cb70-7"><a href="#cb70-7" aria-hidden="true" tabindex="-1"></a>          <span class="at">subtitle =</span><span class="st">"Faceted by Grade and Gender"</span>,</span>
-<span id="cb70-8"><a href="#cb70-8" aria-hidden="true" tabindex="-1"></a>          <span class="at">x=</span><span class="st">"AMAS Score"</span>,</span>
-<span id="cb70-9"><a href="#cb70-9" aria-hidden="true" tabindex="-1"></a>          <span class="at">y=</span><span class="st">"Count"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="sc">%&gt;%</span> </span>
+<span id="cb83-2"><a href="#cb83-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_histogram</span>(<span class="sc">~</span>amas<span class="sc">|</span> grade<span class="sc">~</span>gender,</span>
+<span id="cb83-3"><a href="#cb83-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">bins =</span> <span class="dv">5</span>,</span>
+<span id="cb83-4"><a href="#cb83-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">fill =</span> <span class="st">"steelblue"</span>,</span>
+<span id="cb83-5"><a href="#cb83-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">color=</span><span class="st">"white"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb83-6"><a href="#cb83-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">title=</span><span class="st">"Histogram of AMAS Scores"</span>,</span>
+<span id="cb83-7"><a href="#cb83-7" aria-hidden="true" tabindex="-1"></a>          <span class="at">subtitle =</span><span class="st">"Faceted by Grade and Gender"</span>,</span>
+<span id="cb83-8"><a href="#cb83-8" aria-hidden="true" tabindex="-1"></a>          <span class="at">x=</span><span class="st">"AMAS Score"</span>,</span>
+<span id="cb83-9"><a href="#cb83-9" aria-hidden="true" tabindex="-1"></a>          <span class="at">y=</span><span class="st">"Count"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1153,12 +1213,12 @@ $ arith  &lt;dbl&gt; 6, 6, 5, 7, 1, 1, 4, 7, 2, 6, 2, 5, 2, 6, 2, 7, 2, 4, 7, 3,
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="sc">%&gt;%</span> </span>
-<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_histogram</span>(<span class="sc">~</span>amas <span class="sc">|</span> grade,</span>
-<span id="cb71-3"><a href="#cb71-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">fill=</span><span class="sc">~</span>grade,</span>
-<span id="cb71-4"><a href="#cb71-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">colour=</span><span class="st">"black"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb71-5"><a href="#cb71-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(</span>
-<span id="cb71-6"><a href="#cb71-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"AMAS by Filled and Faceted by Grade"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb84"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="sc">%&gt;%</span> </span>
+<span id="cb84-2"><a href="#cb84-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_histogram</span>(<span class="sc">~</span>amas <span class="sc">|</span> grade,</span>
+<span id="cb84-3"><a href="#cb84-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">fill=</span><span class="sc">~</span>grade,</span>
+<span id="cb84-4"><a href="#cb84-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">colour=</span><span class="st">"black"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb84-5"><a href="#cb84-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(</span>
+<span id="cb84-6"><a href="#cb84-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"AMAS by Filled and Faceted by Grade"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>`stat_bin()` using `bins = 30`. Pick better value `binwidth`.</code></pre>
 </div>
@@ -1171,14 +1231,14 @@ $ arith  &lt;dbl&gt; 6, 6, 5, 7, 1, 1, 4, 7, 2, 6, 2, 5, 2, 6, 2, 7, 2, 4, 7, 3,
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="sc">%&gt;%</span> </span>
-<span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_boxplot</span>(amas<span class="sc">~</span>gender <span class="sc">|</span> grade,</span>
-<span id="cb73-3"><a href="#cb73-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">fill=</span><span class="sc">~</span>gender,</span>
-<span id="cb73-4"><a href="#cb73-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">orientation =</span> <span class="st">"x"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb73-5"><a href="#cb73-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">title =</span> <span class="st">"Boxplots of AMAS Scores by Grade"</span>,</span>
-<span id="cb73-6"><a href="#cb73-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Faceted by Grade"</span>,</span>
-<span id="cb73-7"><a href="#cb73-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Gender"</span>,</span>
-<span id="cb73-8"><a href="#cb73-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"AMAS Score"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb86"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="sc">%&gt;%</span> </span>
+<span id="cb86-2"><a href="#cb86-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_boxplot</span>(amas<span class="sc">~</span>gender <span class="sc">|</span> grade,</span>
+<span id="cb86-3"><a href="#cb86-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">fill=</span><span class="sc">~</span>gender,</span>
+<span id="cb86-4"><a href="#cb86-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">orientation =</span> <span class="st">"x"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb86-5"><a href="#cb86-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">title =</span> <span class="st">"Boxplots of AMAS Scores by Grade"</span>,</span>
+<span id="cb86-6"><a href="#cb86-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Faceted by Grade"</span>,</span>
+<span id="cb86-7"><a href="#cb86-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Gender"</span>,</span>
+<span id="cb86-8"><a href="#cb86-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"AMAS Score"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1197,15 +1257,15 @@ $ arith  &lt;dbl&gt; 6, 6, 5, 7, 1, 1, 4, 7, 2, 6, 2, 5, 2, 6, 2, 7, 2, 4, 7, 3,
 <section id="rcmas-scores-based-on-gender-grade" class="level3">
 <h3 class="anchored" data-anchor-id="rcmas-scores-based-on-gender-grade">RCMAS Scores based on Gender &amp; Grade</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="sc">%&gt;%</span> </span>
-<span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_histogram</span>(<span class="sc">~</span>rcmas<span class="sc">|</span> grade<span class="sc">~</span>gender,</span>
-<span id="cb74-3"><a href="#cb74-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">bins =</span> <span class="dv">5</span>,</span>
-<span id="cb74-4"><a href="#cb74-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">fill =</span> <span class="st">"steelblue"</span>,</span>
-<span id="cb74-5"><a href="#cb74-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">color=</span><span class="st">"white"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb74-6"><a href="#cb74-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">title=</span><span class="st">"Histogram of RCMAS Scores"</span>,</span>
-<span id="cb74-7"><a href="#cb74-7" aria-hidden="true" tabindex="-1"></a>          <span class="at">subtitle =</span><span class="st">"Faceted by Grade and Gender"</span>,</span>
-<span id="cb74-8"><a href="#cb74-8" aria-hidden="true" tabindex="-1"></a>          <span class="at">x=</span><span class="st">"RCMAS Score"</span>,</span>
-<span id="cb74-9"><a href="#cb74-9" aria-hidden="true" tabindex="-1"></a>          <span class="at">y=</span><span class="st">"Count"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="sc">%&gt;%</span> </span>
+<span id="cb87-2"><a href="#cb87-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_histogram</span>(<span class="sc">~</span>rcmas<span class="sc">|</span> grade<span class="sc">~</span>gender,</span>
+<span id="cb87-3"><a href="#cb87-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">bins =</span> <span class="dv">5</span>,</span>
+<span id="cb87-4"><a href="#cb87-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">fill =</span> <span class="st">"steelblue"</span>,</span>
+<span id="cb87-5"><a href="#cb87-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">color=</span><span class="st">"white"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb87-6"><a href="#cb87-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">title=</span><span class="st">"Histogram of RCMAS Scores"</span>,</span>
+<span id="cb87-7"><a href="#cb87-7" aria-hidden="true" tabindex="-1"></a>          <span class="at">subtitle =</span><span class="st">"Faceted by Grade and Gender"</span>,</span>
+<span id="cb87-8"><a href="#cb87-8" aria-hidden="true" tabindex="-1"></a>          <span class="at">x=</span><span class="st">"RCMAS Score"</span>,</span>
+<span id="cb87-9"><a href="#cb87-9" aria-hidden="true" tabindex="-1"></a>          <span class="at">y=</span><span class="st">"Count"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1215,12 +1275,12 @@ $ arith  &lt;dbl&gt; 6, 6, 5, 7, 1, 1, 4, 7, 2, 6, 2, 5, 2, 6, 2, 7, 2, 4, 7, 3,
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="sc">%&gt;%</span> </span>
-<span id="cb75-2"><a href="#cb75-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_histogram</span>(<span class="sc">~</span>rcmas <span class="sc">|</span> grade,</span>
-<span id="cb75-3"><a href="#cb75-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">fill=</span><span class="sc">~</span>grade,</span>
-<span id="cb75-4"><a href="#cb75-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">colour=</span><span class="st">"black"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb75-5"><a href="#cb75-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(</span>
-<span id="cb75-6"><a href="#cb75-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"AMAS by Filled and Faceted by Grade"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb88"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb88-1"><a href="#cb88-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="sc">%&gt;%</span> </span>
+<span id="cb88-2"><a href="#cb88-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_histogram</span>(<span class="sc">~</span>rcmas <span class="sc">|</span> grade,</span>
+<span id="cb88-3"><a href="#cb88-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">fill=</span><span class="sc">~</span>grade,</span>
+<span id="cb88-4"><a href="#cb88-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">colour=</span><span class="st">"black"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb88-5"><a href="#cb88-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(</span>
+<span id="cb88-6"><a href="#cb88-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"AMAS by Filled and Faceted by Grade"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>`stat_bin()` using `bins = 30`. Pick better value `binwidth`.</code></pre>
 </div>
@@ -1233,14 +1293,14 @@ $ arith  &lt;dbl&gt; 6, 6, 5, 7, 1, 1, 4, 7, 2, 6, 2, 5, 2, 6, 2, 7, 2, 4, 7, 3,
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="sc">%&gt;%</span> </span>
-<span id="cb77-2"><a href="#cb77-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_boxplot</span>(rcmas<span class="sc">~</span>gender <span class="sc">|</span> grade,</span>
-<span id="cb77-3"><a href="#cb77-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">fill=</span><span class="sc">~</span>gender,</span>
-<span id="cb77-4"><a href="#cb77-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">orientation =</span> <span class="st">"x"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb77-5"><a href="#cb77-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">title =</span> <span class="st">"Boxplots of RCMAS Scores by Grade"</span>,</span>
-<span id="cb77-6"><a href="#cb77-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Faceted by Grade"</span>,</span>
-<span id="cb77-7"><a href="#cb77-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Gender"</span>,</span>
-<span id="cb77-8"><a href="#cb77-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"RCMAS Score"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb90"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="sc">%&gt;%</span> </span>
+<span id="cb90-2"><a href="#cb90-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_boxplot</span>(rcmas<span class="sc">~</span>gender <span class="sc">|</span> grade,</span>
+<span id="cb90-3"><a href="#cb90-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">fill=</span><span class="sc">~</span>gender,</span>
+<span id="cb90-4"><a href="#cb90-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">orientation =</span> <span class="st">"x"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb90-5"><a href="#cb90-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">title =</span> <span class="st">"Boxplots of RCMAS Scores by Grade"</span>,</span>
+<span id="cb90-6"><a href="#cb90-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Faceted by Grade"</span>,</span>
+<span id="cb90-7"><a href="#cb90-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Gender"</span>,</span>
+<span id="cb90-8"><a href="#cb90-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"RCMAS Score"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1261,16 +1321,16 @@ $ arith  &lt;dbl&gt; 6, 6, 5, 7, 1, 1, 4, 7, 2, 6, 2, 5, 2, 6, 2, 7, 2, 4, 7, 3,
 <section id="arith-scores-based-on-gender-grade" class="level3">
 <h3 class="anchored" data-anchor-id="arith-scores-based-on-gender-grade">Arith Scores based on Gender &amp; Grade</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="sc">%&gt;%</span></span>
-<span id="cb78-2"><a href="#cb78-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_bar</span>(<span class="sc">~</span>arith <span class="sc">|</span> grade,</span>
-<span id="cb78-3"><a href="#cb78-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">fill =</span> <span class="sc">~</span>gender,</span>
-<span id="cb78-4"><a href="#cb78-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">position=</span><span class="st">"dodge"</span>,</span>
-<span id="cb78-5"><a href="#cb78-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">color=</span><span class="st">"black"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb78-6"><a href="#cb78-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">title =</span> <span class="st">"Dodged Bar Graph of Arith Scores"</span>,</span>
-<span id="cb78-7"><a href="#cb78-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Faceted by Grade"</span>,</span>
-<span id="cb78-8"><a href="#cb78-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Arith Score"</span>,</span>
-<span id="cb78-9"><a href="#cb78-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Count"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb78-10"><a href="#cb78-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_refine</span>(<span class="fu">scale_color_brewer</span>(<span class="at">palette =</span> <span class="st">"Set 2"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb91"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb91-1"><a href="#cb91-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="sc">%&gt;%</span></span>
+<span id="cb91-2"><a href="#cb91-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_bar</span>(<span class="sc">~</span>arith <span class="sc">|</span> grade,</span>
+<span id="cb91-3"><a href="#cb91-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">fill =</span> <span class="sc">~</span>gender,</span>
+<span id="cb91-4"><a href="#cb91-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">position=</span><span class="st">"dodge"</span>,</span>
+<span id="cb91-5"><a href="#cb91-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">color=</span><span class="st">"black"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb91-6"><a href="#cb91-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">title =</span> <span class="st">"Dodged Bar Graph of Arith Scores"</span>,</span>
+<span id="cb91-7"><a href="#cb91-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Faceted by Grade"</span>,</span>
+<span id="cb91-8"><a href="#cb91-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Arith Score"</span>,</span>
+<span id="cb91-9"><a href="#cb91-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Count"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb91-10"><a href="#cb91-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_refine</span>(<span class="fu">scale_color_brewer</span>(<span class="at">palette =</span> <span class="st">"Set 2"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: Unknown palette: "Set 2"</code></pre>
 </div>
@@ -1289,16 +1349,16 @@ $ arith  &lt;dbl&gt; 6, 6, 5, 7, 1, 1, 4, 7, 2, 6, 2, 5, 2, 6, 2, 7, 2, 4, 7, 3,
 <li>In Primary Grade, it is seen that the difference between girls and boys score is less when compared to Secondary grade where the gap is bigger.</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="sc">%&gt;%</span></span>
-<span id="cb80-2"><a href="#cb80-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_bar</span>(<span class="sc">~</span>arith <span class="sc">|</span> grade,</span>
-<span id="cb80-3"><a href="#cb80-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">fill =</span> <span class="sc">~</span>gender,</span>
-<span id="cb80-4"><a href="#cb80-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">position=</span><span class="st">"fill"</span>,</span>
-<span id="cb80-5"><a href="#cb80-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">color=</span><span class="st">"black"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb80-6"><a href="#cb80-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">title =</span> <span class="st">"Filled Bar Graph of Arith Scores"</span>,</span>
-<span id="cb80-7"><a href="#cb80-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Faceted by Grade"</span>,</span>
-<span id="cb80-8"><a href="#cb80-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Arith Score"</span>,</span>
-<span id="cb80-9"><a href="#cb80-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Count"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb80-10"><a href="#cb80-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_refine</span>(<span class="fu">scale_color_brewer</span>(<span class="at">palette =</span> <span class="st">"Set 2"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb93"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="sc">%&gt;%</span></span>
+<span id="cb93-2"><a href="#cb93-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_bar</span>(<span class="sc">~</span>arith <span class="sc">|</span> grade,</span>
+<span id="cb93-3"><a href="#cb93-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">fill =</span> <span class="sc">~</span>gender,</span>
+<span id="cb93-4"><a href="#cb93-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">position=</span><span class="st">"fill"</span>,</span>
+<span id="cb93-5"><a href="#cb93-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">color=</span><span class="st">"black"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb93-6"><a href="#cb93-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">title =</span> <span class="st">"Filled Bar Graph of Arith Scores"</span>,</span>
+<span id="cb93-7"><a href="#cb93-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Faceted by Grade"</span>,</span>
+<span id="cb93-8"><a href="#cb93-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Arith Score"</span>,</span>
+<span id="cb93-9"><a href="#cb93-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Count"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb93-10"><a href="#cb93-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_refine</span>(<span class="fu">scale_color_brewer</span>(<span class="at">palette =</span> <span class="st">"Set 2"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: Unknown palette: "Set 2"</code></pre>
 </div>
@@ -1311,14 +1371,14 @@ $ arith  &lt;dbl&gt; 6, 6, 5, 7, 1, 1, 4, 7, 2, 6, 2, 5, 2, 6, 2, 7, 2, 4, 7, 3,
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="sc">%&gt;%</span> </span>
-<span id="cb82-2"><a href="#cb82-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_bar</span>(<span class="sc">~</span>arith <span class="sc">|</span> grade,</span>
-<span id="cb82-3"><a href="#cb82-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">fill=</span><span class="sc">~</span>grade,</span>
-<span id="cb82-4"><a href="#cb82-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">colour=</span><span class="st">"black"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb82-5"><a href="#cb82-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(</span>
-<span id="cb82-6"><a href="#cb82-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Arith by Filled and Faceted by Grade"</span>,</span>
-<span id="cb82-7"><a href="#cb82-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">x=</span><span class="st">"Arith Scores"</span>,</span>
-<span id="cb82-8"><a href="#cb82-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">y=</span><span class="st">"Count"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb95"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb95-1"><a href="#cb95-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="sc">%&gt;%</span> </span>
+<span id="cb95-2"><a href="#cb95-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_bar</span>(<span class="sc">~</span>arith <span class="sc">|</span> grade,</span>
+<span id="cb95-3"><a href="#cb95-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">fill=</span><span class="sc">~</span>grade,</span>
+<span id="cb95-4"><a href="#cb95-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">colour=</span><span class="st">"black"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb95-5"><a href="#cb95-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(</span>
+<span id="cb95-6"><a href="#cb95-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Arith by Filled and Faceted by Grade"</span>,</span>
+<span id="cb95-7"><a href="#cb95-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">x=</span><span class="st">"Arith Scores"</span>,</span>
+<span id="cb95-8"><a href="#cb95-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">y=</span><span class="st">"Count"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1332,14 +1392,14 @@ $ arith  &lt;dbl&gt; 6, 6, 5, 7, 1, 1, 4, 7, 2, 6, 2, 5, 2, 6, 2, 7, 2, 4, 7, 3,
 <h4 class="anchored" data-anchor-id="inferences-1">Inferences:</h4>
 <p>Primary Grade have higher arith scores than Secondary Grade.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="sc">%&gt;%</span> </span>
-<span id="cb83-2"><a href="#cb83-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_boxplot</span>(arith <span class="sc">~</span>gender <span class="sc">|</span> grade,</span>
-<span id="cb83-3"><a href="#cb83-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">fill=</span><span class="sc">~</span>gender,</span>
-<span id="cb83-4"><a href="#cb83-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">orientation =</span> <span class="st">"x"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb83-5"><a href="#cb83-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">title =</span> <span class="st">"Boxplots of Arith Scores by Grade"</span>,</span>
-<span id="cb83-6"><a href="#cb83-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Faceted by Grade"</span>,</span>
-<span id="cb83-7"><a href="#cb83-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Gender"</span>,</span>
-<span id="cb83-8"><a href="#cb83-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Arith Score"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb96"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="sc">%&gt;%</span> </span>
+<span id="cb96-2"><a href="#cb96-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_boxplot</span>(arith <span class="sc">~</span>gender <span class="sc">|</span> grade,</span>
+<span id="cb96-3"><a href="#cb96-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">fill=</span><span class="sc">~</span>gender,</span>
+<span id="cb96-4"><a href="#cb96-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">orientation =</span> <span class="st">"x"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb96-5"><a href="#cb96-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">title =</span> <span class="st">"Boxplots of Arith Scores by Grade"</span>,</span>
+<span id="cb96-6"><a href="#cb96-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Faceted by Grade"</span>,</span>
+<span id="cb96-7"><a href="#cb96-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Gender"</span>,</span>
+<span id="cb96-8"><a href="#cb96-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Arith Score"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1360,17 +1420,17 @@ $ arith  &lt;dbl&gt; 6, 6, 5, 7, 1, 1, 4, 7, 2, 6, 2, 5, 2, 6, 2, 7, 2, 4, 7, 3,
 <section id="arith-scores-based-on-age-grade-gender" class="level3">
 <h3 class="anchored" data-anchor-id="arith-scores-based-on-age-grade-gender">Arith Scores based on Age, Grade &amp; Gender</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb84"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="sc">%&gt;%</span></span>
-<span id="cb84-2"><a href="#cb84-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_point</span>(arith <span class="sc">~</span> age <span class="sc">|</span> gender, <span class="at">color =</span> <span class="sc">~</span> grade) <span class="sc">%&gt;%</span></span>
-<span id="cb84-3"><a href="#cb84-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(</span>
-<span id="cb84-4"><a href="#cb84-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Scatter Plot of Age vs Arithmetic Score"</span>,</span>
-<span id="cb84-5"><a href="#cb84-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Faceted by Gender, Colored by Grade"</span>,</span>
-<span id="cb84-6"><a href="#cb84-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Age"</span>,</span>
-<span id="cb84-7"><a href="#cb84-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Arithmetic Score"</span>,</span>
-<span id="cb84-8"><a href="#cb84-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"Grade"</span></span>
-<span id="cb84-9"><a href="#cb84-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb84-10"><a href="#cb84-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_refine</span>(<span class="fu">scale_color_brewer</span>(<span class="at">palette =</span> <span class="st">"Spectral"</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb84-11"><a href="#cb84-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_theme</span>(<span class="fu">theme_dark</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb97"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb97-1"><a href="#cb97-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="sc">%&gt;%</span></span>
+<span id="cb97-2"><a href="#cb97-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_point</span>(arith <span class="sc">~</span> age <span class="sc">|</span> gender, <span class="at">color =</span> <span class="sc">~</span> grade) <span class="sc">%&gt;%</span></span>
+<span id="cb97-3"><a href="#cb97-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(</span>
+<span id="cb97-4"><a href="#cb97-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Scatter Plot of Age vs Arithmetic Score"</span>,</span>
+<span id="cb97-5"><a href="#cb97-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Faceted by Gender, Colored by Grade"</span>,</span>
+<span id="cb97-6"><a href="#cb97-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Age"</span>,</span>
+<span id="cb97-7"><a href="#cb97-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Arithmetic Score"</span>,</span>
+<span id="cb97-8"><a href="#cb97-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"Grade"</span></span>
+<span id="cb97-9"><a href="#cb97-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb97-10"><a href="#cb97-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_refine</span>(<span class="fu">scale_color_brewer</span>(<span class="at">palette =</span> <span class="st">"Spectral"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb97-11"><a href="#cb97-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_theme</span>(<span class="fu">theme_dark</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1385,16 +1445,16 @@ $ arith  &lt;dbl&gt; 6, 6, 5, 7, 1, 1, 4, 7, 2, 6, 2, 5, 2, 6, 2, 7, 2, 4, 7, 3,
 <li>Scatter plots shows similar Arith trends across both genders, but girls tend to have higher AMAS.</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb85"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="sc">%&gt;%</span> </span>
-<span id="cb85-2"><a href="#cb85-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_boxplot</span>(arith <span class="sc">~</span> grade <span class="sc">|</span> gender, <span class="at">orientation =</span> <span class="st">"x"</span>, <span class="at">fill=</span><span class="sc">~</span>grade, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb85-3"><a href="#cb85-3" aria-hidden="true" tabindex="-1"></a> <span class="fu">gf_labs</span>(</span>
-<span id="cb85-4"><a href="#cb85-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Grade"</span>,</span>
-<span id="cb85-5"><a href="#cb85-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Arithmetic Score"</span>,</span>
-<span id="cb85-6"><a href="#cb85-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Arithmetic Scores by Grade"</span>,</span>
-<span id="cb85-7"><a href="#cb85-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Faceted by Gender"</span></span>
-<span id="cb85-8"><a href="#cb85-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb85-9"><a href="#cb85-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_refine</span>(<span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">"Set3"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb85-10"><a href="#cb85-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_theme</span>(<span class="fu">theme_dark</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb98"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb98-1"><a href="#cb98-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="sc">%&gt;%</span> </span>
+<span id="cb98-2"><a href="#cb98-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_boxplot</span>(arith <span class="sc">~</span> grade <span class="sc">|</span> gender, <span class="at">orientation =</span> <span class="st">"x"</span>, <span class="at">fill=</span><span class="sc">~</span>grade, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb98-3"><a href="#cb98-3" aria-hidden="true" tabindex="-1"></a> <span class="fu">gf_labs</span>(</span>
+<span id="cb98-4"><a href="#cb98-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Grade"</span>,</span>
+<span id="cb98-5"><a href="#cb98-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Arithmetic Score"</span>,</span>
+<span id="cb98-6"><a href="#cb98-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Arithmetic Scores by Grade"</span>,</span>
+<span id="cb98-7"><a href="#cb98-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Faceted by Gender"</span></span>
+<span id="cb98-8"><a href="#cb98-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb98-9"><a href="#cb98-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_refine</span>(<span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">"Set3"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb98-10"><a href="#cb98-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_theme</span>(<span class="fu">theme_dark</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1408,17 +1468,17 @@ $ arith  &lt;dbl&gt; 6, 6, 5, 7, 1, 1, 4, 7, 2, 6, 2, 5, 2, 6, 2, 7, 2, 4, 7, 3,
 <section id="density-plot-based-on-age-gender-grade" class="level3">
 <h3 class="anchored" data-anchor-id="density-plot-based-on-age-gender-grade">Density Plot based on Age, Gender &amp; Grade</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb86"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="sc">%&gt;%</span></span>
-<span id="cb86-2"><a href="#cb86-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_density</span>(<span class="sc">~</span> age <span class="sc">|</span> gender, <span class="at">fill =</span> <span class="sc">~</span> grade, <span class="at">color=</span><span class="st">"black"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb86-3"><a href="#cb86-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(</span>
-<span id="cb86-4"><a href="#cb86-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Density Plots of Age"</span>,</span>
-<span id="cb86-5"><a href="#cb86-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Faceted by Gender, Filled by Grade"</span>,</span>
-<span id="cb86-6"><a href="#cb86-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Age"</span>,</span>
-<span id="cb86-7"><a href="#cb86-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Density"</span>,</span>
-<span id="cb86-8"><a href="#cb86-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"Grade"</span></span>
-<span id="cb86-9"><a href="#cb86-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
-<span id="cb86-10"><a href="#cb86-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_refine</span>(<span class="fu">scale_color_brewer</span>(<span class="at">palette =</span> <span class="st">"Set 3"</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb86-11"><a href="#cb86-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_theme</span>(<span class="fu">theme_light</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb99"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb99-1"><a href="#cb99-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="sc">%&gt;%</span></span>
+<span id="cb99-2"><a href="#cb99-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_density</span>(<span class="sc">~</span> age <span class="sc">|</span> gender, <span class="at">fill =</span> <span class="sc">~</span> grade, <span class="at">color=</span><span class="st">"black"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb99-3"><a href="#cb99-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(</span>
+<span id="cb99-4"><a href="#cb99-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Density Plots of Age"</span>,</span>
+<span id="cb99-5"><a href="#cb99-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Faceted by Gender, Filled by Grade"</span>,</span>
+<span id="cb99-6"><a href="#cb99-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Age"</span>,</span>
+<span id="cb99-7"><a href="#cb99-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Density"</span>,</span>
+<span id="cb99-8"><a href="#cb99-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"Grade"</span></span>
+<span id="cb99-9"><a href="#cb99-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb99-10"><a href="#cb99-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_refine</span>(<span class="fu">scale_color_brewer</span>(<span class="at">palette =</span> <span class="st">"Set 3"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb99-11"><a href="#cb99-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_theme</span>(<span class="fu">theme_light</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: Unknown palette: "Set 3"</code></pre>
 </div>
@@ -1438,16 +1498,16 @@ $ arith  &lt;dbl&gt; 6, 6, 5, 7, 1, 1, 4, 7, 2, 6, 2, 5, 2, 6, 2, 7, 2, 4, 7, 3,
 <section id="comparing-amas-rcmas" class="level3">
 <h3 class="anchored" data-anchor-id="comparing-amas-rcmas">Comparing AMAS &amp; RCMAS</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb89"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="sc">%&gt;%</span></span>
-<span id="cb89-2"><a href="#cb89-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_point</span>(rcmas <span class="sc">~</span> amas, <span class="at">color =</span> <span class="sc">~</span> gender, <span class="at">shape =</span> <span class="sc">~</span> gender) <span class="sc">%&gt;%</span></span>
-<span id="cb89-3"><a href="#cb89-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(</span>
-<span id="cb89-4"><a href="#cb89-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Scatter Plot of Amas vs Rcmas"</span>,</span>
-<span id="cb89-5"><a href="#cb89-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Colored by Gender"</span>,</span>
-<span id="cb89-6"><a href="#cb89-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Amas Score"</span>,</span>
-<span id="cb89-7"><a href="#cb89-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Rcmas Score"</span></span>
-<span id="cb89-8"><a href="#cb89-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb89-9"><a href="#cb89-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_refine</span>(<span class="fu">scale_color_brewer</span>(<span class="at">palette =</span> <span class="st">"Set1"</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb89-10"><a href="#cb89-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_theme</span>(<span class="fu">theme_light</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb102"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb102-1"><a href="#cb102-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="sc">%&gt;%</span></span>
+<span id="cb102-2"><a href="#cb102-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_point</span>(rcmas <span class="sc">~</span> amas, <span class="at">color =</span> <span class="sc">~</span> gender, <span class="at">shape =</span> <span class="sc">~</span> gender) <span class="sc">%&gt;%</span></span>
+<span id="cb102-3"><a href="#cb102-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(</span>
+<span id="cb102-4"><a href="#cb102-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Scatter Plot of Amas vs Rcmas"</span>,</span>
+<span id="cb102-5"><a href="#cb102-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Colored by Gender"</span>,</span>
+<span id="cb102-6"><a href="#cb102-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Amas Score"</span>,</span>
+<span id="cb102-7"><a href="#cb102-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Rcmas Score"</span></span>
+<span id="cb102-8"><a href="#cb102-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb102-9"><a href="#cb102-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_refine</span>(<span class="fu">scale_color_brewer</span>(<span class="at">palette =</span> <span class="st">"Set1"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb102-10"><a href="#cb102-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_theme</span>(<span class="fu">theme_light</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1462,16 +1522,16 @@ $ arith  &lt;dbl&gt; 6, 6, 5, 7, 1, 1, 4, 7, 2, 6, 2, 5, 2, 6, 2, 7, 2, 4, 7, 3,
 <li>In general, both Genders have higher amas and lower rcmas</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb90"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="sc">%&gt;%</span></span>
-<span id="cb90-2"><a href="#cb90-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_boxplot</span>(rcmas <span class="sc">~</span> amas <span class="sc">|</span> gender<span class="sc">~</span>grade, <span class="at">fill =</span><span class="sc">~</span>gender, <span class="at">orientation =</span> <span class="st">"y"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb90-3"><a href="#cb90-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(</span>
-<span id="cb90-4"><a href="#cb90-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Scatter Plot of Amas vs Rcmas"</span>,</span>
-<span id="cb90-5"><a href="#cb90-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Colored by Grade"</span>,</span>
-<span id="cb90-6"><a href="#cb90-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Amas Score"</span>,</span>
-<span id="cb90-7"><a href="#cb90-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Rcmas Score"</span></span>
-<span id="cb90-8"><a href="#cb90-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb90-9"><a href="#cb90-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_refine</span>(<span class="fu">scale_color_brewer</span>(<span class="at">palette =</span> <span class="st">"Set2"</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb90-10"><a href="#cb90-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_theme</span>(<span class="fu">theme_light</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb103"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb103-1"><a href="#cb103-1" aria-hidden="true" tabindex="-1"></a>meth_modified <span class="sc">%&gt;%</span></span>
+<span id="cb103-2"><a href="#cb103-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_boxplot</span>(rcmas <span class="sc">~</span> amas <span class="sc">|</span> gender<span class="sc">~</span>grade, <span class="at">fill =</span><span class="sc">~</span>gender, <span class="at">orientation =</span> <span class="st">"y"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb103-3"><a href="#cb103-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(</span>
+<span id="cb103-4"><a href="#cb103-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Scatter Plot of Amas vs Rcmas"</span>,</span>
+<span id="cb103-5"><a href="#cb103-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Colored by Grade"</span>,</span>
+<span id="cb103-6"><a href="#cb103-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Amas Score"</span>,</span>
+<span id="cb103-7"><a href="#cb103-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Rcmas Score"</span></span>
+<span id="cb103-8"><a href="#cb103-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb103-9"><a href="#cb103-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_refine</span>(<span class="fu">scale_color_brewer</span>(<span class="at">palette =</span> <span class="st">"Set2"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb103-10"><a href="#cb103-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_theme</span>(<span class="fu">theme_light</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">

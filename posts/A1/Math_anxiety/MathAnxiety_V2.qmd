@@ -21,45 +21,39 @@ Load necessary libraries for data manipulation, visualization, and interactive e
 ### **Setting up R Packages**
 
 ```{r}
-library(tidyverse)
-library(mosaic)
-library(skimr)
-library(visdat)
-library(naniar)
-library(janitor)
-library(tinytable)
 library(ggformula)
-library(DT)
-library(ggridges)
-library(corrplot)
-library(TeachHist)
+library(janitor)
+library(mosaic)
+library(naniar)
+library(skimr)
+library(tidyverse)
+library(tinytable)
+library(visdat)
 library(crosstable)
 library(RColorBrewer)
 ```
 
-### **Read Data**
+## Read Data
 
 ```{r}
 meth <- readr::read_delim("MathAnxiety.csv",
                           delim = ";",
                           locale = locale(decimal_mark = ",")) %>% 
-  janitor::clean_names("snake") 
+  janitor::clean_names("snake")
 meth
+
 ```
 
-### *Data dictionary*
+## Data Dictionary
 
-*Age*: The age of the child in months.
-
-*Gender*: The gender of the child (Boy or Girl).
-
-*Grade*: The educational level of the child (Primary or Secondary).
-
-*AMAS*: The score on the Abbreviated Math Anxiety Scale, where a higher score indicates greater math anxiety.
-
-*RCMAS*: The score on the Revised Children's Manifest Anxiety Scale, measuring general anxiety.
-
-*Arith*: The score on an arithmetic test.
+| Variable | Description |
+|----|----|
+| Age | The age of the child in months. |
+| Gender | The gender of the child (Boy or Girl). |
+| Grade | The educational level of the child (Primary or Secondary). |
+| AMAS | The score on the Abbreviated Math Anxiety Scale, where a higher score indicates greater math anxiety. |
+| RCMAS | The score on the Revised Children's Manifest Anxiety Scale, measuring general anxiety |
+| Arith | The score on an arithmetic test. |
 
 ## Examine Data
 

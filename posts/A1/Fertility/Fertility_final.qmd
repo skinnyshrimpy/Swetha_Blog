@@ -5,7 +5,12 @@ date: "2025-09-28"
 categories: [Fertility]
 format: html
 ---
+
 # 1. Fertility Data set
+
+Exploring and Analysing patterns of a dataset about fertility, demographics and weeks worked in 1979.
+
+![](Fertility.jpg)
 
 ## Setting up R Packages
 
@@ -29,6 +34,19 @@ janitor::clean_names(case="snake")
 Fertility
 
 ```
+
+## Data Dictionary
+
+| Variable | **Description** |
+|----|----|
+| morekids | Does the mother have more than 2 children? |
+| gender1 | indicating gender of first child. |
+| gender2 | indicating gender of second child. |
+| age | age of mother at census. |
+| afam | Is the mother African-American? |
+| hispanic | Is the mother Hispanic? |
+| other | Is the mother's ethnicity neither African-American nor Hispanic, nor Caucasian? |
+| work | number of weeks in which the mother worked in 1979. |
 
 ## Examine Data
 
@@ -121,6 +139,7 @@ crosstable(ethnicity ~ morekids,
 ) %>%
   crosstable::as_flextable()
 ```
+
 ```{r}
 crosstable(ethnicity ~ gender1 + gender2,
   data = Fertility_ethnicity_factor

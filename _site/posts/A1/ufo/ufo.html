@@ -192,6 +192,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="ufo-data-set" class="level1">
 <h1>2. UFO Data set</h1>
+<p>People keep spotting “UFOs” in different shapes, at random places on Earth, for weird amounts of time…and we analysed the patterns of when, where and how.</p>
+<p><img src="UFO.jpg" class="img-fluid"></p>
 <section id="setting-up-r-packages" class="level2">
 <h2 class="anchored" data-anchor-id="setting-up-r-packages">Setting up R Packages</h2>
 <div class="cell">
@@ -314,6 +316,67 @@ dbl (3): encounter_length, latitude, longitude
 ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 </div>
 </div>
+</section>
+<section id="data-dictionary" class="level2">
+<h2 class="anchored" data-anchor-id="data-dictionary">Data Dictionary</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 37%">
+<col style="width: 62%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>Variable</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>date_time</td>
+<td>Date time sighting occurred</td>
+</tr>
+<tr class="even">
+<td>city_area</td>
+<td>City or area of sighting</td>
+</tr>
+<tr class="odd">
+<td>state</td>
+<td>state/region of sighting</td>
+</tr>
+<tr class="even">
+<td>country</td>
+<td>Country of sighting</td>
+</tr>
+<tr class="odd">
+<td>ufo_shape</td>
+<td>UFO Shape</td>
+</tr>
+<tr class="even">
+<td>encounter_length</td>
+<td>Encounter length in seconds</td>
+</tr>
+<tr class="odd">
+<td>described_encounter_length</td>
+<td>Encounter length as described (eg 1 hour, etc</td>
+</tr>
+<tr class="even">
+<td>description</td>
+<td>Description of encounter</td>
+</tr>
+<tr class="odd">
+<td>date_documented</td>
+<td>Date documented</td>
+</tr>
+<tr class="even">
+<td>latitude</td>
+<td>Latitude</td>
+</tr>
+<tr class="odd">
+<td>longitude</td>
+<td>Longitude</td>
+</tr>
+</tbody>
+</table>
 </section>
 <section id="examine-data" class="level2">
 <h2 class="anchored" data-anchor-id="examine-data">Examine Data</h2>
