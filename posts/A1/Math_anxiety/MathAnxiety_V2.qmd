@@ -1,9 +1,10 @@
 ---
-title: "Fertility Dataset"
+title: "A1 Math Anxiety Dataset"
 author: "Swetha KV, Diya Bijoy, Abhinav R, Aanya Pandith"
 date: "2025-09-28"
 categories: [Math Anxiety]
----quarti
+format: html
+---
 
 # Math Anxiety Data set
 
