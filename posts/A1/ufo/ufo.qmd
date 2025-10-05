@@ -43,7 +43,7 @@ ufo_sightings <- readr::read_csv("https://raw.githubusercontent.com/rfordatascie
 ## Data Dictionary
 
 | **Variable**               | **Description**                               |
-|---------------------------|---------------------------------------------|
+|----------------------------|-----------------------------------------------|
 | date_time                  | Date time sighting occurred                   |
 | city_area                  | City or area of sighting                      |
 | state                      | state/region of sighting                      |
