@@ -587,7 +587,3 @@ meth_modified %>%
     -   Girls have higher median and wider range for math anxiety (amas)
     -   Boys have wider range of general anxiety compared to girls (rcmas)
     
-## Conclusion
-1. Most visualizations show that girls have higher anxieties (both math and general), while boys have higher arithmetic scores. This could be due to boys possibly having a better support system.
-
-2. Many visualizations confirm: primary grade students do better in Math,
