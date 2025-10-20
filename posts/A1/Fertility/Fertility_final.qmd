@@ -327,7 +327,7 @@ Fertility_ethnicity_factor %>%
 ```{r}
 Fertility_ethnicity_factor %>%
   count(ethnicity, morekids) %>%  
-  gf_col(n ~ ethnicity, fill = ~morekids, position = "dodge") %>%  
+  gf_col(n ~ ethnicity, fill = ~morekids, position = "stack") %>%  
   gf_labs(
     title = "Ethnic Group Distribution by More Kids",
     subtitle = "Count of Respondents who have More Children ",

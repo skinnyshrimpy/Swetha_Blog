@@ -1,0 +1,369 @@
+---
+title: "A2 Crimedataset"
+author: "Swetha, Shruthi"
+date: "2025-10-13"
+categories: [Homicides in Nine US Cities (2015)]
+format: html
+---
+
+## Setting up R Packages
+
+```{r}
+library(tidyverse)
+library(janitor)
+library(dplyr)
+library(naniar)
+library(skimr)
+library(crosstable)
+library(tinytable)
+library(ggformula)
+library(mosaic)
+library(tidyverse)
+library(vcd)
+library(vcdExtra) 
+library(resampledata)
+library(ggmosaic)
+library(ggpubr) 
+library(visdat)
+library(naniar) 
+library(DT)
+library(ggrepel)
+library(marquee)
+
+library(crimedatasets)
+library(DataSetsVerse)
+```
+
+## Reading Data
+
+```{r}
+data(package = "crimedatasets")
+```
+
+```{r}
+data("homicides15_tbl_df", package = "crimedatasets")
+dplyr::glimpse(homicides15_tbl_df)
+```
+
+## Examine Data
+
+```{r}
+base::names(homicides15_tbl_df)
+dplyr::glimpse(homicides15_tbl_df)
+base::dim(homicides15_tbl_df)
+utils::str(homicides15_tbl_df)
+
+```
+
+## Removing NA
+
+```{r}
+homicides15_tbl_df <- homicides15_tbl_df %>% 
+ tidyr::drop_na()
+```
+
+## Viewing Missing Data
+
+```{r}
+visdat::vis_dat(homicides15_tbl_df)
+```
+
+```{r}
+visdat::vis_miss(homicides15_tbl_df)
+```
+
+## Replace common NA strings and numbers with actual NA
+
+```{r}
+homicides15_tbl_df_modified <- homicides15_tbl_df %>%
+  naniar::replace_with_na_all(data = ., condition = ~ .x %in% common_na_numbers) %>%
+  naniar::replace_with_na_all(data = ., condition = ~ .x %in% common_na_strings) 
+glimpse(homicides15_tbl_df_modified)
+```
+
+## Data Cleaned
+
+```{r}
+homicides15_tbl_df_modified %>%
+  head(10) %>%
+  stats::setNames(c("UID", "City Name", "Offense Code", "Offense Type", "Date Single", "Address", "Longitude", "Latitude", "Location Type", "Location Category", "FIPS State", "FIPS County", "Tract", "Block Group", "Block")) %>% 
+  
+    DT::datatable(
+    caption = htmltools::tags$caption(
+      style = "caption-side: top; text-align: left; color: blue; font-size: 150%",
+      "Homicides in Nine US Cities (2015)"
+    ),
+    options = list(pageLength = 10, autoWidth = TRUE)
+  ) %>%
+  DT::formatStyle(
+    columns = names(c("UID", "City Name", "Offense Code", "Offense Type", "Date Single", "Address", "Longitude", "Latitude", "Location Type", "Location Category", "FIPS State", "FIPS County", "Tract", "Block Group", "Block")),
+    fontFamily = "Georgia",
+    fontSize = "12px",
+    color = "black"
+  ) 
+```
+
+## Munging Data
+
+```{r}
+homicides15_tbl_df_cleaned <- homicides15_tbl_df_modified %>%
+  mutate(across(where(is.character), as.factor)) %>% 
+  relocate(where(is.factor))
+glimpse(homicides15_tbl_df_cleaned)
+```
+
+```{r}
+homicides15_tbl_df_quant <- homicides15_tbl_df_cleaned %>%
+  drop_na() %>%
+  select(where(is.numeric))
+homicides15_tbl_df_quant %>% names()
+```
+
+## Summaries: Examining the Data
+
+```{r}
+homicides15_tbl_df_cleaned %>%
+  count(city_name, offense_type) %>%
+  arrange(desc(n))
+```
+
+```{r}
+homicides15_tbl_df_cleaned %>%
+  count(location_type) %>%
+  arrange(desc(n))
+```
+
+```{r}
+  homicides15_tbl_df_cleaned %>%
+    dplyr::summarise(
+      median_year = median(year(date_single), na.rm=TRUE),
+      mean_hour = mean(hour(date_single), na.rm=TRUE),
+      sd_hour = sd(hour(date_single), na.rm=TRUE)
+    )
+```
+
+```{r}
+homicides15_tbl_df_cleaned <- homicides15_tbl_df_cleaned %>%
+  mutate(
+    year = year(date_single),
+    month = month(date_single, label = TRUE, abbr = TRUE),  # gives Jan, Feb, Mar...
+    day = day(date_single),
+    hour = hour(date_single)
+  )
+homicides15_tbl_df_cleaned
+```
+
+```{r}
+glimpse(homicides15_tbl_df_cleaned)
+```
+
+```{r}
+homicides_block_counts <- homicides15_tbl_df_cleaned %>%
+  drop_na(block, block_group, city_name) %>%
+  count(city_name, block, block_group, name = "homicide_count")
+
+homicides_block_counts
+```
+
+```{r}
+homicides_counts <- homicides15_tbl_df_cleaned %>%
+  dplyr::count(longitude, latitude, name = "count")
+
+homicides_counts
+```
+
+## Visualizing the data
+
+### 1.Homicides by City
+
+```{r}
+
+gf_bar(~city_name, data = homicides15_tbl_df_cleaned, fill = ~city_name) %>%
+  gf_labs(title = "Crime Count by City", x = "City Name", y = "Count")
+```
+
+```{r}
+mosaic::cor_test(latitude ~ longitude, data = homicides15_tbl_df_cleaned) %>%
+  broom::tidy() %>%
+  knitr::kable(
+    digits = 3,
+    caption = "Correlation between latitude and longitude"
+  )
+```
+
+-Inference 
+1.The largest number of cases seems to be in the northernmost eastern location (Chicago) and the westernmost location (Los Angeles).
+
+-Inference
+1.  Homicides mostly happen in a few specific cities and locations; they are not spread everywhere.
+
+2.  Homicides usaully cluster in large cities - Chicago, LA
+
+### 2. Block and Block Group Patterns
+
+```{r}
+mosaic::cor_test(block ~ block_group, data = homicides15_tbl_df_cleaned) %>%
+  broom::tidy() %>%
+  knitr::kable(
+    digits = 3,
+    caption = "Correlation between block and block_group"
+  )
+
+```
+
+```{r}
+
+homicides15_tbl_df_cleaned %>%
+  count(block, sort = TRUE) %>%
+  top_n(5, n)
+
+homicides15_tbl_df_cleaned %>%
+  count(block_group, sort = TRUE) %>%
+  top_n(7, n)
+
+```
+
+```{r}
+gf_point(
+  block_group ~ block | city_name,
+  data = homicides_block_counts,
+  position = "jitter",
+  color = ~homicide_count,
+  size = ~homicide_count ) %>%
+  gf_lm() %>% 
+  gf_labs(
+    title = "Homicide Concentration -  Block and Block Group",
+    subtitle = "size show number of homicides",
+    x = "block",
+    y = "block group",
+    size = "Number of Homicides"
+  )
+
+```
+-Inference
+1. Why do lower-numbered block groups have more homicides? what makes them riskier?
+```{r}
+homicides15_tbl_df_cleaned %>% 
+  gf_bar(~offense_type| block_group, fill = ~offense_type) %>% 
+   gf_labs(
+    title = "How does offense type vary across block groups?",
+    x="Offense type",
+    y="count", 
+    fill="Block Group"
+  )
+```
+
+```{r}
+homicides15_tbl_df_cleaned %>% 
+  gf_bar(~block_group | city_name, fill = ~offense_type) %>% 
+   gf_labs(
+    title = "How does offense type vary across block groups?",
+    x="block group",
+    y="count", 
+    fill="offence type"
+  )
+```
+
+-Inference 
+1.In Chicago, most homicides happen in the lowest-numbered block groups (like Group 1 and 2).
+
+2.  As higher the block number goes less number of homicides seems to happen. Block 6 and 7 seems to safer place to live.
+
+### 3. HomicidePatterns: Month, Day, and Hour
+
+```{r}
+gf_bar(~month, data = homicides15_tbl_df_cleaned, fill = ~month, , color = "black" , position = "dodge") %>%
+  gf_labs(
+    title = "Homicides by Month",
+    x = "Month",
+    y = "Count",
+    fill = "Location"
+  )
+```
+-Inferences
+1. Homicide peak sharply during the summer months, with the highest counts occurring in August and September.
+
+2. The lowest number of homicides was recorded in February, and during winter seasons homicide incidents are less.
+
+3. Do homicides increase in summer because people go out more?
+
+```{r}
+gf_bar(~month, data = homicides15_tbl_df_cleaned, fill = ~location_category, , position = "fill") %>%
+  gf_labs(
+    title = "Homicides by Month and Location Type",
+    x = "Month",
+    y = "Count",
+    fill = "Location"
+  )
+```
+-Inferences
+1. Majority of homicides occur two major location types: Street (public space).Residence (private home).
+
+2. The propotional distribution of homicides across location types is  consistent throughout the year.
+
+3.Are homicides on the street mostly in strangers and those at home mostly between family members?
+
+
+```{r}
+gf_density(~hour, data = homicides15_tbl_df_cleaned, fill = ~month) %>%
+  gf_labs(
+    title = "Are some times of day riskier?",
+    x = "Hour of the Day",
+    y = "Density"
+  )
+```
+-Inference
+1.  Homicides happen least in the morning (about 6 AM to 10 AM).
+
+2.  The peak time is 18:00 to 20:00.
+
+```{r}
+# overall histogram
+homicides15_tbl_df_cleaned %>%
+  gf_histogram(~ hour | location_category,
+               bins = 24,
+               fill = ~location_category) %>%
+  gf_labs(
+    title = "Histogram of Homicide Hour (All Incidents)",
+    x = "Hour of Day",
+    y = "Count"
+  )
+```
+-Inference
+1. Street homicides peak late at night, mostly between 8 PM and 1 AM..
+
+2. Residence homicides cluster in the evening,but peak at midnigt
+
+```{r}
+homicides15_tbl_df_cleaned %>%
+  gf_violin(hour ~ offense_type,
+            orientation = "x",
+            fill = ~offense_type) %>%
+  gf_labs(
+    title = "Distribution of Homicide Time by Offense Type (Violin)",
+    x = "Offense Type",
+    y = "Hour of Day"
+  )
+```
+-Inference
+1. The plot only covers a single offense type: "murder and nonnegligent manslaughter."
+
+2. The time distribution has two peaks.
+- The highest risk time for a homicide is late at night/early morning.
+- There is a secondary cluster of incidents during the mid-day hours.
+
+3. Homicides happen at every hour of the day.
+
+
+- Note:
+
+1.  Most homicides are on Vehicles, streets → location_type heavily skewed.
+
+2.  Almost all offenses are murder and nonnegligent manslaughter → offense_type dominated by one level.
+
+3.  Because of this, even “real differences” are small, so shading is weak in mosaic plots
+
+## Conclusion:
+
+The 2015 homicide datasets show that Chicago and Los Angeles had the highest number of cases and the incidents clustered in lower-numbered block groups. Homicides peaked during summer, especially in August and September, and most were reported as occurring in streets or residences, occurring predominantly in the evening. Street homicides occurred at night and residential homicides occurred around midnight.
+

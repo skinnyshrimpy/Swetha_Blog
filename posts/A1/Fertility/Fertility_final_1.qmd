@@ -1,0 +1,29 @@
+---
+title: "Fertility_final_1"
+format: html
+---
+
+# 1. Fertility Data set
+
+## Setting up R Packages
+
+```{r}
+library(tidyverse)
+library(janitor)
+library(dplyr)
+library(naniar)
+library(skimr)
+library(crosstable)
+library(tinytable)
+library(ggformula)
+library(mosaic)
+```
+
+## Read Data
+
+```{r}
+Fertility <- readr::read_csv("~/R Studio/Swetha_Stat/Swetha_Blog/posts/Data/Fertility.csv") %>% 
+janitor::clean_names(case="snake")
+Fertility
+
+```

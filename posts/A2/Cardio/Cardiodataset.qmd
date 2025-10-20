@@ -1,0 +1,470 @@
+---
+title: "A2 Cardio-Dataset"
+author: "Swetha KV, Shruthi"
+date: "2025-10-12"
+categories: [Scottish CVD]
+format: html
+---
+
+## Setting up R Packages
+
+```{r}
+library(tidyverse)
+library(janitor)
+library(dplyr)
+library(naniar)
+library(skimr)
+library(crosstable)
+library(tinytable)
+library(ggformula)
+library(mosaic)
+library(tidyverse)
+library(vcd)
+library(vcdExtra) 
+library(resampledata)
+library(ggmosaic)
+library(ggpubr) 
+library(visdat)
+library(naniar) 
+library(DT)
+library(ggrepel)
+library(marquee)
+library(visStatistics)
+library(sf)
+library(GGally)
+```
+
+## Read Data
+
+```{r}
+data(package = "CardioDataSets")
+```
+
+```{r}
+data("scottish_CVD_df", package = "CardioDataSets")
+View( scottish_CVD_df )
+```
+
+```{r}
+data("scottish_CVD_df", package = "CardioDataSets")
+dplyr::glimpse( scottish_CVD_df )
+```
+
+## Data Dictionary
+
+| Variable | Description                                          |
+|----------|------------------------------------------------------|
+| age      | Respondent's age in years                            |
+| sex      | Respondent's sex                                     |
+| sc       | Social class                                         |
+| cvddef   | Doctor-diagnosed cardiovascular disease (CVD) status |
+| carstair | Carstairs deprivation score                          |
+| smoke    | Smoking status                                       |
+| id       | Respondent identification number                     |
+| area     | Geographic area code                                 |
+
+## Examine Data
+
+```{r}
+base::names(scottish_CVD_df)
+```
+
+```{r}
+dplyr::glimpse(scottish_CVD_df)
+```
+
+```{r}
+base::dim(scottish_CVD_df)
+```
+
+```{r}
+utils::str(scottish_CVD_df)
+```
+
+## Viewing Missing Data
+
+```{r}
+visdat::vis_dat(scottish_CVD_df)
+```
+
+```{r}
+visdat::vis_miss(scottish_CVD_df)
+```
+
+```{r}
+scottish_CVD_df <- scottish_CVD_df %>% 
+ tidyr::drop_na()
+```
+
+```{r}
+visdat::vis_miss(scottish_CVD_df)
+```
+
+```{r}
+scottish_CVD_df %>% tt ()
+```
+
+```{r}
+scottish_CVD_df %>%
+  DT::datatable(
+    caption = htmltools::tags$caption(
+      style = "caption-side: top; text-align: left; color: black; font-size: 150%;",
+      "CVD Dataset (Clean)"
+    ),
+    options = list(pageLength = 10, autoWidth = TRUE)
+  ) %>%
+  DT::formatStyle(
+    columns = names(scottish_CVD_df),
+    fontFamily = "Roboto Condensed",
+    fontSize = "12px"
+  )
+```
+
+
+## Munging Data
+```{r}
+scottish_CVD_df <- scottish_CVD_df %>%
+  mutate(across(where(is.character), as.factor)) %>% 
+   mutate(cvddef = as.factor(cvddef)) %>% 
+  relocate(where(is.factor))
+glimpse(scottish_CVD_df)
+```
+
+```{r}
+scottish_CVD_df_grp <- scottish_CVD_df %>%
+  mutate(
+    age_group = cut(age, 
+                    breaks = c(0, 30, 50, 70, 100),
+                    labels = c("<30", "31–50", "51–70", "71<"))
+  )
+
+```
+
+```{r}
+glimpse(scottish_CVD_df_grp)
+```
+```{r}
+scottish_CVD_df_grp_1 <- scottish_CVD_df %>%
+  mutate(
+    deprivation_group = cut(carstair,
+                            breaks = quantile(carstair, probs = c(0, 0.33, 0.66, 1), na.rm = TRUE),
+                            labels = c("Low", "Medium", "High"))
+  )
+
+```
+
+## Summaries: Examining the Data
+
+```{r}
+cor <- correlation::correlation(scottish_CVD_df)
+cor
+```
+
+```{r}
+scottish_CVD_df %>%
+  group_by(smoke) %>%
+  dplyr::summarise(mean_age = mean(age, na.rm = TRUE))
+
+scottish_CVD_df %>%
+  group_by(smoke) %>%
+  dplyr::summarise(mean_carstair = mean(carstair, na.rm = TRUE))
+
+scottish_CVD_df %>%
+  group_by(cvddef) %>%
+  dplyr::summarise(mean_age = mean(age, na.rm = TRUE))
+```
+
+```{r}
+# Crosstable version (nicer output)
+crosstable::crosstable(scottish_CVD_df_grp, c(smoke, sex, age_group), by = cvddef)
+
+```
+
+```{r}
+scottish_CVD_summary <- scottish_CVD_df %>%
+  dplyr::group_by(smoke) %>%
+  dplyr::summarise(
+    mean_carstair = mean(carstair, na.rm = TRUE),
+    se = sd(carstair, na.rm = TRUE)/sqrt(n())
+  )
+
+scottish_CVD_summary
+```
+
+```{r}
+mosaic::cor_test(as.numeric(cvddef) ~ carstair, data = scottish_CVD_df) %>%
+  broom::tidy() %>%
+  knitr::kable(
+    digits = 3,
+    caption = "Correlation between CVD and Carstairs Index"
+  )
+```
+
+## Visualizing the data
+
+
+### 1. Age and CVD Risk3.
+
+-   Hypothesis: Are older people more likely to have cardiovascular disease?
+
+```{r}
+mosaic::cor_test(as.numeric(cvddef) ~ age, data = scottish_CVD_df) %>%
+  broom::tidy() %>%
+  knitr::kable(
+    digits = 3)
+
+```
+
+-Inferences:
+
+1.  The p-value = 0 means this result is highly significant
+
+2.  The confidence interval (0.34 to 0.38) is narrow and fully positive → this strengthens our confidence.
+
+### (a) Scatter Plot
+```{r}
+scottish_CVD_df %>%
+  drop_na(age, cvddef) %>%
+  gf_point(age ~ cvddef, width = 0.2, height = 0, position = "jitter" , color = "blue") %>%
+  gf_lm(color = "red") %>% 
+  gf_labs(
+    title = "Age Distribution by CVD Status",
+    x = "CVD Status (0 = No, 1 = Yes)",
+    y = "Age (years)"
+  )
+```
+
+### (b) Mosaic Plot
+```{r}
+vcd::structable(age_group ~ cvddef, data = scottish_CVD_df_grp) %>%
+  vcd::mosaic(gp = shading_Friendly())
+```
+-Inference
+1. From the mosaic plot, it shows that age and CVD are strongly correlated.
+
+2. The tall blue blocks (who don't have CVD), mostly younger ages (18–30 and 31–50). 
+
+3. Red blocks (people with CVD) are much higher for older age groups (51–70, 70+)
+
+
+### (c) Filled Bar Graph
+```{r}
+scottish_CVD_df_grp %>%
+  gf_bar(~ age_group, fill = ~(cvddef), position = "fill") %>%
+  gf_labs(
+    title = "Proportion of CVD by Smoking Status",
+    x = "Smoking Category",
+    y = "Proportion",
+    fill = "CVD Status"
+  )
+```
+- Inference
+1. Bar chart - I am able to spot quickly which group has more CVD compared to other graphs - (age group 71+ has highest cvd followed up 51 -70).
+
+
+### (d) Violin plot
+```{r}
+scottish_CVD_df %>%
+  drop_na(age, cvddef) %>%
+  gf_violin(age ~ cvddef, fill = ~cvddef) %>%
+  gf_line()%>%
+  gf_labs(
+    y = "Age of Individuals",
+    x = "CVD Status",
+    title = "Age Distribution by CVD Status",
+    subtitle = "Comparing age of individuals with and without CVD"
+  )
+```
+This plot is easier find the age gorup within cvd! 
+As age increases, the chance of having cardiovascular disease (CVD) also increases.
+
+### 2. Smoking, CVD Risk
+
+### (a) Mosaic plot
+```{r}
+vcd::mosaic(cvddef ~ smoke, data = scottish_CVD_df,
+            direction = "v", gp = shading_max, legend = FALSE)
+
+# Expected mosaic plot
+vcd::mosaic(cvddef ~ smoke, data = scottish_CVD_df,
+            type = "expected", direction = "v", gp = shading_max, legend = FALSE)
+
+# their difference plot
+vcd::assoc(smoke ~ cvddef, data = scottish_CVD_df,
+           gp = shading_max, legend = FALSE)
+
+```
+
+### (b) Bar Filled Graph
+```{r}
+scottish_CVD_df %>%
+  gf_bar(~ smoke, fill = ~(cvddef), position = "fill") %>%
+  gf_labs(
+    title = "Proportion of CVD by Smoking Status",
+    x = "Smoking Category",
+    y = "Proportion",
+    fill = "CVD Status"
+  )
+
+```
+
+### (c) Mosaic Plot
+```{r}
+vcd::mosaic(age_group ~ smoke, data = scottish_CVD_df_grp,
+            direction = "v", gp = shading_max, legend = FALSE)
+
+# Expected mosaic plot
+vcd::mosaic(age_group ~ smoke, data = scottish_CVD_df_grp,
+            type = "expected", direction = "v", gp = shading_max, legend = FALSE)
+
+# their difference plot
+vcd::assoc(age_group ~ smoke, data = scottish_CVD_df_grp,
+           gp = shading_max, legend = FALSE)
+
+```
+-Inference
+1. Younger people are usually never or light smokers. Is there a link between age, deprivation, and smoking type?
+
+### (d) Box Plot
+```{r}
+scottish_CVD_df %>%
+  gf_boxplot(age ~ smoke | cvddef, orientation = "x", fill = ~smoke, color = "black") %>%
+  gf_labs(
+    y = "Age of Individuals",
+    x = "Smoking Status",
+    title = "Age Distribution by Smoking Status and CVD",
+    subtitle = "Comparing age patterns by CVD presence"
+  )
+
+```
+-Inference
+1. For every smoking group, people with CVD are older than those without CVD. 
+
+2. Ex-smokers likely quit after their cardio health issues began — ex smokers cluster with CVD-positive and older age groups with very few outliers.
+
+3. This boxplot also confirms again that age factor also affect cvd not just smoking behiviour.
+
+### Age, carstair and smoking behiviour
+
+### (a) Correaltion Test
+```{r}
+mosaic::cor_test(carstair ~ age, data = scottish_CVD_df) %>%
+  broom::tidy() %>%
+  knitr::kable(
+    digits = 3,
+    caption = "Correlation between Deprivation and Smoking"
+  )
+```
+-Inference
+1. There isn’t much of a connection between age and deprivation within each smoking group here.
+
+### (b) Box Plot
+```{r}
+#4
+scottish_CVD_df %>% 
+  gf_boxplot(carstair ~ smoke, orientation = "x", fill = ~smoke, color = "black") %>%
+  gf_labs(
+    y = "Deprivation Index (Carstairs)",
+    x = "Smoking status", 
+    title = "Distribution of Deprivation Index by Smoking Status",
+    subtitle = "Exploring whether smoking habits vary by social deprivation"
+  )%>% 
+  gf_refine(scale_fill_brewer(palette = "Set3")) %>% 
+    gf_theme(theme_minimal())
+
+```
+
+### (c) Density Plot
+```{r}
+gf_density(~ carstair, fill = ~smoke, data = scottish_CVD_df, alpha = 0.5) %>% 
+  gf_labs(title = "Density of Carstairs Index by Smoking Category",
+          x = "Carstairs Index", y = "Density")
+```
+-Inference
+1. Although heavy smokers appear slightly more deprived on average, the differences are minor.
+
+2. The smoking behiviour does not strongly relate with social deprivation in this dataset
+
+
+### How their social class impact their smoking behiviour?
+
+### (a) Box Plot
+```{r}
+scottish_CVD_df %>% 
+  gf_boxplot(carstair ~ sc, orientation = "x", fill = ~sc, color = "black") %>%
+  gf_labs(
+    y = "Deprivation Index (Carstairs)",
+    x = "social deprivation", 
+    title = "Distribution of Deprivation Index by Smoking Status",
+    subtitle = "Exploring whether smoking habits vary by social deprivation"
+  ) %>% 
+  gf_refine(scale_fill_brewer(palette = "Set2"))
+```
+
+### (b) Mosaic Plot
+```{r}
+vcd::mosaic(sc ~ smoke, data = scottish_CVD_df,
+             direction = "v", gp = shading_max,
+            main = "Mosaic Plot: Smoking Status by sc")
+
+# expected 
+vcd::mosaic(sc ~ smoke, data = scottish_CVD_df,
+            type = "expected", direction = "v", gp = shading_max, legend = FALSE)
+
+# their difference 
+vcd::assoc(sc ~ smoke, data = scottish_CVD_df,
+          direction = "v", gp = shading_max, legend = FALSE)
+  
+```
+
+### (c) Bar Filled Graph
+```{r}
+scottish_CVD_df %>%
+gf_bar(~ smoke, fill = ~sc, position = "fill") %>%
+  gf_labs(
+    title = "Smoking Prevalence by Social class",
+    x = "smoking level",
+    y = "Proportion with ?"
+  ) %>% 
+  gf_refine(scale_fill_brewer(palette = "Set2"))
+```
+-Inference
+1. People with lower social and economic status (lower social class, higher Carstairs index) are more likely to live in deprived areas and to smoke more.
+
+2. Those with higher social class and less deprivation tend to smoke less or be non-smokers/ex-smokers.
+
+3. Higher deprivation means more smoking; better-off people smoke less.
+
+## False Hypothesis
+
+### (a) Bar Filled Graph
+```{r}
+scottish_CVD_df %>%
+gf_bar(~ smoke, fill = ~sex, position = "fill") %>%
+  gf_labs(
+    title = "CVD Prevalence by Sex",
+    x = "Sex",
+    y = "Proportion with CVD"
+  )
+```
+
+```{r}
+scottish_CVD_df %>% 
+  count(sex)
+```
+
+### (b) Mosaic Plot
+```{r}
+# Three-variable mosaic plot: cvddef ~ sex + smoke
+vcd::structable(cvddef + smoke ~ sex, data = scottish_CVD_df) %>%
+  vcd::mosaic(  direction = "v",
+    gp = shading_Friendly2(),
+    main = "Mosaic Plot: CVD by Sex and Smoking Behavior"
+  )
+```
+-Inference
+1. Sex is not really affecting the smoking behiviour!
+
+##Conclusion
+The Scottish CVD dataset suggests that age is also the strongest reason for cardiovascular disease, with prevalence rising sharply after age 50. The social class (in relation to class) and Carstairs deprivation index suggest that the lower socioeconomic group are bearing a disproportionate amount of the CVD risk. Sex appears to be less important than age, smoking or deprivation.
+------------------------------------------------------------------

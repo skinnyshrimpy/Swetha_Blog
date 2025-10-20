@@ -1,0 +1,481 @@
+---
+title: "A2 Cuisines"
+author: "Swetha, Shruthi"
+date: "2025-10-13"
+categories: [Cuisines across World]
+format: html
+---
+
+### [**The Cuisines Dataset**]{.underline}
+
+The Cuisines dataset from the tastyR package explores different dish recepies that have been published by authors on their blogs from across the globe. It looks at each dishes features, from it ingredients and calorie contents to ratings and reviews.
+
+#### How could the experiment have taken place?
+
+This dataset was likely collected as part of an experiment aimed at analyzing global recipes to understand cross-cultural variations in food preparation, nutrition, and popularity. After narrowing down on the objective, Recipes were gathered from online recipe-sharing blogs and platforms, different parameters to analyzing the dishes were identified including **Identification variables, Nutritional data,** **User engagement metrics**, **Preparation variables, Textual data**. Researchers captured details such as cuisine type, ingredients, author, nutritional values (calories, fat, carbs, protein), and user engagement metrics (ratings and reviews). Additional information on preparation and cooking times were also included to possibly assess effort and complexity. After collecting the data, some variables were also derived from the collected data such as average rating and total cook time before publishing it in a tabular format. It's a dataset that allows us to compare recipes from different regions and test relationships between nutritional profiles, cooking characteristics, and audience preferences.
+
+#### Summary of Findings
+
+North American and European dishes tend to be higher in calories and fat, while Asian cuisines are significantly lighter, with fat content rather than protein being the primary driver of calorie counts. The data also shows stark regional differences in user engagement, with North American dishes dominating ratings and reviews
+
+[**Set Up**]{.underline}
+
+```{r}
+#Setup
+library(tidyverse)
+library(mosaic) # Our trusted friend
+library(skimr)
+library(ggformula) # Formula interface to ggplot2
+library(vcd) # Michael Friendly's package, Visualizing Categorical
+library(vcdExtra) # Categorical Data Sets
+library(resampledata) # More datasets
+library(visStatistics) # Comprehensive all-in-one stats viz/test package
+library(ggmosaic) # Tidy Mosaic Plots
+library(ggpubr) # Colours, Themes and new geometries in ggplot
+##
+library(GGally) # Corr plots
+library(broom) # Clean reports from Stats / ML outputs
+
+# library(devtools)
+# devtools::install_github("rpruim/Lock5withR")
+library(easystats) # Easy Statistical Analysis and Charts
+library(correlation) # Different Types of Correlations
+##
+library(janitor) # Data Cleaning and Tidying
+library(visdat) # Visualize whole dataframes for missing data
+library(naniar) # Clean missing data
+library(DT) # Interactive Tables for our data
+library(tinytable) # Elegant Tables for our data
+library(ggrepel) # Repelling Text Labels in ggplot
+library(marquee) # Marquee Text in ggplot
+##
+library(CardioDataSets)
+library(DataSetsVerse)
+library(tastyR)
+```
+
+[**Finding Data**]{.underline}
+
+```{r}
+data(package = "tastyR")
+```
+
+[**Read Data**]{.underline}
+
+```{r}
+#Getting the Data
+class(cuisines)
+cuisines
+```
+
+[**Inspect Data**]{.underline}
+
+```{r}
+#Inspecting the Data
+base::names(cuisines)
+dplyr::glimpse(cuisines)
+base::dim(cuisines)
+utils::str(cuisines)
+```
+
+[**Show and Remove Missing Data**]{.underline}
+
+```{r}
+#Raw data visualization
+visdat::vis_dat(cuisines)
+```
+
+[**Cleaning and Munging Data**]{.underline}
+
+```{r}
+#Cleaning the Data
+cuisines_modified <- cuisines %>%
+  janitor::clean_names(case = "snake") # clean names
+
+cuisines_modified
+```
+
+```{r}
+cuisines_clean <- cuisines_modified %>% 
+tidyr::drop_na()
+cuisines_clean
+```
+
+```{r}
+cuisines_clean %>% 
+  naniar::replace_with_na_all(condition = ~ .x %in% common_na_numbers) %>%
+  replace_with_na_all(condition = ~ .x %in% common_na_strings)
+cuisines_clean
+```
+
+```{r}
+visdat::vis_dat(cuisines_clean)
+```
+
+```{r}
+cuisines_clean2 <- cuisines_clean %>% 
+  dplyr::select(-c(url, date_published))
+cuisines_clean2
+```
+
+[**Creating a new Column**]{.underline}
+
+```{r}
+#Introducing a Continents Column
+cuisines_cleaned <- cuisines_clean2 %>%
+mutate(continent = case_when(
+
+    country %in% c("Amish and Mennonite", "Cajun and Creole", "Canadian", 
+                   "Soul Food", "Southern Recipes", "Tex-Mex") ~ "North America",
+    
+    country %in% c("Argentinian", "Brazilian", "Chilean", 
+                   "Colombian", "Peruvian") ~ "South America",
+    
+    country %in% c("Austrian", "Belgian", "Danish", "Dutch", "Finnish", "French", 
+                   "German", "Greek", "Italian", "Norwegian", "Polish", "Portuguese", 
+                   "Russian", "Scandinavian", "Spanish", "Swedish", "Swiss") ~ "Europe",
+    
+    country %in% c("Bangladeshi", "Chinese", "Indian", "Indonesian", "Israeli", 
+                   "Japanese", "Jewish", "Korean", "Lebanese", "Malaysian", "Pakistani", 
+                   "Persian", "Thai", "Turkish", "Vietnamese") ~ "Asia",
+    
+    country %in% c("Australian and New Zealander") ~ "Oceania",
+    
+    country %in% c("South African", "Jamaican", "Cuban", "Puerto Rican") ~ "Caribbean/Africa",
+    
+    TRUE ~ "Other"
+  ))
+  
+cuisines_cleaned
+
+```
+
+```{r}
+#Data Munging
+cuisines_cleaned %>%
+  mutate(
+    name = as.factor(name),
+    country = as.factor(country),
+    author = as.factor(author),
+    continent = as.factor(continent)
+  ) %>%
+
+  # Arrange the Qual variables first, Quant next
+  dplyr::relocate(where(is.factor), .after = name)
+
+glimpse(cuisines_cleaned)
+```
+
+[**Data Dictionary**]{.underline}
+
+| Title | Definition |
+|------------------------------------|------------------------------------|
+| name | Name of the recipe (character) |
+| country | The country/region the cuisine is from (character) |
+| url | Link to the recipe (character) |
+| author | Author of the recipe (character) |
+| date_published | When the recipe was published or updated (Date) |
+| ingredients | The ingredients of the recipe (character) |
+| calories | Calories per serving (numeric) |
+| fat | Fat per serving (numeric) |
+| carbs | Carbs per serving (numeric) |
+| protein | Protein per serving (numeric) |
+| avg_rating | Average rating out of 5 stars (numeric) |
+| total_ratings | Number of ratings received (numeric) |
+| reviews | Number of written reviews (numeric) |
+| prep_time | Preparation time in minutes (numeric) |
+| cook_time | Cooking time in minutes (numeric) |
+| total_time | Total time (prep + cook) in minutes; note that this may not always equal the sum of prep_time and cook_time due to exclusions of other time-related steps (numeric) |
+| servings | Number of servings (numeric) |
+
+[**Tiny Table**]{.underline}
+
+```{r}
+cuisines_cleaned %>%
+  head(10) %>%
+  tinytable::tt(caption = "Cuisines Dataset (Clean)") %>%
+  tinytable::theme_html(class = "table table-hover table-striped table-condensed") %>%
+  style_tt(fontsize = 0.8) %>%
+  stats::setNames(c("Dish Name", "Country", "Author", "Ingredients", "Calories", "Fat", "Carbs", "Protein", "Avg Rating", "Total Ratings", "Reviews", "Prep Time", "Cook Time", "Total Time", "Servings", "Continent"))
+```
+
+**Inspecting Data**
+
+```{r}
+#Summarizing the Data
+cuisines_cleaned %>% 
+  mosaic::inspect()
+```
+
+1.  Calories across Continents How are calories of different cuisine's dishes spread across the World?
+
+How many dishes are there from each country?
+
+```{r}
+#Summarizing the Data
+cuisines_cleaned %>% 
+  dplyr::count(country) %>%
+  tt()
+```
+
+```{r}
+cuisines_cleaned %>%
+  gf_violin(continent ~ calories, fill = ~continent, color = "black") %>%
+  gf_labs(
+    title = "Plot 1A: Calories vs. Continents",
+    subtitle = "Distribution of calories across different continents",
+    x = "Calories",
+    y = "Continent"
+  )
+```
+
+```{r}
+cuisines_cleaned%>% 
+  gf_boxplot(calories ~ continent, orientation = "x", fill = ~continent, color = "black") %>%
+  gf_labs(
+    y = "Calories",
+    x = "Continent", 
+    title = "Plot 1B: Calories vs. Continents",
+    subtitle = "Distribution of calories across different continents"
+  )
+
+```
+
+```{r}
+cuisines_cleaned %>%
+  gf_boxplot(continent ~ calories, fill = ~calories>=480, orientation = "y") %>%
+  gf_labs(
+    y = "Country", x = "Calorie Content", title = "Plot 1C: Calories vs. Continent Box plot")
+```
+
+Inferences:
+
+-   Wider sections of a violin = where more dishes cluster (higher density)
+-   Narrower sections of the violin = fewer dishes at those calorie levels
+
+Continents like Europe and North America have a wider and more stretched distribution, suggesting greater variation in calorie content. Cuisines here range from very low to very high calories. In contrast, Oceania and Asia have narrower distributions, implying they have more consistent calorie levels across the various dishes that originate from there.
+
+-   Asia and Oceania: Cluster around 400–700 calories, indicating lighter dishes on average.
+-   Europe and North America: Have thicker regions extending up to 1000+ calories, meaning heavier, more calorie-dense cuisines are common.
+
+Asian and Oceanian diets might focus more on lighter, balanced meals, whereas European and North American cuisines tend toward richer, higher-calorie dishes
+
+-   European and North American have more outliers compared to other continents like Oceania and Asia, this could be a result of some rich high calorie ingredients they use in some of their dishes like cream, cheese, and meats.
+
+-   There might be cultural or ingredient-based dietary trends. This helps us learn alot about regional dietary habits from looking at such graphs.
+
+Macronutrient composition by continent
+
+```{r}
+cuisines_cleaned%>% 
+  pivot_longer(cols = c(calories, protein, carbs, fat),
+               names_to = "nutrient",
+               values_to = "value") %>% 
+
+gf_bar(nutrient ~ country | continent, fill = ~nutrient, position = "stack", data = cuisines_cleaned) %>%
+  gf_labs(
+    title = "Macronutrient Composition by Continent",
+    subtitle = "Layered area plot showing calories, protein, carbs, and fats across continents",
+    x = "Cuisine",
+    y = "Nutrient Value"
+  )
+```
+
+```{r}
+cuisines_cleaned %>%
+  count(calories) %>%
+  arrange(desc(calories)) %>%
+  top_n(3, n)
+```
+
+2.  Fats vs. Calories
+
+```{r}
+cuisines_cleaned %>% 
+gf_point(fat~ calories, position = "jitter", color = ~continent, data = cuisines_cleaned) %>%
+  gf_lm() %>% 
+  gf_labs(
+    title = "Plot 2A: Average Calorie & Fat content of dishes",
+    subtitle = "Exploring the relationship between fat and calorie content across different continents"
+  )
+```
+
+```{r}
+##Average calorie & fat content of dishes significantly differs across continent
+cuisines_cleaned %>% 
+  filter(continent == "South America") %>% 
+gf_point(fat~ calories | country, position = "jitter", color = ~country, data = cuisines_cleaned) %>%
+  gf_lm(color = "grey") %>% 
+  gf_labs(
+    title = "Plot 2B: Average Calorie & Fat content of dishes from South America",
+    subtitle = "Facetted by Country"
+  )
+```
+
+```{r}
+##Average calorie & fat content of dishes significantly differs across continent
+cuisines_cleaned %>% 
+  filter(continent == "Europe") %>% 
+gf_point(fat~ calories | country, position = "jitter", color = ~country, data = cuisines_cleaned) %>%
+  gf_lm(color = "grey") %>% 
+  gf_labs(
+    title = "Plot 2B: Average Calorie & Fat content of dishes from Europe",
+    subtitle = "Facetted by Country"
+  )
+```
+
+Inferences
+
+-   There is a clear, strong positive relationship between the average calorie content and the average fat content of dishes
+
+-   There is a substantial gap between the continents with the heaviest dishes (North America/Europe) and the lightest (Asia)
+
+-   Dishes from North America and Europe appear to have the highest average values for both calories and fat. It's suprising to find that Europe is on top of the list just below "other", I was expecting for it to be North America.
+
+-   Dishes from Asia, Oceania, South America, and Africa have lower average calorie and fat content. This could because of various reasons. For example, Asian cuisines often use vegetables, lean proteins, and cooking methods like steaming and stir-frying (which can use less oil), resulting in lighter meals.
+
+-   However, this graph purely looks at the dishes and their fat to calorie content and doesn't take into account their serving portions. There are also more data points for Europe than South America, meaning that the outcome for Europe is likely more accurate than the one for South America.
+
+3.  Correlation Tests
+
+```{r}
+cor <- correlation::correlation(cuisines_cleaned)
+cor
+```
+
+```{r}
+cor %>%
+  filter(Parameter1 == "protein") %>%
+  gf_errorbar(CI_low + CI_high ~ reorder(Parameter2, r),
+    width = 0.5
+  ) %>%
+  gf_point(r ~ reorder(Parameter2, r), size = 4, color = "red") %>%
+  gf_hline(yintercept = 0, color = "grey", linewidth = 2) %>%
+  gf_labs(
+    title = "Correlation Errorbar Chart",
+    subtitle = "Target variable: Protein",
+    x = "Predictor Variable",
+    y = "Correlation Score with Protein"
+  )
+```
+
+```{r}
+GGally::ggpairs(
+  cuisines_cleaned %>% drop_na(),
+  # Select Quant variables only for now
+  columns = c(
+    "calories", "fat", "carbs", "protein", "avg_rating", "total_ratings", "reviews", "prep_time", "cook_time", "total_time"
+  ),
+  switch = "both",
+  # axis labels in more traditional locations(left and bottom)
+
+  progress = FALSE,
+  # no compute progress messages needed
+
+  # Choose the diagonal graphs (always single variable! Think!)
+  diag = list(continuous = "barDiag"),
+  # choosing histogram,not density
+
+  # Choose lower triangle graphs, two-variable graphs
+  lower = list(continuous = wrap("smooth", alpha = 0.3, se = FALSE)),
+  title = "Correlations amongst quant variables in Cuisines Dataset"
+)
+```
+
+```{r}
+mosaic::cor_test(calories ~ protein, data = cuisines_cleaned) %>%
+  broom::tidy() %>%
+  knitr::kable(
+    digits = 3,
+    caption = "Calories vs. Protein Content"
+  )
+```
+
+```{r}
+##High-protein dishes tend to have higher calorie counts
+cuisines_cleaned %>% 
+gf_point(protein ~ calories, color = ~fat, data = cuisines_cleaned) %>%
+gf_refine(scale_color_gradient(low = "blue", high = "red"))%>% 
+   gf_lm() %>%
+  gf_labs(
+    title = "Plot 3A: Protein vs. Fat against Calories"
+  ) %>% 
+  gf_refine(scale_fill_brewer(palette = "Set1"))
+```
+
+Inferences
+
+-   The data points widen as the calorie count increases.They are not tightly clustered along a clear upward line which suggests a positive but some what distributed trend since we can find low-protein, mid-protein, and high-protein dishes at the same calorie level. The real driver that has the most affect on the number of calories per dish might actually be fat content.
+
+```{r}
+mosaic::cor_test(protein ~ carbs, data = cuisines_cleaned) %>%
+  broom::tidy() %>%
+  knitr::kable(
+    digits = 3,
+    caption = "Protein vs. Carbs Content"
+  )
+```
+
+```{r}
+##Are high-protein foods typically low in carbs? (Inverse relationship)
+cuisines_cleaned %>% 
+gf_point(protein ~ carbs, color = ~fat, position = "jitter", data = cuisines_cleaned) %>%
+  gf_refine(scale_color_gradient(low = "blue", high = "red"))%>% 
+   gf_lm() %>%
+  gf_labs(
+    title = "Plot 3B: Protein vs. Carbs against Fat"
+  ) %>% 
+  gf_refine(scale_fill_brewer(palette = "Set1"))
+```
+
+Inferences
+
+-   The data points are scattered widely across the plot without forming a clear upward or downward pattern. They don't cluster along a diagonal line, it's largely because of the outliers that we get a slope line but the majority of the data points are widely dispersed.
+-   A majority of the dish recepies seam to be low-protein, and low-carb recepies. I was expecting more 1 or the other but not both.
+
+```{r}
+##Are high-protein foods typically low in carbs? (Inverse relationship)
+cuisines_cleaned %>% 
+gf_point(cook_time ~ total_ratings, color = ~avg_rating, position = "jitter", data = cuisines_cleaned) %>%
+  gf_refine(scale_color_gradient(low = "blue", high = "red"))%>% 
+   gf_lm() %>%
+  gf_labs(
+    title = "Plot 3C: Cook Time vs. Total ratings against average rating"
+  ) %>% 
+  gf_refine(scale_fill_brewer(palette = "Set1"))
+```
+
+Inferences
+
+-   I initially thought that higher cook times might result in lower ratings (regression slope) as individuals might prefer dishes that require lower times to prepare. It's suprising to see there is actually little to in fact no correlation between the 2. This could also be a result of the number of outliers visible in this plot
+
+```{r}
+mosaic::cor_test(total_ratings ~ reviews, data = cuisines_cleaned) %>%
+  broom::tidy() %>%
+  knitr::kable(
+    digits = 3,
+    caption = "Cook Time vs. Avg Rating"
+  )
+```
+
+```{r}
+cuisines_cleaned %>% 
+gf_area(total_ratings ~ reviews, fill = ~continent, position = "jitter", alpha = 0.4, data = cuisines_cleaned) %>%
+  gf_labs(
+    title = "Plot 3C: Total Ratings vs. Reviews"
+  )
+```
+
+```{r}
+cuisines_cleaned %>% 
+gf_area(total_ratings ~ reviews | continent, fill = ~continent, data = cuisines_cleaned) %>%
+  gf_labs(
+    title = "Plot 3D: Total Ratings vs. Reviews",
+    subtitle = "facetted by continent"
+  )
+```
+
+Inferences
+
+-   It's clear that total ratings and reviews have a strong positve correlation, suggesting that the number of readers who've rated the dish also most likely left a review for it.
+-   The plot also suggests either more popular dishes, more users, or more active reviewing culture exists in North America. Asia and Europe also come really close to this. It could also be because some cuisines might be more universally appealing drawing in more attention.
