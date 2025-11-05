@@ -1,0 +1,343 @@
+---
+title: "A3 Tattoo Dataset"
+author: "Swetha KV"
+date: "2025-10-31"
+categories: [Tattoo]
+format: html
+---
+
+```{r}
+library(tidyverse)
+library(mosaic)
+library(vcd)
+library(visStatistics)
+library(resampledata)
+library(ggformula)
+library(infer)
+library(openintro)
+```
+
+```{r}
+tattoo <- read.csv("tattoo.csv")
+glimpse(tattoo)
+```
+
+```{r}
+visdat::vis_dat(tattoo)
+```
+
+```{r}
+tattoo %>% count(Tattoo_Attractive)
+```
+
+```{r}
+tattoo %>% count(Gender)
+```
+
+```{r}
+tattoo_modified <- tattoo %>%
+  dplyr::select(Gender, Tattoo_Attractive) %>%
+  tidyr::drop_na(c(Gender, Tattoo_Attractive )) %>%
+  mutate(
+    Gender = factor(Gender,
+                    levels = c("F", "M"),
+                    labels = c("Female", "Male")
+    ),
+    Tattoo_Attractive = factor(Tattoo_Attractive,
+                              levels = c("Yes", "No"),
+                              labels = c("Yes", "No")
+    )
+  )
+
+glimpse(tattoo_modified)
+
+```
+
+```{r}
+contingency_table <- vcd::structable(Gender ~ Tattoo_Attractive,
+  data = tattoo_modified
+)
+contingency_table
+```
+
+```{r}
+gss_vcd_table <- vcd::structable(Gender ~ Tattoo_Attractive, data = tattoo_modified)
+gss_vcd_table %>%
+  vcd::mosaic(
+    gp = shading_hsv, direction = "v",
+    main = "Tattoo Attraction by Gender Mosaic Chart",
+    legend = TRUE,
+    labeling = labeling_border(
+      varnames = c("F", "F"),  # Adjusts variable name labels
+      rot_labels = c(90, 0, 0, 0),  # Rotates top-side labels
+      just_labels = c(
+        "left",   # Top side
+        "left",   # Right side
+        "left",   # Bottom side
+        "right"   # Left side
+      )
+    )
+  )
+```
+### Inference
+
+- The chart and test results strongly suggest there is no association between gender and tattoo attraction in your dataset.
+
+- Statistically, the proportions of Yes/No responses for tattoo attraction are about the same for both males and females.
+
+```{r}
+# Somewhat strange notation with visstat
+chisq_visstat <- visstat(
+  x = tattoo_modified, # dataframe
+  y = "Gender", # y variable
+  "Tattoo_Attractive"
+) # x variables
+
+chisq_visstat %>% summary()
+```
+
+### Hypothesis
+
+Null Hypothesis: There is no association between gender and finding tattoos attractive.
+
+Alternative Hypothesis: Null Hypothesis is true 
+
+```{r}
+chisq_visstat$observed
+```
+
+```{r}
+chisq_visstat$expected
+```
+
+```{r}
+chisq_visstat$stdres
+```
+Need more samples!
+
+```{r}
+summary(tattoo_modified$Gender)
+summary(tattoo_modified$Tattoo_Attractive)
+```
+
+```{r}
+contingency_table
+```
+```{r}
+contingency_table <- table(tattoo_modified$Gender, tattoo_modified$Tattoo_Attractive)
+```
+
+```{r}
+xq_test_object <- xchisq.test(contingency_table)
+```
+
+```{r}
+xq_test_object %>%
+  broom::tidy() %>%
+  select(statistic) %>%
+  as.numeric() -> X_squared_observed
+X_squared_observed
+```
+
+```{r}
+df <- 1
+X_squared_observed <- 0
+X_squared_critical <- qchisq(0.95, df)
+
+mosaic::xqchisq(
+  p = 0.95, df = df,
+  return = c("plot"), verbose = FALSE,
+  system = "gg"
+) %>%
+  gf_labs(
+    x = "F value", title = "Critical and Observed Chi-Square Values"
+  ) %>%
+  gf_vline(
+    xintercept = X_squared_observed,
+    color = "red", linewidth = 1
+  ) %>%
+  gf_vline(
+    xintercept = X_squared_critical,
+    color = "dodgerblue",
+    linewidth = 1
+  ) %>%
+  gf_annotate(
+    x = X_squared_observed - 2.5, y = 0.15,
+    geom = "label", label = "Observed\nChi-Square",
+    fill = "red", alpha = 0.3
+  ) %>%
+  gf_annotate("curve", X_squared_observed - 2.5,
+    y = 0.135, yend = 0.10,
+    xend = X_squared_observed - 0.5,
+    linewidth = 0.5, curvature = 0.3,
+    arrow = arrow(length = unit(0.25, "cm"))
+  ) %>%
+  gf_annotate(
+    # ***MODIFIED: Changed x from + 2.5 to + 1.5***
+    x = X_squared_critical + 1.5, y = 0.15,
+    geom = "label", label = "Critical\nChi-Square",
+    fill = "lightblue"
+  ) %>%
+  gf_annotate("curve", X_squared_critical + 1.5,
+    y = 0.135, yend = 0.10,
+    xend = X_squared_critical + 0.25,
+    linewidth = 0.5, curvature = -0.3,
+    arrow = arrow(length = unit(0.25, "cm"))
+  ) %>%
+  gf_refine(
+    scale_y_continuous(expand = expansion(add = c(0, 0.01))),
+    scale_x_continuous(expand = expansion(add = c(3, 2)))
+  )
+ 
+```
+### Inference
+
+- This shows the expected frequency of different Chi-Square values under the null hypothesis (there is no significant relationship).
+
+
+
+
+```{r}
+tattoo_vcd_table <- vcd::structable(Tattoo_Attractive ~ Gender,
+  data = tattoo_modified
+)
+
+vcd::mosaic(tattoo_vcd_table,
+  gp = shading_max, legend = TRUE, direction = "v",
+  labeling = labeling_border(
+    varnames = c("F", "F"),
+    rot_labels = c(90, 0, 0, 0),
+    just_labels = c(
+      "left",
+      "left",
+      "left",
+      "right"
+    )
+  )
+)
+
+vcd::mosaic(tattoo_vcd_table,
+  type = "expected", gp = shading_max, legend = TRUE, direction = "v",
+  labeling = labeling_border(
+    varnames = c("F", "F"),
+    rot_labels = c(90, 0, 0, 0),
+    just_labels = c(
+      "left",
+      "left",
+      "left",
+      "right"
+    )
+  )
+)
+
+vcd::assoc(tattoo_vcd_table,
+  gp = shading_max, legend = TRUE, direction = "v",
+  labeling = labeling_border(
+    varnames = c("F", "F"),
+    rot_labels = c(90, 0, 0, 0),
+    just_labels = c(
+      "left",
+      "left",
+      "left",
+      "right"
+    )
+  )
+)
+
+```
+
+### Inference
+
+- The Chi-Square test was conducted to check the relationship between gender and whether people find tattoos attractive.
+
+- The observed frequencies (Female: 15 Yes, 5 No; Male: 15 Yes, 5 No) are same to the expected frequencies.
+
+- The Chi-Square value = 0, with 1 degree of freedom and a p-value = 1.0.
+
+- Since the p-value (1.0) is greater than 0.05. This means there is no association between gender and perception of tattoo attractiveness.
+
+- Both males and females responded in exactly the same way, showing no variation in opinion.
+
+# Proportion Test
+
+```{r}
+tattoo_modified %>%
+  group_by(Tattoo_Attractive) %>%
+  count()
+```
+
+```{r}
+tattoo_modified_clean <- tattoo_modified %>%
+  drop_na(Tattoo_Attractive)
+```
+
+```{r}
+tattoo_modified_clean %>%
+  count(Tattoo_Attractive)
+```
+
+```{r}
+tattoo_modified_clean %>%
+  summarize(prop = mean(Tattoo_Attractive == "Yes"), n = n())
+```
+
+###Inference
+- The test result confirms if this percentage is significantly above 50%.
+
+```{r}
+
+tattoo_modified_clean %>%
+  drop_na() %>%
+  gf_bar(~Tattoo_Attractive, fill = ~Gender) %>%
+  gf_labs(
+    x = "Found tattoos attractive?",
+    title = "Proportion of Students Finding Tattoos Attractive"
+  )
+
+```
+### Inference
+
+- Majority of them find tattoos attractive and it's equally spread out
+
+- Again no association between gender and perception of tattoo attractiveness
+
+```{r}
+mosaic::binom.test(~Tattoo_Attractive, data = tattoo_modified_clean, success = "Yes")
+
+```
+
+```{r}
+mosaic::binom.test(~Tattoo_Attractive, data = tattoo_modified_clean, success = "Yes") %>%
+  broom::tidy()
+```
+
+```{r}
+tattoo_modified_clean %>%
+  drop_na() %>%
+  specify(response = Tattoo_Attractive, success = "Yes") %>%
+  generate(reps = 999, type = "bootstrap") %>%
+  calculate(stat = "prop") %>%
+  get_ci(level = 0.95)
+```
+
+## Inference
+
+- A sample proportion test was conducted to determine if the proportion of students who find tattoos attractive differs significantly from 0.5 (i.e., 50%).
+
+- Out of 40 students, 30 (75%) said they find tattoos attractive.
+
+- The sample proportion (p) = 0.75.
+
+- The p-value obtained from the test is 0.0022, which is less than 0.05. This means that the proportion of students who find tattoos attractive is significantly different from 50%.
+
+- The 95% confidence interval (0.588 to 0.873) indicates that the true proportion of students who find tattoos attractive likely falls between 59% and 87%.
+
+# Conclusion
+
+- The Chi sqaure result is Not Statistically Significant. We Fail to Reject the Null Hypothesis.
+
+- However, because the sample size is small (only 40 participants), the test may not capture real-world differences. A larger sample is needed to draw stronger and more reliable conclusions.
+
+- For now, we can only conclude that within this limited sample, gender has no impact on tattoo attractiveness.
+
+- But 

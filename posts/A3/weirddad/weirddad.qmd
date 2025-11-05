@@ -1,0 +1,231 @@
+---
+title: "A3 Weird Dad Dataset"
+author: "Swetha KV"
+date: "2025-11-01"
+categories: [Weird Dad]
+format: html
+---
+
+```{r}
+library(tidyverse)
+library(mosaic)
+library(vcd)
+library(visStatistics)
+library(resampledata)
+library(ggformula)
+library(infer)
+library(openintro)
+```
+
+```{r}
+weirddad <- read.csv("wierddad.csv")
+glimpse(weirddad)
+```
+
+```{r}
+weirddad <- weirddad%>% 
+ tidyr::drop_na()
+```
+
+```{r}
+visdat::vis_dat(weirddad)
+```
+
+```{r}
+weirddad_clean <- weirddad %>%
+  dplyr::select(college, is_dad_weird) %>%
+  tidyr::drop_na(c(college, is_dad_weird)) %>%
+  mutate(
+    college = factor(college),
+    is_dad_weird = factor(is_dad_weird, levels = c("Yes", "No"))
+  )
+```
+
+```{r}
+glimpse(weirddad_clean)
+```
+
+```{r}
+weirddad_clean %>% count(is_dad_weird)
+```
+
+```{r}
+weirddad_clean %>% count(college)
+
+```
+
+
+```{r}
+contingency_table <- vcd::structable(college ~ is_dad_weird,
+  data = weirddad_clean
+)
+contingency_table
+
+```
+At MIT,  5 out of 33 students (≈15%) said their dad is weird.
+At SMI, 12 out of 31 students (≈39%) said their dad is weird.
+
+```{r}
+gss_vcd_table <- vcd::structable(is_dad_weird ~ college, data = weirddad_clean)
+gss_vcd_table %>%
+  vcd::mosaic(
+    gp = shading_hsv, direction = "v",
+    main = "College vs 'Is Dad Weird?' Mosaic Chart",
+    legend = TRUE
+      )
+```
+
+```{r}
+contingency_table <- vcd::structable(college ~ is_dad_weird, data = weirddad_clean)
+contingency_table <- as.table(contingency_table)
+xq_test_object <- xchisq.test(contingency_table)
+```
+
+```{r}
+xq_test_object %>%
+  broom::tidy() %>%
+  select(statistic) %>%
+  as.numeric() -> X_squared_observed
+X_squared_observed
+```
+
+```{r}
+# Determine the Chi-Square critical value
+X_squared_critical <- qchisq(
+  p = .05,
+  df = (5 - 1) * (2 - 1), # (nrows-1) * (ncols-1)
+  lower.tail = FALSE
+)
+X_squared_critical
+```
+
+```{r}
+test_result <- chisq.test(contingency_table)
+
+# Extract required values
+X_squared_observed <- test_result$statistic
+df <- test_result$parameter
+X_squared_critical <- qchisq(0.95, df)
+```
+
+```{r}
+mosaic::xqchisq(
+  p = 0.95, df = df,
+  return = c("plot"), verbose = F,
+  system = "gg"
+) %>%
+  gf_labs(
+    x = "Chi-Square Value", title = "Critical and Observed Chi-Square Values",
+    x = ""
+  ) %>%
+  gf_vline(
+    xintercept = X_squared_observed,
+    color = "red", linewidth = 1
+  ) %>%
+  gf_vline(
+    xintercept = X_squared_critical,
+    color = "dodgerblue", linewidth = 1
+  ) %>%
+  gf_annotate(
+    x = X_squared_observed - 1, y = 0.15,
+    geom = "label", label = "Observed\nChi-Square",
+    fill = "red", alpha = 0.3
+  ) %>%
+  gf_annotate("curve", X_squared_observed - 1,
+    y = 0.135, yend = 0.10,
+    xend = X_squared_observed - 0.3,
+    linewidth = 0.5, curvature = 0.3,
+    arrow = arrow(length = unit(0.25, "cm"))
+  ) %>%
+  gf_annotate(
+    x = X_squared_critical + 1, y = 0.15,
+    geom = "label", label = "Critical\nChi-Square",
+    fill = "lightblue"
+  ) %>%
+  gf_annotate("curve", X_squared_critical + 1,
+    y = 0.135, yend = 0.10,
+    xend = X_squared_critical + 0.3,
+    linewidth = 0.5, curvature = -0.3,
+    arrow = arrow(length = unit(0.25, "cm"))
+  ) %>%
+  gf_refine(
+    scale_y_continuous(expand = expansion(add = c(0, 0.01))),
+    scale_x_continuous(expand = expansion(add = c(0, 1)))
+  )
+```
+
+# Propotion Test
+
+```{r}
+weirddad_clean %>%
+  group_by(is_dad_weird) %>%
+  count()
+```
+
+```{r}
+glimpse(weirddad_clean)
+```
+
+```{r}
+weirddad_clean %>%
+  summarize(prop = mean(is_dad_weird == "Yes"), n = n())
+```
+### Inference 
+- The difference in the proportion of students saying “Yes, my dad is weird” in college is statistically significant.
+
+- Across both colleges (MIT and SMI combined), about 26.6% of students said their dad is weird.
+
+- This means that most students (≈73%) do not consider their dad weird, suggesting that “weird dads” are a minority perception overall.
+
+- MIT: 15% “weird dads”
+SMI: 39% “weird dads”
+
+- That contrast shows that SMI is well above the overall average (26.6%), while MIT is below it.
+
+- SMI dads are perceived as significantly weirder than MIT dads.
+
+```{r}
+weirddad_clean %>%
+  drop_na() %>%
+  gf_bar(~is_dad_weird, fill = ~college, position = "fill") %>%
+  gf_labs(
+    x = "Is your dad weird?",
+    title = "Proportion of Students saying their dad is weird"
+  )
+```
+
+```{r}
+weirddad %>%
+  drop_na() %>%
+  gf_bar(~is_dad_weird, fill = ~gender, position = "fill") %>%
+  gf_labs(
+    x = "Is your dad weird?",
+    title = "Proportion of Students saying their dad is weird"
+  )
+```
+### Inference
+- Gender does not appear to influence whether students think their dad is weird.
+
+- Males and females show almost equal proportions saying “Yes” or “No.”
+
+- This pattern shows the idea that perception of dad weirdness is gender-neutral — both male and female students perceive their fathers similarly.
+
+```{r}
+mosaic::binom.test(~is_dad_weird, data = weirddad_clean, success = "Yes")
+
+```
+
+```{r}
+mosaic::binom.test(~is_dad_weird, data = weirddad_clean, success = "Yes") %>%
+  broom::tidy()
+```
+
+```{r}
+weirddad_clean %>%
+  drop_na() %>%
+  specify(response = is_dad_weird, success = "Yes") %>%
+  generate(reps = 999, type = "bootstrap") %>%
+  calculate(stat = "prop") %>%
+  get_ci(level = 0.95)
+```
+

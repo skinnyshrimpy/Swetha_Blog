@@ -242,6 +242,7 @@ gf_point(
 ```
 -Inference
 1. Why do lower-numbered block groups have more homicides? what makes them riskier?
+
 ```{r}
 homicides15_tbl_df_cleaned %>% 
   gf_bar(~offense_type| block_group, fill = ~offense_type) %>% 

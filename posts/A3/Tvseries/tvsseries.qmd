@@ -1,0 +1,265 @@
+---
+title: "A3 Series Dataset"
+author: "Swetha KV"
+date: "2025-10-31"
+categories: [Tv Series]
+format: html
+---
+
+```{r}
+library(tidyverse)
+library(ggformula)
+library(mosaic)
+library(broom)
+library(infer)
+library(supernova)
+library(ggstatsplot)
+library(ggcompare)
+library(patchwork)
+library(ggprism)
+library(paletteer)
+library(DescTools)
+
+```
+
+```{r}
+set.seed(123)
+ratings_orig <- tibble(
+  ID = 1:120,
+  Friends = c(rnorm(40, 8.5, 0.5), rep(NA, 80)),
+  ModernFamily = c(rep(NA, 40), rnorm(40, 7.5, 0.6), rep(NA, 40)),
+  BigBangTheory = c(rep(NA, 80), rnorm(40, 6.5, 0.7)),
+  Gender = rep(c(rep("Male", 20), rep("Female", 20)), 3) # 20 males + 20 females for each show
+)
+```
+
+# Convert from wide to long format
+
+```{r}
+ratings_long <- ratings_orig %>%
+  pivot_longer(cols = c(Friends, ModernFamily, BigBangTheory), names_to = "Show", values_to = "Rating") %>%
+  drop_na() %>%
+  mutate(
+    Show = factor(Show, levels = c("Friends", "ModernFamily", "BigBangTheory")),
+    Gender = factor(Gender, levels = c("Male", "Female"))
+  )
+ratings_long
+```
+
+```{r}
+gf_jitter(Rating ~ Show, color = ~Show, width = 0.2, data = ratings_long, size = 3, alpha = 0.5) %>%
+  gf_labs(title = "Opinion Scores by Show", x = "Show", y = "Rating") %>%
+  gf_hline(yintercept = ~ mean(Rating), color = "grey") %>%
+  gf_annotate(geom = "text", label = "Overall Mean", x = 3, y = mean(ratings_long$Rating) + 0.2, size = 4)
+
+```
+### Inference
+The raw data clearly shows Friends having the highest ratings, followed by ModernFamily, and then BigBangTheory. The overall mean rating (grey line) falls roughly between the ModernFamily and BigBangTheory groups. The groups appear separated, suggesting a strong effect.
+
+
+```{r}
+gf_histogram(~Rating, fill = ~Show, data = ratings_long, alpha = 0.5) %>%
+  gf_vline(xintercept = ~ mean(ratings_long$Rating)) %>%
+  gf_labs(title = "Histogram of Ratings", x = "Rating", y = "Count")
+```
+### Inference
+
+Confirms the means are different and shows the distribution of scores. 
+- Friends ratings are higher (peaked around 8-9), 
+- ModernFamily is mid-range (peaked around 7-8), 
+- BigBangTheory is lowest (peaked around 6-7). The black vertical line is the overall mean.
+
+```{r}
+ratings_anova <- aov(Rating ~ Show, data = ratings_long)
+summary(ratings_anova)
+
+# Produce a supernova ANOVA table for detailed output
+supernova::supernova(ratings_anova)
+
+```
+
+```{r}
+ratings_anova <- aov(Rating ~ Show, data = ratings_long)
+ratings_anova
+```
+
+# Hypothesis 
+
+- Null Hypothesis Rejected: We confidently rejected the idea that all three shows have the same true average rating.
+
+- Alternative Hypothesis Supported: This means we accept the alternative hypothesis, concluding that there is a significant difference in the mean ratings among the TV shows.
+
+```{r}
+# Create a "pairwise" list object
+ratings_supernova <-
+  supernova::pairwise(ratings_anova,
+    correction = "Bonferroni", # Try "Tukey"
+    alpha = 0.05, # 95% CI calculation
+    var_equal = TRUE, # We'll see
+    plot = T
+  )
+```
+
+
+
+```{r}
+ratings_supernova$Show
+```
+
+```{r}
+supernova::supernova(ratings_anova)
+```
+
+```{r}
+supernova::equation(ratings_anova)
+```
+
+```{r}
+library(latex2exp)
+library(ggformula)
+library(paletteer)
+
+ratings_anova <- aov(Rating ~ Show, data = ratings_long)
+
+ratings_long %>%
+  mutate(fitted = fitted(ratings_anova)) %>%
+  gf_jitter(Rating ~ Show,
+    width = 0.2, alpha = 0.6,
+    color = ~Show,
+    data = .
+  ) %>%
+  gf_summary(
+    group = ~1,   # connects all points with a line
+    fun = "mean", geom = "line", colour = "lightblue",
+    lty = 1, linewidth = 2
+  ) %>%
+  gf_point(fitted ~ Show,
+    color = ~Show,
+    shape = 2,
+    size = 6
+  ) %>%
+  gf_segment(fitted + fitted ~ 0 + Show, linetype = 2, color = ~Show) %>%
+  gf_annotate("label",
+    label = TeX(r"($Rating = \mu_{Friends} + \Delta_{ModernFamily} + \Delta_{BigBangTheory} + e$)", output = "character"),
+    parse = TRUE,
+    y = max(ratings_long$Rating) - 0.5,
+    x = 2.25,
+    size = 3, color = "black", fill = "lightblue"
+  ) %>%
+  gf_annotate("label",
+    label = "Triangles are Predictions\n at each Show level", y = min(ratings_long$Rating) + 0.5, x = 1.25,
+    size = 3, color = "black", fill = "moccasin"
+  ) %>%
+  gf_labs(
+    title = "Fitted ANOVA Model Equation",
+    x = "TV Show", y = "Rating"
+  ) %>%
+  gf_refine(
+    scale_colour_paletteer_d("ggthemes::colorblind"),
+    guides(colour = guide_legend(title = "Show"))
+  )
+
+```
+### Inference
+
+Visually confirms the mean differences calculated in the ANOVA. The predicted mean for Friends is highest, ModernFamily is next, and BigBangTheory is lowest. The blue line connecting the means illustrates the difference between groups.
+
+
+```{r}
+shapiro.test(x = ratings_long$Rating)
+```
+
+```{r}
+ratings_long %>%
+  group_by(Show) %>%
+  group_modify(~ .x %>%
+    select(Rating) %>%
+    as_vector() %>%
+    shapiro.test() %>%
+    broom::tidy())
+```
+
+```{r}
+ratings_anova$residuals %>%
+  as_tibble() %>%
+  gf_dhistogram(~value, data = .) %>%
+  gf_labs(
+    title = "Residuals Histogram",
+    x = "Residuals", y = "Count"
+  ) %>%
+  gf_fitdistr()
+
+ratings_anova$residuals %>%
+  as_tibble() %>%
+  gf_qq(~value, data = .) %>%
+  gf_qqstep() %>%
+  gf_labs(
+    title = "Residuals Q-Q Plot",
+    x = "Theoretical Quantiles", y = "Sample Quantiles"
+  ) %>%
+  gf_qqline()
+
+```
+### Inference
+
+The residuals generally follow the normal curve, suggesting the normality assumption for the errors is reasonably met, despite some bin irregularities. This supports the validity of the ANOVA test.
+
+Most of the data points fall close to the dashed straight line, especially in the center, indicating that the residuals are approximately normally distributed, supporting the ANOVA assumption. Deviations at the tails are common with real-world data but do not severely violate the assumption here.
+
+```{r}
+ratings_long %>%
+  group_by(Gender) %>%
+  summarise(variance = var(Rating))
+
+ratings_long %>%
+  group_by(Show, Gender) %>%
+  summarise(variance = var(Rating))
+
+```
+
+```{r}
+DescTools::LeveneTest(Rating ~ Show, data = ratings_long)
+```
+- While the average rating is very different, the level of agreement or disagreement among the people rating Friends is the same as for ModernFamily and BigBangTheory. They are equally consistent in how tightly their ratings cluster around the mean for that specific show.
+
+```{r}
+fligner.test(Rating ~ Show, data = ratings_long)
+```
+
+```{r}
+ratings_supernova$Show
+```
+
+```{r}
+ggstatsplot::ggbetweenstats(
+  data = ratings_long,
+  x = Show,
+  y = Rating,
+  colour = Show,
+  alpha = 0.8,
+  type = "parametric",
+  p.adjust.method = "bonferroni",
+  conf.level = 0.95,
+  violin.args = list(width = 0.0)  # Removes violin plots like in frogs example
+) +
+  scale_colour_paletteer_d("ggthemes::colorblind") +
+  labs(
+    title = "ANOVA: Ratings by TV Show",
+    x = "TV Show",
+    y = "Rating",
+    subtitle = "",
+    caption = ""
+  )
+```
+### Inference
+- This plot visually summarizes the means and spread. The pairwise values for all three comparisons are all highly significant. This confirms that the mean rating of every show is statistically different from every other show.
+
+# Conclusion
+
+Friends is the Clear Winner (8.52$)
+
+ModernFamily is the Mid-Performer (7.49)
+
+BigBangTheory is the Lowest Rated (6.50)
+
+Friends vs. The Others: On a rating scale, Friends is rated significantly higher than both and is approximately 1 point higher than ModernFamily and 2 points higher than BigBangTheory. ModernFamily vs. BigBangTheory: ModernFamily is similarly rated significantly better than BigBangTheory, with a difference of about 1 point.

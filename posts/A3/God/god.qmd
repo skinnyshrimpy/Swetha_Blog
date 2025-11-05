@@ -1,0 +1,101 @@
+---
+title: "A3 God Dataset"
+author: "Swetha KV"
+date: "2025-11-01"
+categories: [God]
+format: html
+---
+
+```{r}
+library(tidyverse)
+library(mosaic)
+library(vcd)
+library(visStatistics)
+library(ggformula)
+library(infer)
+library(openintro)
+```
+
+```{r}
+god <- read.csv("kadavulirukanda.csv")
+glimpse(god)
+```
+
+```{r}
+god <- god%>% 
+ tidyr::drop_na()
+```
+
+```{r}
+visdat::vis_dat(god)
+```
+
+```{r}
+god %>%
+  group_by(Believe_in_God) %>%
+  count()
+```
+
+```{r}
+god %>%
+  group_by(Gender) %>%
+  count()
+```
+
+```{r}
+god %>%
+  summarize(prop = mean(Believe_in_God == "Yes"), n = n())
+```
+
+```{r}
+god_table <- vcd::structable(Gender ~ Believe_in_God, data = god)
+god_table
+```
+
+```{r}
+god %>%
+  gf_bar(~Believe_in_God, fill = ~Gender) %>%
+  gf_labs(
+    x = "Believe in God",
+    title = "Proportion of Students saying they believe in god"
+  )
+```
+### Inference 
+
+- The bar graph shows a moderate distribution of belief, indicating coexistence of both religious and secular perspectives among students.
+
+```{r}
+mosaic::binom.test(~Believe_in_God, data = god, success = "Yes")
+```
+
+```{r}
+god %>%
+  drop_na() %>%
+  specify(response = Believe_in_God, success = "Yes") %>%
+  generate(reps = 999, type = "bootstrap") %>%
+  calculate(stat = "prop") %>%
+  get_ci(level = 0.95)
+```
+
+# Conlcusion
+
+### Hypothesis
+
+Numerical hypothesis: The proportion of students that believe in God is equal to 0.5 (no difference and equally to believe and disbelieve).
+
+Alternative hypothesis: The proportion of students that believe in God is not equal to 0.5 (there is a difference between believe and disbelieve).
+
+### Inference
+
+- Since the p-value (0.1173) > 0.05, we fail to reject the null hypothesis.
+
+- There isn’t strong statistical evidence that the proportion of students who believe in God differs significantly from 50%.
+
+- The sample proportion (63%) does lean higher than 0.5, which means tendency toward belief that become significant.
+
+- The 95% confidence interval (0.469 to 0.779) means we are 95% confident that the true population proportion of students who believe in God lies between 46.9% and 77.9%.
+
+- Since 0.5 (the neutral value) lies within this interval, we can’t claim a significant deviation from 50%.
+
+- The unequal gender sample (23 female, 18 male) have slightly biased the overall proportion upward because the graph is showing that females tend to express higher belief rates. A gender-balanced sample might give us a slightly lower or more neutral proportion.
+

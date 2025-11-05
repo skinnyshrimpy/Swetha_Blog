@@ -1,0 +1,299 @@
+---
+title: "A3 Weekly Expense Dataset"
+author: "Swetha KV"
+date: "2025-11-01"
+categories: [Weekly Expense]
+format: html
+---
+
+```{r}
+library(tidyverse)
+library(mosaic)
+library(broom)
+library(gt) 
+library(visStatistics)
+library(dplyr)
+library(ggplot2)
+```
+
+```{r}
+weekly_expense <- read.csv("weeklyexpence.csv")
+glimpse(weekly_expense)
+```
+
+```{r}
+library(dplyr)
+
+weekly_expense <- weekly_expense %>%
+  select(-X, -X.1, -X.2)
+
+```
+
+```{r}
+glimpse(weekly_expense)
+```
+
+```{r}
+
+weekly_expense <- weekly_expense %>%
+  mutate(
+    Name = str_squish(Name),
+    Gender = str_squish(Gender)
+  )
+
+# Summarize total and average expenditure by gender
+gender_summary <- weekly_expense %>%
+  group_by(Gender) %>%
+  summarise(
+    Average_Expenditure = mean(Total_Expenditure_Last_Week, na.rm = TRUE),
+    Total_Expenditure = sum(Total_Expenditure_Last_Week, na.rm = TRUE),
+    Count = n()
+  )
+
+gender_summary
+
+```
+
+### Hypothesis 
+
+- Null Hypothesis: There is no difference between the true mean weekly expenditure for Male and Female.
+
+- Alternative Hypothesis: There is a significant difference between the mean weekly expenditure for Male and Female.
+
+```{r}
+weekly_expense %>%
+  gf_dhistogram(
+    ~Total_Expenditure_Last_Week,
+    fill = ~Gender,
+    alpha = 0.5,
+    title = "Weekly Expenditure by Gender"
+  ) %>%
+  gf_facet_grid(~Gender) %>%
+  gf_fitdistr(dist = "dnorm") %>%
+  gf_refine(scale_fill_brewer(palette = "Set2")) %>%
+  gf_theme(theme(legend.position = "none"))
+```
+### Inference
+
+- Most girls spend a small amount of money, and their spending is very consistent.
+
+- The spending habits of boys are much more spread out and less consistent than the spending of girls.
+
+- The highest individual spenders in the dataset are all boys.
+
+```{r}
+# Optional custom theme (uncomment if you have theme_custom defined)
+# ggplot2::theme_set(new = theme_custom())
+
+weekly_expense %>%
+  gf_density(
+    ~Total_Expenditure_Last_Week,
+    fill = ~Gender,
+    alpha = 0.5,
+    title = "Weekly Expenditure by Gender"
+  ) %>%
+  gf_facet_grid(~Gender) %>%
+  gf_fitdistr(dist = "dnorm") %>%
+  gf_refine(scale_fill_brewer(palette = "Set1")) %>%
+  gf_theme(theme(legend.position = "none"))
+
+```
+
+```{r}
+weekly_expense %>%
+  gf_boxplot(
+    Total_Expenditure_Last_Week ~ Gender, orientation = "x" ,
+    fill = ~Gender
+  ) %>%
+  gf_refine(scale_fill_brewer(palette = "Set2"))
+```
+
+### Inference
+
+- A few boys who spent a lot of money (outliers) made the average spending for all boys look much higher than it really is for most of them.
+
+```{r}
+weekly_expense %>%
+  gf_jitter(
+    Total_Expenditure_Last_Week ~ Gender,
+    color = ~Gender,
+    alpha = 0.6,
+    title = "Individual Weekly Expenditures"
+  )
+```
+
+```{r}
+weekly_expense %>%
+  group_by(Gender) %>%
+  summarise(Average_Spend = mean(Total_Expenditure_Last_Week, na.rm = TRUE)) %>%
+  gf_col(
+    Gender ~ Average_Spend,
+    fill = ~Gender,
+    title = "Average Weekly Expenditure by Gender"
+  ) %>%
+  gf_refine(scale_fill_brewer(palette = "Set2"))
+
+```
+
+```{r}
+weekly_expense %>%
+  gf_violin(
+    Total_Expenditure_Last_Week ~ Gender,
+    fill = ~Gender,
+    alpha = 0.7,
+    title = "Distribution of Weekly Expenditure by Gender"
+  ) %>%
+  gf_refine(scale_fill_brewer(palette = "Set2"))
+
+```
+
+```{r}
+# Calculate observed difference in mean expenditure between genders
+obs_diff_expense <- diffmean(
+  Total_Expenditure_Last_Week ~ Gender,
+  data = weekly_expense,
+  only.2 = FALSE
+)
+
+# Alternate method (if your data had separate columns for each gender — not needed here)
+# obs_diff_expense <- mean(~ Female - Male, data = weekly_expense)
+
+obs_diff_expense
+
+```
+
+```{r}
+mosaic::t_test(
+  Total_Expenditure_Last_Week ~ Gender,
+  data = weekly_expense
+) %>%
+  broom::tidy() %>%
+  gt() %>%
+  tab_style(
+    style = list(
+      cell_fill(color = "orange"),
+      cell_text(weight = "bold")
+    ),
+    locations = cells_body(columns = p.value)
+  ) %>%
+  tab_header(title = "t-test: Difference in Mean Weekly Expenditure by Gender")
+
+wilcox.test(
+  Total_Expenditure_Last_Week ~ Gender,
+  data = weekly_expense,
+  conf.int = TRUE,
+  conf.level = 0.95
+) %>%
+  broom::tidy() %>%
+  gt() %>%
+  tab_style(
+    style = list(
+      cell_fill(color = "yellow"),
+      cell_text(weight = "bold")
+    ),
+    locations = cells_body(columns = p.value)
+  ) %>%
+  tab_header(title = "Wilcoxon Test: Median Expenditure Difference by Gender")
+```
+### Inference
+
+From t-Test
+- 
+
+From Mann-Whitney Test
+- P-value 0.066 it's Borderline Significant
+
+- Estimate is 1100 The median for boys is about 1,100 Rs. higher than the median for girls.
+
+
+```{r}
+shapiro.test(weekly_expense$Total_Expenditure_Last_Week[weekly_expense$Gender == "Female"])
+shapiro.test(weekly_expense$Total_Expenditure_Last_Week[weekly_expense$Gender == "Male"])
+```
+### Inference
+
+- The weekly expenditure data for both males and females is not normally distributed. This is also strongly supported by histogram chart.
+
+```{r}
+var.test(
+  Total_Expenditure_Last_Week ~ Gender,
+  data = weekly_expense
+)
+```
+### Inference 
+
+- There is a statistically significant difference in the variability (spread) of the weekly expenditures between males and females. Specifically, the sample ratio of variances (0.0459) shows that the variance of Female expenditure is much smaller than the variance of Male expenditure. 
+
+- This also we saw the visual observation that Male spending is far more spread out and inconsistent than Female spending on the histogram chart.
+
+```{r}
+obs_diff_expense_less <- diffmean(
+  Total_Expenditure_Last_Week ~ Gender,
+  data = weekly_expense
+)
+
+obs_diff_expense_less
+
+```
+
+```{r}
+set.seed(12345)
+polarity_less <- c(rep(1, 15), rep(-1, 14)) 
+
+# Observed difference
+obs_diff_expense_less <- mean(
+  ~ (Total_Expenditure_Last_Week[Gender == "Female"] - 
+       Total_Expenditure_Last_Week[Gender == "Male"]),
+  data = weekly_expense
+)
+
+# Null distribution using permutation
+null_dist_expense_less <- 
+  do(9999) * mean(
+    data = weekly_expense,
+    ~ (Total_Expenditure_Last_Week[Gender == "Female"] - 
+         Total_Expenditure_Last_Week[shuffle(Gender) == "Male"])
+  )
+
+## Histogram
+gf_histogram(data = null_dist_expense_less, ~mean) %>%
+  gf_vline(
+    xintercept = obs_diff_expense_less,
+    colour = "red"
+  ) %>%
+  gf_refine(scale_y_continuous(expand = c(0, 0)))
+
+## ECDF
+gf_ecdf(data = null_dist_expense_less, ~mean, linewidth = 1) %>%
+  gf_vline(
+    xintercept = obs_diff_expense_less,
+    colour = "red",
+    linewidth = 1, 
+    title = "Null Distribution by Permutation",
+    subtitle = "Cumulative Density"
+  ) %>%
+  gf_labs(x = "Difference in Means") %>%
+  gf_refine(scale_y_continuous(expand = c(0, 0)))
+
+## P-value
+mean(null_dist_expense_less >= obs_diff_expense_less)
+
+```
+### Inference 
+
+- the actual observed difference is very far out in the tail of the Null Distribution
+
+- difference in average weekly expenditure between males and females is statistically significant.
+
+- The average weekly expenditure for males is significantly higher than that for females.
+
+# Conclusion
+
+- Boys Spend More! Overall, boys spend a higher amount of money than girls do.
+
+- Boys Spending is Messy (t-Test): Boys' spending habits are very unpredictable (some spend very little, a few spend huge amounts), but girls' spending is much more consistent.
+
+- Outliers Confuse Tests: A few boys who spent giant amounts (the outliers) made the standard average tests (like the t-test) unreliable and unable to clearly prove the difference.
+
+- Mann-whitney test that ignores those extreme high amounts, it confirms that the difference in spending between the genders is real with difference 1100 Rs.
+
