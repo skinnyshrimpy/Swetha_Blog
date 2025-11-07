@@ -6,6 +6,10 @@ categories: [Weird Dad]
 format: html
 ---
 
+Are Srishti dads weird?
+
+## Setting up R Packages
+
 ```{r}
 library(tidyverse)
 library(mosaic)
@@ -17,10 +21,16 @@ library(infer)
 library(openintro)
 ```
 
+## Read Data
+
 ```{r}
 weirddad <- read.csv("wierddad.csv")
 glimpse(weirddad)
 ```
+
+## Data Dictionary
+
+## Cleaning Data
 
 ```{r}
 weirddad <- weirddad%>% 
@@ -30,6 +40,8 @@ weirddad <- weirddad%>%
 ```{r}
 visdat::vis_dat(weirddad)
 ```
+
+## Data Munging
 
 ```{r}
 weirddad_clean <- weirddad %>%
@@ -45,6 +57,8 @@ weirddad_clean <- weirddad %>%
 glimpse(weirddad_clean)
 ```
 
+## Summaries: Examining the Data
+
 ```{r}
 weirddad_clean %>% count(is_dad_weird)
 ```
@@ -54,6 +68,41 @@ weirddad_clean %>% count(college)
 
 ```
 
+# Visualing data
+
+```{r}
+weirddad_clean %>%
+  drop_na() %>%
+  gf_bar(~college, fill = ~is_dad_weird, position = "fill") %>%
+  gf_labs(
+    x = "Is your dad weird?",
+    title = "Propotion of SMI vs MIT saying their dad is weird"
+  )
+```
+
+### Inference
+
+-   more SMI students think their dad is weird than MIT students.
+
+```{r}
+weirddad %>%
+  drop_na() %>%
+  gf_bar(~is_dad_weird, fill = ~gender, position = "fill") %>%
+  gf_labs(
+    x = "Is your dad weird?",
+    title = "Proportion of Students saying their dad is weird - Gender wise"
+  )
+```
+
+### Inference
+
+-   Gender does not appear to influence whether students think their dad is weird.
+
+-   Males and females show almost equal proportions saying “Yes” or “No.”
+
+-   This pattern shows the idea that perception of dad weirdness is gender-neutral — both male and female students perceive their fathers similarly.
+
+## Chi Sqaure Test
 
 ```{r}
 contingency_table <- vcd::structable(college ~ is_dad_weird,
@@ -62,8 +111,8 @@ contingency_table <- vcd::structable(college ~ is_dad_weird,
 contingency_table
 
 ```
-At MIT,  5 out of 33 students (≈15%) said their dad is weird.
-At SMI, 12 out of 31 students (≈39%) said their dad is weird.
+
+At MIT, 5 out of 33 students (15%) said their dad is weird. At SMI, 12 out of 31 students (39%) said their dad is weird.
 
 ```{r}
 gss_vcd_table <- vcd::structable(is_dad_weird ~ college, data = weirddad_clean)
@@ -154,7 +203,7 @@ mosaic::xqchisq(
   )
 ```
 
-# Propotion Test
+## Propotion Test
 
 ```{r}
 weirddad_clean %>%
@@ -170,45 +219,30 @@ glimpse(weirddad_clean)
 weirddad_clean %>%
   summarize(prop = mean(is_dad_weird == "Yes"), n = n())
 ```
-### Inference 
-- The difference in the proportion of students saying “Yes, my dad is weird” in college is statistically significant.
 
-- Across both colleges (MIT and SMI combined), about 26.6% of students said their dad is weird.
+### Inference
 
-- This means that most students (≈73%) do not consider their dad weird, suggesting that “weird dads” are a minority perception overall.
+-   The difference in the proportion of students saying “Yes, my dad is weird” in college is statistically significant.
 
-- MIT: 15% “weird dads”
-SMI: 39% “weird dads”
+-   Across both colleges (MIT and SMI combined), about 26.6% of students said their dad is weird.
 
-- That contrast shows that SMI is well above the overall average (26.6%), while MIT is below it.
+-   This means that most students (≈73%) do not consider their dad weird, suggesting that “weird dads” are a minority perception overall.
 
-- SMI dads are perceived as significantly weirder than MIT dads.
+-   MIT: 15% “weird dads” SMI: 39% “weird dads”
+
+-   That contrast shows that SMI is well above the overall average (26.6%), while MIT is below it.
+
+-   SMI dads are perceived as significantly weirder than MIT dads.
 
 ```{r}
 weirddad_clean %>%
   drop_na() %>%
-  gf_bar(~is_dad_weird, fill = ~college, position = "fill") %>%
+  gf_bar(~is_dad_weird,  position = "dodge") %>%
   gf_labs(
     x = "Is your dad weird?",
     title = "Proportion of Students saying their dad is weird"
   )
 ```
-
-```{r}
-weirddad %>%
-  drop_na() %>%
-  gf_bar(~is_dad_weird, fill = ~gender, position = "fill") %>%
-  gf_labs(
-    x = "Is your dad weird?",
-    title = "Proportion of Students saying their dad is weird"
-  )
-```
-### Inference
-- Gender does not appear to influence whether students think their dad is weird.
-
-- Males and females show almost equal proportions saying “Yes” or “No.”
-
-- This pattern shows the idea that perception of dad weirdness is gender-neutral — both male and female students perceive their fathers similarly.
 
 ```{r}
 mosaic::binom.test(~is_dad_weird, data = weirddad_clean, success = "Yes")
@@ -229,3 +263,4 @@ weirddad_clean %>%
   get_ci(level = 0.95)
 ```
 
+------------------------------------------------------------------------

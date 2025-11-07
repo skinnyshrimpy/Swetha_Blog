@@ -190,8 +190,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<section id="set-up-packages" class="level1">
-<h1>Set-up Packages</h1>
+<section id="setting-up-r-packages" class="level2">
+<h2 class="anchored" data-anchor-id="setting-up-r-packages">Setting up R Packages</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
@@ -310,59 +310,83 @@ The following object is masked from 'package:mosaic':
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(latex2exp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
+<section id="read-data" class="level2">
+<h2 class="anchored" data-anchor-id="read-data">Read Data</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>ratings <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"tvseries.csv"</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(ratings)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 52
+Columns: 5
+$ Name            &lt;chr&gt; "Diya", "Ihina", "Abhinav", "Nikhita", "Rishi", "Charv…
+$ Gender          &lt;chr&gt; "Female", "Female", "Male", "Female", "Male", "Female"…
+$ Friends         &lt;dbl&gt; 8.0, 7.0, 8.0, 7.0, 8.0, 6.0, 8.0, 4.0, 9.0, 7.0, NA, …
+$ Modern.Family   &lt;dbl&gt; 9.0, 9.0, 10.0, 9.0, 6.0, 9.0, 7.5, 8.0, 8.0, 9.0, 9.5…
+$ Big.Bang.Theory &lt;dbl&gt; 9.0, 6.0, 7.0, 6.0, 5.0, 5.5, 9.0, 6.0, 5.0, 3.0, 6.0,…</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>ratings <span class="ot">&lt;-</span> ratings <span class="sc">%&gt;%</span> <span class="fu">drop_na</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
 <section id="data-munging" class="level1">
 <h1>Data Munging</h1>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>ratings_orig <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">ID =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">120</span>,</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">Friends =</span> <span class="fu">c</span>(<span class="fu">rnorm</span>(<span class="dv">40</span>, <span class="fl">8.5</span>, <span class="fl">0.5</span>), <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="dv">80</span>)),</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">ModernFamily =</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="cn">NA</span>, <span class="dv">40</span>), <span class="fu">rnorm</span>(<span class="dv">40</span>, <span class="fl">7.5</span>, <span class="fl">0.6</span>), <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="dv">40</span>)),</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">BigBangTheory =</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="cn">NA</span>, <span class="dv">80</span>), <span class="fu">rnorm</span>(<span class="dv">40</span>, <span class="fl">6.5</span>, <span class="fl">0.7</span>)),</span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">Gender =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">"Male"</span>, <span class="dv">20</span>), <span class="fu">rep</span>(<span class="st">"Female"</span>, <span class="dv">20</span>)), <span class="dv">3</span>) <span class="co"># 20 males + 20 females for each show</span></span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
 <section id="convert-from-wide-to-long-format" class="level3">
 <h3 class="anchored" data-anchor-id="convert-from-wide-to-long-format">Convert from wide to long format</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>ratings_long <span class="ot">&lt;-</span> ratings_orig <span class="sc">%&gt;%</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(Friends, ModernFamily, BigBangTheory), <span class="at">names_to =</span> <span class="st">"Show"</span>, <span class="at">values_to =</span> <span class="st">"Rating"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">Show =</span> <span class="fu">factor</span>(Show, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Friends"</span>, <span class="st">"ModernFamily"</span>, <span class="st">"BigBangTheory"</span>)),</span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">Gender =</span> <span class="fu">factor</span>(Gender, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Male"</span>, <span class="st">"Female"</span>))</span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>ratings_long</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(ratings)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 120 × 4
-      ID Gender Show    Rating
-   &lt;int&gt; &lt;fct&gt;  &lt;fct&gt;    &lt;dbl&gt;
- 1     1 Male   Friends   8.22
- 2     2 Male   Friends   8.38
- 3     3 Male   Friends   9.28
- 4     4 Male   Friends   8.54
- 5     5 Male   Friends   8.56
- 6     6 Male   Friends   9.36
- 7     7 Male   Friends   8.73
- 8     8 Male   Friends   7.87
- 9     9 Male   Friends   8.16
-10    10 Male   Friends   8.28
-# ℹ 110 more rows</code></pre>
+<pre><code>[1] "Name"            "Gender"          "Friends"         "Modern.Family"  
+[5] "Big.Bang.Theory"</code></pre>
 </div>
 </div>
-</section>
-</section>
-<section id="visualising-data" class="level1">
-<h1>Visualising Data</h1>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_jitter</span>(Rating <span class="sc">~</span> Show, <span class="at">color =</span> <span class="sc">~</span>Show, <span class="at">width =</span> <span class="fl">0.2</span>, <span class="at">data =</span> ratings_long, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">title =</span> <span class="st">"Opinion Scores by Show"</span>, <span class="at">x =</span> <span class="st">"Show"</span>, <span class="at">y =</span> <span class="st">"Rating"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_hline</span>(<span class="at">yintercept =</span> <span class="sc">~</span> <span class="fu">mean</span>(Rating), <span class="at">color =</span> <span class="st">"grey"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_annotate</span>(<span class="at">geom =</span> <span class="st">"text"</span>, <span class="at">label =</span> <span class="st">"Overall Mean"</span>, <span class="at">x =</span> <span class="dv">3</span>, <span class="at">y =</span> <span class="fu">mean</span>(ratings_long<span class="sc">$</span>Rating) <span class="sc">+</span> <span class="fl">0.2</span>, <span class="at">size =</span> <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>ratings_long <span class="ot">&lt;-</span> ratings <span class="sc">%&gt;%</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> <span class="fu">c</span>(Friends, Modern.Family, Big.Bang.Theory),</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="st">"Show"</span>,</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to =</span> <span class="st">"Rating"</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">Show =</span> <span class="fu">factor</span>(</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>      Show,</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Friends"</span>, <span class="st">"Modern.Family"</span>, <span class="st">"Big.Bang.Theory"</span>),</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Friends"</span>, <span class="st">"Modern Family"</span>, <span class="st">"Big Bang Theory"</span>)</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">Gender =</span> <span class="fu">factor</span>(Gender, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Male"</span>, <span class="st">"Female"</span>))</span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>ratings_long</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 138 × 4
+   Name    Gender Show            Rating
+   &lt;chr&gt;   &lt;fct&gt;  &lt;fct&gt;            &lt;dbl&gt;
+ 1 Diya    Female Friends              8
+ 2 Diya    Female Modern Family        9
+ 3 Diya    Female Big Bang Theory      9
+ 4 Ihina   Female Friends              7
+ 5 Ihina   Female Modern Family        9
+ 6 Ihina   Female Big Bang Theory      6
+ 7 Abhinav Male   Friends              8
+ 8 Abhinav Male   Modern Family       10
+ 9 Abhinav Male   Big Bang Theory      7
+10 Nikhita Female Friends              7
+# ℹ 128 more rows</code></pre>
+</div>
+</div>
+</section>
+<section id="visualising-data" class="level2">
+<h2 class="anchored" data-anchor-id="visualising-data">Visualising Data</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_jitter</span>(Rating <span class="sc">~</span> Show, <span class="at">color =</span> <span class="sc">~</span>Show, <span class="at">width =</span> <span class="fl">0.2</span>, <span class="at">data =</span> ratings_long, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">title =</span> <span class="st">"Opinion Scores by Show"</span>, <span class="at">x =</span> <span class="st">"Show"</span>, <span class="at">y =</span> <span class="st">"Rating"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_hline</span>(<span class="at">yintercept =</span> <span class="sc">~</span> <span class="fu">mean</span>(Rating), <span class="at">color =</span> <span class="st">"grey"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_annotate</span>(<span class="at">geom =</span> <span class="st">"text"</span>, <span class="at">label =</span> <span class="st">"Overall Mean"</span>, <span class="at">x =</span> <span class="dv">3</span>, <span class="at">y =</span> <span class="fu">mean</span>(ratings_long<span class="sc">$</span>Rating) <span class="sc">+</span> <span class="fl">0.2</span>, <span class="at">size =</span> <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="tvsseries_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="tvsseries_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -371,20 +395,24 @@ The following object is masked from 'package:mosaic':
 <h3 class="anchored" data-anchor-id="inference">Inference</h3>
 <p>The raw data clearly shows Friends having the highest ratings, followed by ModernFamily, and then BigBangTheory. The overall mean rating (grey line) falls roughly between the ModernFamily and BigBangTheory groups. The groups appear separated, suggesting a strong effect.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_histogram</span>(<span class="sc">~</span>Rating, <span class="at">fill =</span> <span class="sc">~</span>Show, <span class="at">data =</span> ratings_long, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_vline</span>(<span class="at">xintercept =</span> <span class="sc">~</span> <span class="fu">mean</span>(ratings_long<span class="sc">$</span>Rating)) <span class="sc">%&gt;%</span></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">title =</span> <span class="st">"Histogram of Ratings"</span>, <span class="at">x =</span> <span class="st">"Rating"</span>, <span class="at">y =</span> <span class="st">"Count"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: Use of `ratings_long$Rating` is discouraged.
-ℹ Use `Rating` instead.</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>`stat_bin()` using `bins = 30`. Pick better value `binwidth`.</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>ratings_long <span class="sc">%&gt;%</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_boxplot</span>(Rating <span class="sc">~</span> Show, <span class="at">orientation =</span> <span class="st">"x"</span>, <span class="at">fill =</span> <span class="sc">~</span> Show) <span class="sc">%&gt;%</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Rating vs Show"</span>,</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"TV Shows"</span>,</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Ratings"</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_hline</span>(<span class="at">yintercept =</span> <span class="sc">~</span> <span class="fu">mean</span>(Rating), <span class="at">color =</span> <span class="st">"darkblue"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_annotate</span>(</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">geom =</span> <span class="st">"text"</span>,</span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="st">"Overall Mean"</span>,</span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="dv">2</span>,</span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="fu">mean</span>(ratings_long<span class="sc">$</span>Rating)</span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="tvsseries_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="tvsseries_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -392,13 +420,18 @@ The following object is masked from 'package:mosaic':
 </section>
 <section id="inference-1" class="level3">
 <h3 class="anchored" data-anchor-id="inference-1">Inference</h3>
-<p>Confirms the means are different and shows the distribution of scores. - Friends ratings are higher (peaked around 8-9), - ModernFamily is mid-range (peaked around 7-8), - BigBangTheory is lowest (peaked around 6-7). The black vertical line is the overall mean.</p>
+<ul>
+<li>Modern Family received the highest ratings, with most scores around 8–9.</li>
+<li>Friends ratings are moderate, clustering near 7.</li>
+<li>Big Bang Theory got the lowest ratings, mostly between 6–7.</li>
+<li>The overall mean (blue line) lies near 7.2, showing that the three shows differ clearly in how people rated them.</li>
+</ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_point</span>(Rating <span class="sc">~</span> Show, <span class="at">color =</span> <span class="sc">~</span>Gender, <span class="at">data =</span> ratings_long, </span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">position =</span> <span class="fu">position_dodge</span>(<span class="at">width =</span> <span class="fl">0.5</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_line</span>(Rating <span class="sc">~</span> Show, <span class="at">color =</span> <span class="sc">~</span>Gender, <span class="at">data =</span> ratings_long, </span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">stat =</span> <span class="st">"summary"</span>, <span class="at">fun.y =</span> <span class="st">"mean"</span>, </span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">position =</span> <span class="fu">position_dodge</span>(<span class="at">width =</span> <span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_point</span>(Rating <span class="sc">~</span> Show, <span class="at">color =</span> <span class="sc">~</span>Gender, <span class="at">data =</span> ratings_long, </span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">position =</span> <span class="fu">position_dodge</span>(<span class="at">width =</span> <span class="fl">0.5</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_line</span>(Rating <span class="sc">~</span> Show, <span class="at">color =</span> <span class="sc">~</span>Gender, <span class="at">data =</span> ratings_long, </span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">stat =</span> <span class="st">"summary"</span>, <span class="at">fun.y =</span> <span class="st">"mean"</span>, </span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">position =</span> <span class="fu">position_dodge</span>(<span class="at">width =</span> <span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>No summary function supplied, defaulting to `mean_se()`
 `geom_line()`: Each group consists of only one observation.
@@ -407,110 +440,118 @@ The following object is masked from 'package:mosaic':
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="tvsseries_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="tvsseries_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 </section>
+<section id="inference-2" class="level3">
+<h3 class="anchored" data-anchor-id="inference-2">Inference</h3>
+<ul>
+<li>Both males and females gave a wide range of ratings for all three shows.</li>
+<li>However, females tended to give slightly higher ratings overall, especially for Modern Family.</li>
+<li>There is no extreme difference between genders, but males showed more variation in their ratings.</li>
+</ul>
 </section>
-<section id="anova-test" class="level1">
-<h1>ANOVA Test</h1>
+</section>
+<section id="anova-test" class="level2">
+<h2 class="anchored" data-anchor-id="anova-test">ANOVA Test</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>ratings_anova <span class="ot">&lt;-</span> <span class="fu">aov</span>(Rating <span class="sc">~</span> Show, <span class="at">data =</span> ratings_long)</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(ratings_anova)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>ratings_anova <span class="ot">&lt;-</span> <span class="fu">aov</span>(Rating <span class="sc">~</span> Show, <span class="at">data =</span> ratings_long)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(ratings_anova)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>             Df Sum Sq Mean Sq F value Pr(&gt;F)    
-Show          2  81.38   40.69   138.4 &lt;2e-16 ***
-Residuals   117  34.41    0.29                   
+<pre><code>             Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+Show          2   86.6   43.32   12.37 1.17e-05 ***
+Residuals   135  472.8    3.50                     
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>supernova<span class="sc">::</span><span class="fu">supernova</span>(ratings_anova)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>supernova<span class="sc">::</span><span class="fu">supernova</span>(ratings_anova)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> Analysis of Variance Table (Type III SS)
  Model: Rating ~ Show
 
-                              SS  df     MS       F   PRE     p
- ----- --------------- | ------- --- ------ ------- ----- -----
- Model (error reduced) |  81.382   2 40.691 138.371 .7029 .0000
- Error (from model)    |  34.406 117  0.294                    
- ----- --------------- | ------- --- ------ ------- ----- -----
- Total (empty model)   | 115.788 119  0.973                    </code></pre>
+                              SS  df     MS      F   PRE     p
+ ----- --------------- | ------- --- ------ ------ ----- -----
+ Model (error reduced) |  86.634   2 43.317 12.368 .1549 .0000
+ Error (from model)    | 472.810 135  3.502                   
+ ----- --------------- | ------- --- ------ ------ ----- -----
+ Total (empty model)   | 559.444 137  4.084                   </code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>ratings_anova <span class="ot">&lt;-</span> <span class="fu">aov</span>(Rating <span class="sc">~</span> Show, <span class="at">data =</span> ratings_long)</span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>ratings_anova</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>ratings_anova <span class="ot">&lt;-</span> <span class="fu">aov</span>(Rating <span class="sc">~</span> Show, <span class="at">data =</span> ratings_long)</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>ratings_anova</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Call:
    aov(formula = Rating ~ Show, data = ratings_long)
 
 Terms:
                     Show Residuals
-Sum of Squares  81.38189  34.40635
-Deg. of Freedom        2       117
+Sum of Squares   86.6341  472.8098
+Deg. of Freedom        2       135
 
-Residual standard error: 0.5422835
+Residual standard error: 1.871442
 Estimated effects may be unbalanced</code></pre>
 </div>
 </div>
-<section id="inference-2" class="level3">
-<h3 class="anchored" data-anchor-id="inference-2">Inference</h3>
+<section id="inference-3" class="level3">
+<h3 class="anchored" data-anchor-id="inference-3">Inference</h3>
 <ul>
 <li><p>Null Hypothesis Rejected: We confidently rejected the idea that all three shows have the same true average rating.</p></li>
 <li><p>Alternative Hypothesis Supported: This means we accept the alternative hypothesis, concluding that there is a significant difference in the mean ratings among the TV shows.</p></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>ratings_anova_1 <span class="ot">&lt;-</span> <span class="fu">aov</span>(Rating <span class="sc">~</span> Show <span class="sc">+</span> Gender, <span class="at">data =</span> ratings_long)</span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(ratings_anova)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>ratings_anova_1 <span class="ot">&lt;-</span> <span class="fu">aov</span>(Rating <span class="sc">~</span> Show <span class="sc">+</span> Gender, <span class="at">data =</span> ratings_long)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(ratings_anova)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>             Df Sum Sq Mean Sq F value Pr(&gt;F)    
-Show          2  81.38   40.69   138.4 &lt;2e-16 ***
-Residuals   117  34.41    0.29                   
+<pre><code>             Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+Show          2   86.6   43.32   12.37 1.17e-05 ***
+Residuals   135  472.8    3.50                     
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>supernova<span class="sc">::</span><span class="fu">supernova</span>(ratings_anova_1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>supernova<span class="sc">::</span><span class="fu">supernova</span>(ratings_anova_1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> Analysis of Variance Table (Type III SS)
  Model: Rating ~ Show + Gender
 
-                               SS  df     MS       F   PRE     p
- ------ --------------- | ------- --- ------ ------- ----- -----
-  Model (error reduced) |  83.239   3 27.746  98.883 .7189 .0000
-   Show                 |  81.382   2 40.691 145.016 .7143 .0000
- Gender                 |   1.857   1  1.857   6.618 .0540 .0114
-  Error (from model)    |  32.549 116  0.281                    
- ------ --------------- | ------- --- ------ ------- ----- -----
-  Total (empty model)   | 115.788 119  0.973                    </code></pre>
+                               SS  df     MS      F   PRE     p
+ ------ --------------- | ------- --- ------ ------ ----- -----
+  Model (error reduced) |  88.013   3 29.338  8.339 .1573 .0000
+   Show                 |  86.634   2 43.317 12.312 .1552 .0000
+ Gender                 |   1.379   1  1.379  0.392 .0029 .5323
+  Error (from model)    | 471.431 134  3.518                   
+ ------ --------------- | ------- --- ------ ------ ----- -----
+  Total (empty model)   | 559.444 137  4.084                   </code></pre>
 </div>
 </div>
 </section>
-<section id="inference-3" class="level3">
-<h3 class="anchored" data-anchor-id="inference-3">Inference</h3>
+<section id="inference-4" class="level3">
+<h3 class="anchored" data-anchor-id="inference-4">Inference</h3>
 <ul>
 <li>Mean ratings of the shows are significantly different AND ratings given by different genders are also significantly different.</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>ratings_supernova <span class="ot">&lt;-</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  supernova<span class="sc">::</span><span class="fu">pairwise</span>(ratings_anova_1,</span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">correction =</span> <span class="st">"Bonferroni"</span>, <span class="co"># Try "Tukey"</span></span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.05</span>, <span class="co"># 95% CI calculation</span></span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">var_equal =</span> <span class="cn">TRUE</span>, <span class="co"># We'll see</span></span>
-<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot =</span> T</span>
-<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>ratings_supernova <span class="ot">&lt;-</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  supernova<span class="sc">::</span><span class="fu">pairwise</span>(ratings_anova_1,</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">correction =</span> <span class="st">"Bonferroni"</span>, <span class="co"># Try "Tukey"</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.05</span>, <span class="co"># 95% CI calculation</span></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">var_equal =</span> <span class="cn">TRUE</span>, <span class="co"># We'll see</span></span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot =</span> T</span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="tvsseries_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="tvsseries_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="tvsseries_files/figure-html/unnamed-chunk-10-2.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="tvsseries_files/figure-html/unnamed-chunk-13-2.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -519,11 +560,14 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <section id="inferemce" class="level3">
 <h3 class="anchored" data-anchor-id="inferemce">Inferemce</h3>
 <ul>
-<li><p>Friends &gt; Mordern Family &gt; Big Bang Theory</p></li>
-<li><p>Males gave a higher average rating than Females did (By abt quater point).</p></li>
+<li><p>Modern Family received ratings that are significantly higher than the ratings for Friends.</p></li>
+<li><p>Big Bang Theory and Friends ratings are not significantly different from each other.</p></li>
+<li><p>Modern Family received ratings that are significantly higher than the ratings for Big Bang Theory.</p></li>
+<li><p>The difference between females and males is not statistically significant.</p></li>
+<li><p>This means we cannot clearly say one gender is different from the other based on this test.</p></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>ratings_supernova<span class="sc">$</span>Show</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>ratings_supernova<span class="sc">$</span>Show</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Show</code></pre>
 </div>
@@ -535,265 +579,102 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
-  group_1       group_2        diff pooled_se       t    df  lower  upper p_adj
-  &lt;chr&gt;         &lt;chr&gt;         &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;int&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
-1 ModernFamily  Friends      -1.027     0.084 -12.257   116 -1.207 -0.846 .0000
-2 BigBangTheory Friends      -2.017     0.084 -24.083   116 -2.197 -1.837 .0000
-3 BigBangTheory ModernFamily -0.990     0.084 -11.826   116 -1.171 -0.810 .0000</code></pre>
+  group_1         group_2        diff pooled_se      t    df  lower  upper p_adj
+  &lt;chr&gt;           &lt;chr&gt;         &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt; &lt;int&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+1 Modern Family   Friends       1.413     0.277  5.109   134  0.818  2.008 .0000
+2 Big Bang Theory Friends      -0.446     0.277 -1.611   134 -1.040  0.149 .3283
+3 Big Bang Theory Modern Fami… -1.859     0.277 -6.721   134 -2.453 -1.264 .0000</code></pre>
 </div>
 </div>
+</section>
+<section id="inference-5" class="level3">
+<h3 class="anchored" data-anchor-id="inference-5">Inference</h3>
+<ul>
+<li><p>Modern Family received ratings that are significantly higher than the ratings for Friends.</p></li>
+<li><p>Big Bang Theory and Friends ratings are not significantly different from each other.</p></li>
+<li><p>Modern Family received ratings that are significantly higher than the ratings for Big Bang Theory.</p></li>
+</ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>supernova<span class="sc">::</span><span class="fu">supernova</span>(ratings_anova_1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>supernova<span class="sc">::</span><span class="fu">supernova</span>(ratings_anova_1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> Analysis of Variance Table (Type III SS)
  Model: Rating ~ Show + Gender
 
-                               SS  df     MS       F   PRE     p
- ------ --------------- | ------- --- ------ ------- ----- -----
-  Model (error reduced) |  83.239   3 27.746  98.883 .7189 .0000
-   Show                 |  81.382   2 40.691 145.016 .7143 .0000
- Gender                 |   1.857   1  1.857   6.618 .0540 .0114
-  Error (from model)    |  32.549 116  0.281                    
- ------ --------------- | ------- --- ------ ------- ----- -----
-  Total (empty model)   | 115.788 119  0.973                    </code></pre>
+                               SS  df     MS      F   PRE     p
+ ------ --------------- | ------- --- ------ ------ ----- -----
+  Model (error reduced) |  88.013   3 29.338  8.339 .1573 .0000
+   Show                 |  86.634   2 43.317 12.312 .1552 .0000
+ Gender                 |   1.379   1  1.379  0.392 .0029 .5323
+  Error (from model)    | 471.431 134  3.518                   
+ ------ --------------- | ------- --- ------ ------ ----- -----
+  Total (empty model)   | 559.444 137  4.084                   </code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>supernova<span class="sc">::</span><span class="fu">equation</span>(ratings_anova)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>supernova<span class="sc">::</span><span class="fu">equation</span>(ratings_anova)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Fitted equation:
-Rating = 8.522592 + -1.026621*ShowModernFamily + -2.017092*ShowBigBangTheory + e</code></pre>
+Rating = 6.891304 + 1.413043*ShowModern Family + -0.4456522*ShowBig Bang Theory + e</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>ratings_anova <span class="ot">&lt;-</span> <span class="fu">aov</span>(Rating <span class="sc">~</span> Show, <span class="at">data =</span> ratings_long)</span>
-<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>ratings_long <span class="sc">%&gt;%</span></span>
-<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">fitted =</span> <span class="fu">fitted</span>(ratings_anova)) <span class="sc">%&gt;%</span></span>
-<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_jitter</span>(Rating <span class="sc">~</span> Show,</span>
-<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">width =</span> <span class="fl">0.2</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>,</span>
-<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="sc">~</span>Show,</span>
-<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> .</span>
-<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_summary</span>(</span>
-<span id="cb46-11"><a href="#cb46-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">group =</span> <span class="sc">~</span><span class="dv">1</span>,   <span class="co"># connects all points with a line</span></span>
-<span id="cb46-12"><a href="#cb46-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">fun =</span> <span class="st">"mean"</span>, <span class="at">geom =</span> <span class="st">"line"</span>, <span class="at">colour =</span> <span class="st">"lightblue"</span>,</span>
-<span id="cb46-13"><a href="#cb46-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">lty =</span> <span class="dv">1</span>, <span class="at">linewidth =</span> <span class="dv">2</span></span>
-<span id="cb46-14"><a href="#cb46-14" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb46-15"><a href="#cb46-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_point</span>(fitted <span class="sc">~</span> Show,</span>
-<span id="cb46-16"><a href="#cb46-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="sc">~</span>Show,</span>
-<span id="cb46-17"><a href="#cb46-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">shape =</span> <span class="dv">2</span>,</span>
-<span id="cb46-18"><a href="#cb46-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="dv">6</span></span>
-<span id="cb46-19"><a href="#cb46-19" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb46-20"><a href="#cb46-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_segment</span>(fitted <span class="sc">+</span> fitted <span class="sc">~</span> <span class="dv">0</span> <span class="sc">+</span> Show, <span class="at">linetype =</span> <span class="dv">2</span>, <span class="at">color =</span> <span class="sc">~</span>Show) <span class="sc">%&gt;%</span></span>
-<span id="cb46-21"><a href="#cb46-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_annotate</span>(<span class="st">"label"</span>,</span>
-<span id="cb46-22"><a href="#cb46-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="fu">TeX</span>(r<span class="st">"($Rating = \mu_{Friends} + \Delta_{ModernFamily} + \Delta_{BigBangTheory} + e$)"</span>, <span class="at">output =</span> <span class="st">"character"</span>),</span>
-<span id="cb46-23"><a href="#cb46-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">parse =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb46-24"><a href="#cb46-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="fu">max</span>(ratings_long<span class="sc">$</span>Rating) <span class="sc">-</span> <span class="fl">0.5</span>,</span>
-<span id="cb46-25"><a href="#cb46-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="fl">2.25</span>,</span>
-<span id="cb46-26"><a href="#cb46-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="dv">3</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">fill =</span> <span class="st">"lightblue"</span></span>
-<span id="cb46-27"><a href="#cb46-27" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb46-28"><a href="#cb46-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_annotate</span>(<span class="st">"label"</span>,</span>
-<span id="cb46-29"><a href="#cb46-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="st">"Triangles are Predictions</span><span class="sc">\n</span><span class="st"> at each Show level"</span>, <span class="at">y =</span> <span class="fu">min</span>(ratings_long<span class="sc">$</span>Rating) <span class="sc">+</span> <span class="fl">0.5</span>, <span class="at">x =</span> <span class="fl">1.25</span>,</span>
-<span id="cb46-30"><a href="#cb46-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="dv">3</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">fill =</span> <span class="st">"moccasin"</span></span>
-<span id="cb46-31"><a href="#cb46-31" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb46-32"><a href="#cb46-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(</span>
-<span id="cb46-33"><a href="#cb46-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Fitted ANOVA Model Equation"</span>,</span>
-<span id="cb46-34"><a href="#cb46-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"TV Show"</span>, <span class="at">y =</span> <span class="st">"Rating"</span></span>
-<span id="cb46-35"><a href="#cb46-35" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb46-36"><a href="#cb46-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_refine</span>(</span>
-<span id="cb46-37"><a href="#cb46-37" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_colour_paletteer_d</span>(<span class="st">"ggthemes::colorblind"</span>),</span>
-<span id="cb46-38"><a href="#cb46-38" aria-hidden="true" tabindex="-1"></a>    <span class="fu">guides</span>(<span class="at">colour =</span> <span class="fu">guide_legend</span>(<span class="at">title =</span> <span class="st">"Show"</span>))</span>
-<span id="cb46-39"><a href="#cb46-39" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="tvsseries_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
-<section id="inference-4" class="level3">
-<h3 class="anchored" data-anchor-id="inference-4">Inference</h3>
-<ul>
-<li>Friends has the highest predicted mean rating (triangle and dashed line) at 8.5.</li>
-<li>ModernFamily has the next highest predicted mean rating at $7.5.</li>
-<li>BigBangTheory has the lowest predicted mean rating at 6.5.</li>
-</ul>
-</section>
-</section>
-<section id="normality-test" class="level1">
-<h1>Normality Test</h1>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">shapiro.test</span>(<span class="at">x =</span> ratings_long<span class="sc">$</span>Rating)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-    Shapiro-Wilk normality test
-
-data:  ratings_long$Rating
-W = 0.97729, p-value = 0.0399</code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>ratings_long <span class="sc">%&gt;%</span></span>
-<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Show) <span class="sc">%&gt;%</span></span>
-<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_modify</span>(<span class="sc">~</span> .x <span class="sc">%&gt;%</span></span>
-<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(Rating) <span class="sc">%&gt;%</span></span>
-<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_vector</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">shapiro.test</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a>    broom<span class="sc">::</span><span class="fu">tidy</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 3 × 4
-# Groups:   Show [3]
-  Show          statistic p.value method                     
-  &lt;fct&gt;             &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;                      
-1 Friends           0.989   0.953 Shapiro-Wilk normality test
-2 ModernFamily      0.988   0.940 Shapiro-Wilk normality test
-3 BigBangTheory     0.987   0.913 Shapiro-Wilk normality test</code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>ratings_anova<span class="sc">$</span>residuals <span class="sc">%&gt;%</span></span>
-<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_dhistogram</span>(<span class="sc">~</span>value, <span class="at">data =</span> .) <span class="sc">%&gt;%</span></span>
-<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(</span>
-<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Residuals Histogram"</span>,</span>
-<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Residuals"</span>, <span class="at">y =</span> <span class="st">"Count"</span></span>
-<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_fitdistr</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>`stat_bin()` using `bins = 30`. Pick better value `binwidth`.</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>ratings_anova <span class="ot">&lt;-</span> <span class="fu">aov</span>(Rating <span class="sc">~</span> Show, <span class="at">data =</span> ratings_long)</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>ratings_long <span class="sc">%&gt;%</span></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">fitted =</span> <span class="fu">fitted</span>(ratings_anova)) <span class="sc">%&gt;%</span></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_jitter</span>(</span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>    Rating <span class="sc">~</span> Show,</span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">width =</span> <span class="fl">0.2</span>,</span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.6</span>,</span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="sc">~</span>Show,</span>
+<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> .</span>
+<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb48-12"><a href="#cb48-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_summary</span>(</span>
+<span id="cb48-13"><a href="#cb48-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">group =</span> <span class="sc">~</span><span class="dv">1</span>,</span>
+<span id="cb48-14"><a href="#cb48-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">fun =</span> <span class="st">"mean"</span>,</span>
+<span id="cb48-15"><a href="#cb48-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">geom =</span> <span class="st">"line"</span>,</span>
+<span id="cb48-16"><a href="#cb48-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">colour =</span> <span class="st">"lightblue"</span>,</span>
+<span id="cb48-17"><a href="#cb48-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">lty =</span> <span class="dv">1</span>,</span>
+<span id="cb48-18"><a href="#cb48-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">linewidth =</span> <span class="dv">2</span></span>
+<span id="cb48-19"><a href="#cb48-19" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb48-20"><a href="#cb48-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_point</span>(</span>
+<span id="cb48-21"><a href="#cb48-21" aria-hidden="true" tabindex="-1"></a>    fitted <span class="sc">~</span> Show,</span>
+<span id="cb48-22"><a href="#cb48-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="sc">~</span>Show,</span>
+<span id="cb48-23"><a href="#cb48-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">shape =</span> <span class="dv">2</span>,</span>
+<span id="cb48-24"><a href="#cb48-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="dv">6</span></span>
+<span id="cb48-25"><a href="#cb48-25" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb48-26"><a href="#cb48-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_segment</span>(</span>
+<span id="cb48-27"><a href="#cb48-27" aria-hidden="true" tabindex="-1"></a>    fitted <span class="sc">+</span> fitted <span class="sc">~</span> <span class="dv">0</span> <span class="sc">+</span> Show,</span>
+<span id="cb48-28"><a href="#cb48-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">linetype =</span> <span class="dv">2</span>,</span>
+<span id="cb48-29"><a href="#cb48-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="sc">~</span>Show</span>
+<span id="cb48-30"><a href="#cb48-30" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb48-31"><a href="#cb48-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_annotate</span>(</span>
+<span id="cb48-32"><a href="#cb48-32" aria-hidden="true" tabindex="-1"></a>    <span class="st">"label"</span>,</span>
+<span id="cb48-33"><a href="#cb48-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="st">"Rating = mu_Friends + Δ_ModernFamily + Δ_BigBangTheory + e"</span>,</span>
+<span id="cb48-34"><a href="#cb48-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="fu">max</span>(ratings_long<span class="sc">$</span>Rating) <span class="sc">-</span> <span class="fl">0.5</span>,</span>
+<span id="cb48-35"><a href="#cb48-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="fl">2.25</span>,</span>
+<span id="cb48-36"><a href="#cb48-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="dv">3</span>,</span>
+<span id="cb48-37"><a href="#cb48-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"black"</span>,</span>
+<span id="cb48-38"><a href="#cb48-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"lightblue"</span></span>
+<span id="cb48-39"><a href="#cb48-39" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb48-40"><a href="#cb48-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_annotate</span>(</span>
+<span id="cb48-41"><a href="#cb48-41" aria-hidden="true" tabindex="-1"></a>    <span class="st">"label"</span>,</span>
+<span id="cb48-42"><a href="#cb48-42" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="st">"Triangles are Predictions</span><span class="sc">\n</span><span class="st">at each Show level"</span>,</span>
+<span id="cb48-43"><a href="#cb48-43" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="fu">min</span>(ratings_long<span class="sc">$</span>Rating) <span class="sc">+</span> <span class="fl">0.5</span>,</span>
+<span id="cb48-44"><a href="#cb48-44" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="fl">1.25</span>,</span>
+<span id="cb48-45"><a href="#cb48-45" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="dv">3</span>,</span>
+<span id="cb48-46"><a href="#cb48-46" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"black"</span>,</span>
+<span id="cb48-47"><a href="#cb48-47" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"moccasin"</span></span>
+<span id="cb48-48"><a href="#cb48-48" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb48-49"><a href="#cb48-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(</span>
+<span id="cb48-50"><a href="#cb48-50" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Fitted ANOVA Model Equation"</span>,</span>
+<span id="cb48-51"><a href="#cb48-51" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"TV Show"</span>,</span>
+<span id="cb48-52"><a href="#cb48-52" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Rating"</span></span>
+<span id="cb48-53"><a href="#cb48-53" aria-hidden="true" tabindex="-1"></a>  ) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
 <p><img src="tvsseries_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>ratings_anova<span class="sc">$</span>residuals <span class="sc">%&gt;%</span></span>
-<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_qq</span>(<span class="sc">~</span>value, <span class="at">data =</span> .) <span class="sc">%&gt;%</span></span>
-<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_qqstep</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(</span>
-<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Residuals Q-Q Plot"</span>,</span>
-<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Theoretical Quantiles"</span>, <span class="at">y =</span> <span class="st">"Sample Quantiles"</span></span>
-<span id="cb53-8"><a href="#cb53-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb53-9"><a href="#cb53-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_qqline</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="tvsseries_files/figure-html/unnamed-chunk-17-2.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<section id="inference-5" class="level3">
-<h3 class="anchored" data-anchor-id="inference-5">Inference</h3>
-<p>The residuals generally follow the normal curve, suggesting the normality assumption for the errors is reasonably met, despite some bin irregularities. This supports the validity of the ANOVA test.</p>
-<p>Most of the data points fall close to the dashed straight line, especially in the center, indicating that the residuals are approximately normally distributed, supporting the ANOVA assumption. Deviations at the tails are common with real-world data but do not severely violate the assumption here.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>ratings_long <span class="sc">%&gt;%</span></span>
-<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Gender) <span class="sc">%&gt;%</span></span>
-<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">variance =</span> <span class="fu">var</span>(Rating))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 2 × 2
-  Gender variance
-  &lt;fct&gt;     &lt;dbl&gt;
-1 Male      0.847
-2 Female    1.08 </code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>ratings_long <span class="sc">%&gt;%</span></span>
-<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Show, Gender) <span class="sc">%&gt;%</span></span>
-<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">variance =</span> <span class="fu">var</span>(Rating))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>`summarise()` has grouped output by 'Show'. You can override using the
-`.groups` argument.</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 3
-# Groups:   Show [3]
-  Show          Gender variance
-  &lt;fct&gt;         &lt;fct&gt;     &lt;dbl&gt;
-1 Friends       Male      0.237
-2 Friends       Female    0.172
-3 ModernFamily  Male      0.330
-4 ModernFamily  Female    0.341
-5 BigBangTheory Male      0.337
-6 BigBangTheory Female    0.241</code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">LeveneTest</span>(Rating <span class="sc">~</span> Show, <span class="at">data =</span> ratings_long)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Levene's Test for Homogeneity of Variance (center = median)
-       Df F value Pr(&gt;F)
-group   2  1.0965 0.3375
-      117               </code></pre>
-</div>
-</div>
-<ul>
-<li>While the average rating is very different, the level of agreement or disagreement among the people rating Friends is the same as for ModernFamily and BigBangTheory. They are equally consistent in how tightly their ratings cluster around the mean for that specific show.</li>
-</ul>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fligner.test</span>(Rating <span class="sc">~</span> Show, <span class="at">data =</span> ratings_long)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-    Fligner-Killeen test of homogeneity of variances
-
-data:  Rating by Show
-Fligner-Killeen:med chi-squared = 2.1645, df = 2, p-value = 0.3388</code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>ratings_supernova<span class="sc">$</span>Show</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Show</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Levels: 3</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Family-wise error-rate: 0.049</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-  group_1       group_2        diff pooled_se       t    df  lower  upper p_adj
-  &lt;chr&gt;         &lt;chr&gt;         &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;int&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
-1 ModernFamily  Friends      -1.027     0.084 -12.257   116 -1.207 -0.846 .0000
-2 BigBangTheory Friends      -2.017     0.084 -24.083   116 -2.197 -1.837 .0000
-3 BigBangTheory ModernFamily -0.990     0.084 -11.826   116 -1.171 -0.810 .0000</code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a>ggstatsplot<span class="sc">::</span><span class="fu">ggbetweenstats</span>(</span>
-<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> ratings_long,</span>
-<span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> Show,</span>
-<span id="cb68-4"><a href="#cb68-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> Rating,</span>
-<span id="cb68-5"><a href="#cb68-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">colour =</span> Show,</span>
-<span id="cb68-6"><a href="#cb68-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">alpha =</span> <span class="fl">0.8</span>,</span>
-<span id="cb68-7"><a href="#cb68-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"parametric"</span>,</span>
-<span id="cb68-8"><a href="#cb68-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">p.adjust.method =</span> <span class="st">"bonferroni"</span>,</span>
-<span id="cb68-9"><a href="#cb68-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">conf.level =</span> <span class="fl">0.95</span>,</span>
-<span id="cb68-10"><a href="#cb68-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">violin.args =</span> <span class="fu">list</span>(<span class="at">width =</span> <span class="fl">0.0</span>)  <span class="co"># Removes violin plots like in frogs example</span></span>
-<span id="cb68-11"><a href="#cb68-11" aria-hidden="true" tabindex="-1"></a>) <span class="sc">+</span></span>
-<span id="cb68-12"><a href="#cb68-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_colour_paletteer_d</span>(<span class="st">"ggthemes::colorblind"</span>) <span class="sc">+</span></span>
-<span id="cb68-13"><a href="#cb68-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb68-14"><a href="#cb68-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"ANOVA: Ratings by TV Show"</span>,</span>
-<span id="cb68-15"><a href="#cb68-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"TV Show"</span>,</span>
-<span id="cb68-16"><a href="#cb68-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Rating"</span>,</span>
-<span id="cb68-17"><a href="#cb68-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">""</span>,</span>
-<span id="cb68-18"><a href="#cb68-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">""</span></span>
-<span id="cb68-19"><a href="#cb68-19" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Scale for colour is already present.
-Adding another scale for colour, which will replace the existing scale.</code></pre>
-</div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="tvsseries_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -802,18 +683,211 @@ Adding another scale for colour, which will replace the existing scale.</code></
 <section id="inference-6" class="level3">
 <h3 class="anchored" data-anchor-id="inference-6">Inference</h3>
 <ul>
-<li>This plot visually summarizes the means and spread. The pairwise values for all three comparisons are all highly significant. This confirms that the mean rating of every show is statistically different from every other show.</li>
+<li>The actual ratings for Big Bang Theory show the widest spread (more variation) compared to the other two shows.</li>
 </ul>
 </section>
 </section>
-<section id="conclusion" class="level1">
-<h1>Conclusion</h1>
-<p>Friends is the Clear Winner (8.52$)</p>
-<p>ModernFamily is the Mid-Performer (7.49)</p>
-<p>BigBangTheory is the Lowest Rated (6.50)</p>
-<p>Friends vs.&nbsp;The Others: On a rating scale, Friends is rated significantly higher than both and is approximately 1 point higher than ModernFamily and 2 points higher than BigBangTheory. ModernFamily vs.&nbsp;BigBangTheory: ModernFamily is similarly rated significantly better than BigBangTheory, with a difference of about 1 point.</p>
+<section id="normality-test" class="level2">
+<h2 class="anchored" data-anchor-id="normality-test">Normality Test</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">shapiro.test</span>(<span class="at">x =</span> ratings_long<span class="sc">$</span>Rating)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Shapiro-Wilk normality test
+
+data:  ratings_long$Rating
+W = 0.91645, p-value = 3.301e-07</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>ratings_long <span class="sc">%&gt;%</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Show) <span class="sc">%&gt;%</span></span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_modify</span>(<span class="sc">~</span> .x <span class="sc">%&gt;%</span></span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(Rating) <span class="sc">%&gt;%</span></span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_vector</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">shapiro.test</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>    broom<span class="sc">::</span><span class="fu">tidy</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 4
+# Groups:   Show [3]
+  Show            statistic    p.value method                     
+  &lt;fct&gt;               &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;                      
+1 Friends             0.909 0.00161    Shapiro-Wilk normality test
+2 Modern Family       0.808 0.00000294 Shapiro-Wilk normality test
+3 Big Bang Theory     0.946 0.0320     Shapiro-Wilk normality test</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>ratings_anova<span class="sc">$</span>residuals <span class="sc">%&gt;%</span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_dhistogram</span>(<span class="sc">~</span>value, <span class="at">data =</span> .) <span class="sc">%&gt;%</span></span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(</span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Residuals Histogram"</span>,</span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Residuals"</span>, <span class="at">y =</span> <span class="st">"Count"</span></span>
+<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb53-8"><a href="#cb53-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_fitdistr</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`stat_bin()` using `bins = 30`. Pick better value `binwidth`.</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tvsseries_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>ratings_anova<span class="sc">$</span>residuals <span class="sc">%&gt;%</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_qq</span>(<span class="sc">~</span>value, <span class="at">data =</span> .) <span class="sc">%&gt;%</span></span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_qqstep</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(</span>
+<span id="cb55-6"><a href="#cb55-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Residuals Q-Q Plot"</span>,</span>
+<span id="cb55-7"><a href="#cb55-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Theoretical Quantiles"</span>, <span class="at">y =</span> <span class="st">"Sample Quantiles"</span></span>
+<span id="cb55-8"><a href="#cb55-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb55-9"><a href="#cb55-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_qqline</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tvsseries_files/figure-html/unnamed-chunk-20-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>ratings_long <span class="sc">%&gt;%</span></span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Gender) <span class="sc">%&gt;%</span></span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">variance =</span> <span class="fu">var</span>(Rating))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 2
+  Gender variance
+  &lt;fct&gt;     &lt;dbl&gt;
+1 Male       4.20
+2 Female     4.00</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>ratings_long <span class="sc">%&gt;%</span></span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Show, Gender) <span class="sc">%&gt;%</span></span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">variance =</span> <span class="fu">var</span>(Rating))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has grouped output by 'Show'. You can override using the
+`.groups` argument.</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 3
+# Groups:   Show [3]
+  Show            Gender variance
+  &lt;fct&gt;           &lt;fct&gt;     &lt;dbl&gt;
+1 Friends         Male       5.13
+2 Friends         Female     3.04
+3 Modern Family   Male       2.36
+4 Modern Family   Female     2.46
+5 Big Bang Theory Male       4.06
+6 Big Bang Theory Female     4.03</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">LeveneTest</span>(Rating <span class="sc">~</span> Show, <span class="at">data =</span> ratings_long)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Levene's Test for Homogeneity of Variance (center = median)
+       Df F value Pr(&gt;F)
+group   2  1.5298 0.2203
+      135               </code></pre>
+</div>
+</div>
+<section id="inference-7" class="level3">
+<h3 class="anchored" data-anchor-id="inference-7">Inference</h3>
+<ul>
+<li><p>The p-value (0.33) is greater than 0.05, so there’s no big difference in variances.</p></li>
+<li><p>The spread of ratings is similar across all three shows.</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fligner.test</span>(Rating <span class="sc">~</span> Show, <span class="at">data =</span> ratings_long)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Fligner-Killeen test of homogeneity of variances
+
+data:  Rating by Show
+Fligner-Killeen:med chi-squared = 4.0885, df = 2, p-value = 0.1295</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>ratings_supernova<span class="sc">$</span>Show</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Show</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Levels: 3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Family-wise error-rate: 0.049</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+  group_1         group_2        diff pooled_se      t    df  lower  upper p_adj
+  &lt;chr&gt;           &lt;chr&gt;         &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt; &lt;int&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+1 Modern Family   Friends       1.413     0.277  5.109   134  0.818  2.008 .0000
+2 Big Bang Theory Friends      -0.446     0.277 -1.611   134 -1.040  0.149 .3283
+3 Big Bang Theory Modern Fami… -1.859     0.277 -6.721   134 -2.453 -1.264 .0000</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a>ggstatsplot<span class="sc">::</span><span class="fu">ggbetweenstats</span>(</span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> ratings_long,</span>
+<span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> Show,</span>
+<span id="cb70-4"><a href="#cb70-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> Rating,</span>
+<span id="cb70-5"><a href="#cb70-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">colour =</span> Show,</span>
+<span id="cb70-6"><a href="#cb70-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">alpha =</span> <span class="fl">0.8</span>,</span>
+<span id="cb70-7"><a href="#cb70-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"parametric"</span>,</span>
+<span id="cb70-8"><a href="#cb70-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">p.adjust.method =</span> <span class="st">"bonferroni"</span>,</span>
+<span id="cb70-9"><a href="#cb70-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">conf.level =</span> <span class="fl">0.95</span>,</span>
+<span id="cb70-10"><a href="#cb70-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">violin.args =</span> <span class="fu">list</span>(<span class="at">width =</span> <span class="fl">0.0</span>)  <span class="co"># Removes violin plots like in frogs example</span></span>
+<span id="cb70-11"><a href="#cb70-11" aria-hidden="true" tabindex="-1"></a>) <span class="sc">+</span></span>
+<span id="cb70-12"><a href="#cb70-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_colour_paletteer_d</span>(<span class="st">"ggthemes::colorblind"</span>) <span class="sc">+</span></span>
+<span id="cb70-13"><a href="#cb70-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb70-14"><a href="#cb70-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"ANOVA: Ratings by TV Show"</span>,</span>
+<span id="cb70-15"><a href="#cb70-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"TV Show"</span>,</span>
+<span id="cb70-16"><a href="#cb70-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Rating"</span>,</span>
+<span id="cb70-17"><a href="#cb70-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">""</span>,</span>
+<span id="cb70-18"><a href="#cb70-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">""</span></span>
+<span id="cb70-19"><a href="#cb70-19" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Scale for colour is already present.
+Adding another scale for colour, which will replace the existing scale.</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tvsseries_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="inference-8" class="level3">
+<h3 class="anchored" data-anchor-id="inference-8">Inference</h3>
+<ul>
+<li><p>Highest Rating: Modern Family has the highest average score (8.30).</p></li>
+<li><p>Lowest Rating: Big Bang Theory has the lowest average score (6.45).</p></li>
+<li><p>Most Variation: Friends has the widest scatter of individual ratings, showing the most diverse opinions).</p></li>
+<li><p>Clear Favorite: Modern Family is significantly preferred over both Friends and Big Bang Theory.</p></li>
+<li><p>Sample Size: All three shows have the same number of ratings (46).</p></li>
+</ul>
+</section>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<ul>
+<li><p>Modern Family has the highest average rating among the three shows (8.30).</p></li>
+<li><p>Friends follows, and Big Bang Theory has the lowest ratings (6.45).</p></li>
+<li><p>The pairwise tests indicate that Modern Family is significantly different (and higher) than both Friends and Big Bang Theory.</p></li>
+<li><p>Gender does not significantly influence ratings. The difference between males and females is not statistically significant.</p></li>
+<li><p>The residual plots show that the data is fairly normal. This means the ANOVA results are valid and reliable.</p></li>
+<li><p>Levene’s and Fligner’s tests confirm that the variances are similar across the shows, meeting ANOVA’s assumptions.</p></li>
+<li><p>Overall, viewers clearly prefer Modern Family, and the test shows significant differences in how people rate the three shows.</p></li>
+</ul>
+<hr>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->

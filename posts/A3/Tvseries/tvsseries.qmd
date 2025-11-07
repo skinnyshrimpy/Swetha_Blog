@@ -6,7 +6,7 @@ categories: [Tv Series]
 format: html
 ---
 
-# Set-up Packages
+## Setting up R Packages
 
 ```{r}
 library(tidyverse)
@@ -25,33 +25,51 @@ library(latex2exp)
 
 ```
 
+## Read Data
+```{r}
+ratings <- read.csv("tvseries.csv")
+glimpse(ratings)
+```
+```{r}
+ratings <- ratings %>% drop_na()
+```
+
+
 # Data Munging
 
 ```{r}
-set.seed(123)
-ratings_orig <- tibble(
-  ID = 1:120,
-  Friends = c(rnorm(40, 8.5, 0.5), rep(NA, 80)),
-  ModernFamily = c(rep(NA, 40), rnorm(40, 7.5, 0.6), rep(NA, 40)),
-  BigBangTheory = c(rep(NA, 80), rnorm(40, 6.5, 0.7)),
-  Gender = rep(c(rep("Male", 20), rep("Female", 20)), 3) # 20 males + 20 females for each show
-)
+
 ```
 
 ### Convert from wide to long format
 
 ```{r}
-ratings_long <- ratings_orig %>%
-  pivot_longer(cols = c(Friends, ModernFamily, BigBangTheory), names_to = "Show", values_to = "Rating") %>%
-  drop_na() %>%
-  mutate(
-    Show = factor(Show, levels = c("Friends", "ModernFamily", "BigBangTheory")),
-    Gender = factor(Gender, levels = c("Male", "Female"))
-  )
-ratings_long
+names(ratings)
 ```
 
-# Visualising Data
+
+```{r}
+ratings_long <- ratings %>%
+  pivot_longer(
+    cols = c(Friends, Modern.Family, Big.Bang.Theory),
+    names_to = "Show",
+    values_to = "Rating"
+  ) %>%
+  drop_na() %>%
+  mutate(
+    Show = factor(
+      Show,
+      levels = c("Friends", "Modern.Family", "Big.Bang.Theory"),
+      labels = c("Friends", "Modern Family", "Big Bang Theory")
+    ),
+    Gender = factor(Gender, levels = c("Male", "Female"))
+  )
+
+ratings_long
+
+```
+
+## Visualising Data
 
 ```{r}
 gf_jitter(Rating ~ Show, color = ~Show, width = 0.2, data = ratings_long, size = 3, alpha = 0.5) %>%
@@ -65,16 +83,28 @@ The raw data clearly shows Friends having the highest ratings, followed by Moder
 
 
 ```{r}
-gf_histogram(~Rating, fill = ~Show, data = ratings_long, alpha = 0.5) %>%
-  gf_vline(xintercept = ~ mean(ratings_long$Rating)) %>%
-  gf_labs(title = "Histogram of Ratings", x = "Rating", y = "Count")
+ratings_long %>%
+  gf_boxplot(Rating ~ Show, orientation = "x", fill = ~ Show) %>%
+  gf_labs(
+    title = "Rating vs Show",
+    x = "TV Shows",
+    y = "Ratings"
+  ) %>%
+  gf_hline(yintercept = ~ mean(Rating), color = "darkblue") %>%
+  gf_annotate(
+    geom = "text",
+    label = "Overall Mean",
+    x = 2,
+    y = mean(ratings_long$Rating)
+  )
+
 ```
 ### Inference
 
-Confirms the means are different and shows the distribution of scores. 
-- Friends ratings are higher (peaked around 8-9), 
-- ModernFamily is mid-range (peaked around 7-8), 
-- BigBangTheory is lowest (peaked around 6-7). The black vertical line is the overall mean.
+- Modern Family received the highest ratings, with most scores around 8–9.
+- Friends ratings are moderate, clustering near 7.
+- Big Bang Theory got the lowest ratings, mostly between 6–7.
+- The overall mean (blue line) lies near 7.2, showing that the three shows differ clearly in how people rated them.
 
 ```{r}
 gf_point(Rating ~ Show, color = ~Gender, data = ratings_long, 
@@ -83,7 +113,14 @@ gf_point(Rating ~ Show, color = ~Gender, data = ratings_long,
           stat = "summary", fun.y = "mean", 
           position = position_dodge(width = 0.5))
 ```
-# ANOVA Test
+### Inference
+
+- Both males and females gave a wide range of ratings for all three shows.
+- However, females tended to give slightly higher ratings overall, especially for Modern Family.
+- There is no extreme difference between genders, but males showed more variation in their ratings.
+
+
+## ANOVA Test
 
 ```{r}
 ratings_anova <- aov(Rating ~ Show, data = ratings_long)
@@ -122,13 +159,28 @@ ratings_supernova <-
 ```
 ### Inferemce
 
-- Friends > Mordern Family > Big Bang Theory
+- Modern Family received ratings that are significantly higher than the ratings for Friends.
 
-- Males gave a higher average rating than Females did (By abt quater point).
+- Big Bang Theory and Friends ratings are not significantly different from each other.
+
+- Modern Family received ratings that are significantly higher than the ratings for Big Bang Theory.
+
+- The difference between females and males is not statistically significant.
+
+- This means we cannot clearly say one gender is different from the other based on this test.
 
 ```{r}
 ratings_supernova$Show
 ```
+
+### Inference
+
+- Modern Family received ratings that are significantly higher than the ratings for Friends.
+
+- Big Bang Theory and Friends ratings are not significantly different from each other.
+
+- Modern Family received ratings that are significantly higher than the ratings for Big Bang Theory.
+
 
 ```{r}
 supernova::supernova(ratings_anova_1)
@@ -139,55 +191,66 @@ supernova::equation(ratings_anova)
 ```
 
 ```{r}
-
 ratings_anova <- aov(Rating ~ Show, data = ratings_long)
 
 ratings_long %>%
   mutate(fitted = fitted(ratings_anova)) %>%
-  gf_jitter(Rating ~ Show,
-    width = 0.2, alpha = 0.6,
+  gf_jitter(
+    Rating ~ Show,
+    width = 0.2,
+    alpha = 0.6,
     color = ~Show,
     data = .
   ) %>%
   gf_summary(
-    group = ~1,   # connects all points with a line
-    fun = "mean", geom = "line", colour = "lightblue",
-    lty = 1, linewidth = 2
+    group = ~1,
+    fun = "mean",
+    geom = "line",
+    colour = "lightblue",
+    lty = 1,
+    linewidth = 2
   ) %>%
-  gf_point(fitted ~ Show,
+  gf_point(
+    fitted ~ Show,
     color = ~Show,
     shape = 2,
     size = 6
   ) %>%
-  gf_segment(fitted + fitted ~ 0 + Show, linetype = 2, color = ~Show) %>%
-  gf_annotate("label",
-    label = TeX(r"($Rating = \mu_{Friends} + \Delta_{ModernFamily} + \Delta_{BigBangTheory} + e$)", output = "character"),
-    parse = TRUE,
+  gf_segment(
+    fitted + fitted ~ 0 + Show,
+    linetype = 2,
+    color = ~Show
+  ) %>%
+  gf_annotate(
+    "label",
+    label = "Rating = mu_Friends + Δ_ModernFamily + Δ_BigBangTheory + e",
     y = max(ratings_long$Rating) - 0.5,
     x = 2.25,
-    size = 3, color = "black", fill = "lightblue"
+    size = 3,
+    color = "black",
+    fill = "lightblue"
   ) %>%
-  gf_annotate("label",
-    label = "Triangles are Predictions\n at each Show level", y = min(ratings_long$Rating) + 0.5, x = 1.25,
-    size = 3, color = "black", fill = "moccasin"
+  gf_annotate(
+    "label",
+    label = "Triangles are Predictions\nat each Show level",
+    y = min(ratings_long$Rating) + 0.5,
+    x = 1.25,
+    size = 3,
+    color = "black",
+    fill = "moccasin"
   ) %>%
   gf_labs(
     title = "Fitted ANOVA Model Equation",
-    x = "TV Show", y = "Rating"
-  ) %>%
-  gf_refine(
-    scale_colour_paletteer_d("ggthemes::colorblind"),
-    guides(colour = guide_legend(title = "Show"))
-  )
+    x = "TV Show",
+    y = "Rating"
+  ) 
 
 ```
 ### Inference
 
-- Friends has the highest predicted mean rating (triangle and dashed line) at 8.5.
-- ModernFamily has the next highest predicted mean rating at $7.5.
-- BigBangTheory has the lowest predicted mean rating at 6.5.
+- The actual ratings for Big Bang Theory show the widest spread (more variation) compared to the other two shows.
 
-# Normality Test
+## Normality Test
 
 ```{r}
 shapiro.test(x = ratings_long$Rating)
@@ -224,11 +287,6 @@ ratings_anova$residuals %>%
   gf_qqline()
 
 ```
-### Inference
-
-The residuals generally follow the normal curve, suggesting the normality assumption for the errors is reasonably met, despite some bin irregularities. This supports the validity of the ANOVA test.
-
-Most of the data points fall close to the dashed straight line, especially in the center, indicating that the residuals are approximately normally distributed, supporting the ANOVA assumption. Deviations at the tails are common with real-world data but do not severely violate the assumption here.
 
 ```{r}
 ratings_long %>%
@@ -244,7 +302,11 @@ ratings_long %>%
 ```{r}
 DescTools::LeveneTest(Rating ~ Show, data = ratings_long)
 ```
-- While the average rating is very different, the level of agreement or disagreement among the people rating Friends is the same as for ModernFamily and BigBangTheory. They are equally consistent in how tightly their ratings cluster around the mean for that specific show.
+### Inference
+
+- The p-value (0.33) is greater than 0.05, so there’s no big difference in variances.
+
+- The spread of ratings is similar across all three shows.
 
 ```{r}
 fligner.test(Rating ~ Show, data = ratings_long)
@@ -276,14 +338,31 @@ ggstatsplot::ggbetweenstats(
   )
 ```
 ### Inference
-- This plot visually summarizes the means and spread. The pairwise values for all three comparisons are all highly significant. This confirms that the mean rating of every show is statistically different from every other show.
 
-# Conclusion
+- Highest Rating: Modern Family has the highest average score (8.30).
 
-Friends is the Clear Winner (8.52$)
+- Lowest Rating: Big Bang Theory has the lowest average score (6.45).
 
-ModernFamily is the Mid-Performer (7.49)
+- Most Variation: Friends has the widest scatter of individual ratings, showing the most diverse opinions).
 
-BigBangTheory is the Lowest Rated (6.50)
+- Clear Favorite: Modern Family is significantly preferred over both Friends and Big Bang Theory.
 
-Friends vs. The Others: On a rating scale, Friends is rated significantly higher than both and is approximately 1 point higher than ModernFamily and 2 points higher than BigBangTheory. ModernFamily vs. BigBangTheory: ModernFamily is similarly rated significantly better than BigBangTheory, with a difference of about 1 point.
+- Sample Size: All three shows have the same number of ratings (46).
+
+## Conclusion
+
+- Modern Family has the highest average rating among the three shows (8.30).
+
+- Friends follows, and Big Bang Theory has the lowest ratings (6.45).
+
+- The pairwise tests indicate that Modern Family is significantly different (and higher) than both Friends and Big Bang Theory.
+
+- Gender does not significantly influence ratings. The difference between males and females is not statistically significant.
+
+- The residual plots show that the data is fairly normal. This means the ANOVA results are valid and reliable. 
+
+- Levene’s and Fligner’s tests confirm that the variances are similar across the shows, meeting ANOVA’s assumptions. 
+
+- Overall, viewers clearly prefer Modern Family, and the test shows significant differences in how people rate the three shows.
+
+--------------------------------------------------------------------------------
