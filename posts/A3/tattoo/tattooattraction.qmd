@@ -2,9 +2,12 @@
 title: "A3 Tattoo Dataset"
 author: "Swetha KV"
 date: "2025-10-31"
-categories: [Tattoo]
+categories: [A3]
 format: html
 ---
+# Do tattoos make people look attractive or not?
+
+## Setting up R Packages
 
 ```{r}
 library(tidyverse)
@@ -17,14 +20,20 @@ library(infer)
 library(openintro)
 ```
 
+## Read Data
+
 ```{r}
 tattoo <- read.csv("tattoo.csv")
 glimpse(tattoo)
 ```
 
+## View Missing Data
+
 ```{r}
 visdat::vis_dat(tattoo)
 ```
+
+## Summerise: Examine Data
 
 ```{r}
 tattoo %>% count(Tattoo_Attractive)
@@ -33,6 +42,8 @@ tattoo %>% count(Tattoo_Attractive)
 ```{r}
 tattoo %>% count(Gender)
 ```
+
+## Data Munging
 
 ```{r}
 tattoo_modified <- tattoo %>%
@@ -52,6 +63,8 @@ tattoo_modified <- tattoo %>%
 glimpse(tattoo_modified)
 
 ```
+
+## Chi Sqaure Test
 
 ```{r}
 contingency_table <- vcd::structable(Gender ~ Tattoo_Attractive,
@@ -258,7 +271,7 @@ vcd::assoc(tattoo_vcd_table,
 
 - Both males and females responded in exactly the same way, showing no variation in opinion.
 
-# Proportion Test
+## Proportion Test
 
 ```{r}
 tattoo_modified %>%
@@ -281,7 +294,7 @@ tattoo_modified_clean %>%
   summarize(prop = mean(Tattoo_Attractive == "Yes"), n = n())
 ```
 
-###Inference
+### Inference
 - The test result confirms if this percentage is significantly above 50%.
 
 ```{r}
@@ -320,7 +333,7 @@ tattoo_modified_clean %>%
   get_ci(level = 0.95)
 ```
 
-## Inference
+### Inference
 
 - A sample proportion test was conducted to determine if the proportion of students who find tattoos attractive differs significantly from 0.5 (i.e., 50%).
 
@@ -332,7 +345,7 @@ tattoo_modified_clean %>%
 
 - The 95% confidence interval (0.588 to 0.873) indicates that the true proportion of students who find tattoos attractive likely falls between 59% and 87%.
 
-# Conclusion
+## Conclusion
 
 - The Chi sqaure result is Not Statistically Significant. We Fail to Reject the Null Hypothesis.
 

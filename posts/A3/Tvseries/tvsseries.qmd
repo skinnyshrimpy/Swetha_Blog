@@ -1,10 +1,11 @@
 ---
-title: "A3 Series Dataset"
+title: "A3 TV Shows Dataset"
 author: "Swetha KV"
 date: "2025-10-31"
-categories: [Tv Series]
+categories: [A3]
 format: html
 ---
+# Friends vs Modern Family vs Big Bang Theory!!!
 
 ## Setting up R Packages
 
@@ -34,12 +35,11 @@ glimpse(ratings)
 ratings <- ratings %>% drop_na()
 ```
 
-
-# Data Munging
-
 ```{r}
-
+visdat::vis_dat(ratings)
 ```
+
+## Data Munging
 
 ### Convert from wide to long format
 

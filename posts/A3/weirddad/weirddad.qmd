@@ -2,11 +2,10 @@
 title: "A3 Weird Dad Dataset"
 author: "Swetha KV"
 date: "2025-11-01"
-categories: [Weird Dad]
+categories: [A3]
 format: html
 ---
-
-Are Srishti dads weird?
+# Are All Srishti Dads are Weird?
 
 ## Setting up R Packages
 

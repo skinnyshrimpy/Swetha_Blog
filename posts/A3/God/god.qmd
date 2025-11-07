@@ -2,9 +2,13 @@
 title: "A3 God Dataset"
 author: "Swetha KV"
 date: "2025-11-01"
-categories: [God]
+categories: [A3]
 format: html
 ---
+
+# Do people believe in God? 
+
+## Setting up R Packages
 
 ```{r}
 library(tidyverse)
@@ -16,10 +20,13 @@ library(infer)
 library(openintro)
 ```
 
+## Read Data
+
 ```{r}
 god <- read.csv("kadavulirukanda.csv")
 glimpse(god)
 ```
+## Cleaning Data
 
 ```{r}
 god <- god%>% 
@@ -29,6 +36,7 @@ god <- god%>%
 ```{r}
 visdat::vis_dat(god)
 ```
+## Propotion test
 
 ```{r}
 god %>%
@@ -65,6 +73,15 @@ god %>%
 - The bar graph shows a moderate distribution of belief, indicating coexistence of both religious and secular perspectives among students.
 
 ```{r}
+god %>%
+  gf_bar(~Believe_in_God, fill = ~Gender, position = "fill") %>%
+  gf_labs(
+    x = "Believe in God",
+    title = "Gender difference believe in god"
+  )
+```
+
+```{r}
 mosaic::binom.test(~Believe_in_God, data = god, success = "Yes")
 ```
 
@@ -99,3 +116,4 @@ Alternative hypothesis: The proportion of students that believe in God is not eq
 
 - The unequal gender sample (23 female, 18 male) have slightly biased the overall proportion upward because the graph is showing that females tend to express higher belief rates. A gender-balanced sample might give us a slightly lower or more neutral proportion.
 
+------------------------------------------------------------------------

@@ -2,7 +2,7 @@
 title: "A2 Cuisines"
 author: "Swetha, Shruthi"
 date: "2025-10-13"
-categories: [Cuisines across World]
+categories: [A2]
 format: html
 ---
 

@@ -2,9 +2,13 @@
 title: "A3 Weekly Expense Dataset"
 author: "Swetha KV"
 date: "2025-11-01"
-categories: [Weekly Expense]
+categories: [A3]
 format: html
 ---
+
+# Guys have more pocket money than Girls.
+
+## Setting up R Packages
 
 ```{r}
 library(tidyverse)
@@ -16,20 +20,10 @@ library(dplyr)
 library(ggplot2)
 ```
 
+## Read Data
+
 ```{r}
 weekly_expense <- read.csv("weeklyexpence.csv")
-glimpse(weekly_expense)
-```
-
-```{r}
-library(dplyr)
-
-weekly_expense <- weekly_expense %>%
-  select(-X, -X.1, -X.2)
-
-```
-
-```{r}
 glimpse(weekly_expense)
 ```
 
@@ -41,7 +35,6 @@ weekly_expense <- weekly_expense %>%
     Gender = str_squish(Gender)
   )
 
-# Summarize total and average expenditure by gender
 gender_summary <- weekly_expense %>%
   group_by(Gender) %>%
   summarise(
@@ -59,6 +52,8 @@ gender_summary
 - Null Hypothesis: There is no difference between the true mean weekly expenditure for Male and Female.
 
 - Alternative Hypothesis: There is a significant difference between the mean weekly expenditure for Male and Female.
+
+## Visualising data
 
 ```{r}
 weekly_expense %>%
@@ -80,24 +75,6 @@ weekly_expense %>%
 - The spending habits of boys are much more spread out and less consistent than the spending of girls.
 
 - The highest individual spenders in the dataset are all boys.
-
-```{r}
-# Optional custom theme (uncomment if you have theme_custom defined)
-# ggplot2::theme_set(new = theme_custom())
-
-weekly_expense %>%
-  gf_density(
-    ~Total_Expenditure_Last_Week,
-    fill = ~Gender,
-    alpha = 0.5,
-    title = "Weekly Expenditure by Gender"
-  ) %>%
-  gf_facet_grid(~Gender) %>%
-  gf_fitdistr(dist = "dnorm") %>%
-  gf_refine(scale_fill_brewer(palette = "Set1")) %>%
-  gf_theme(theme(legend.position = "none"))
-
-```
 
 ```{r}
 weekly_expense %>%
@@ -148,16 +125,11 @@ weekly_expense %>%
 ```
 
 ```{r}
-# Calculate observed difference in mean expenditure between genders
 obs_diff_expense <- diffmean(
   Total_Expenditure_Last_Week ~ Gender,
   data = weekly_expense,
   only.2 = FALSE
 )
-
-# Alternate method (if your data had separate columns for each gender — not needed here)
-# obs_diff_expense <- mean(~ Female - Male, data = weekly_expense)
-
 obs_diff_expense
 
 ```
@@ -236,6 +208,8 @@ obs_diff_expense_less
 
 ```
 
+
+
 ```{r}
 set.seed(12345)
 polarity_less <- c(rep(1, 15), rep(-1, 14)) 
@@ -287,7 +261,7 @@ mean(null_dist_expense_less >= obs_diff_expense_less)
 
 - The average weekly expenditure for males is significantly higher than that for females.
 
-# Conclusion
+## Conclusion
 
 - Boys Spend More! Overall, boys spend a higher amount of money than girls do.
 
@@ -296,4 +270,6 @@ mean(null_dist_expense_less >= obs_diff_expense_less)
 - Outliers Confuse Tests: A few boys who spent giant amounts (the outliers) made the standard average tests (like the t-test) unreliable and unable to clearly prove the difference.
 
 - Mann-whitney test that ignores those extreme high amounts, it confirms that the difference in spending between the genders is real with difference 1100 Rs.
+
+--------------------------------------------------------------------------------
 

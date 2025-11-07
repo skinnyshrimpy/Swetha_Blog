@@ -2,9 +2,10 @@
 title: "A2 Cardio-Dataset"
 author: "Swetha KV, Shruthi"
 date: "2025-10-12"
-categories: [Scottish CVD]
+categories: [A2]
 format: html
 ---
+# Scottish CVD
 
 ## Setting up R Packages
 

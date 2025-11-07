@@ -2,9 +2,10 @@
 title: "A2 Crimedataset"
 author: "Swetha, Shruthi"
 date: "2025-10-13"
-categories: [Homicides in Nine US Cities (2015)]
+categories: [A2]
 format: html
 ---
+# Homicides in Nine US Cities (2015)
 
 ## Setting up R Packages
 

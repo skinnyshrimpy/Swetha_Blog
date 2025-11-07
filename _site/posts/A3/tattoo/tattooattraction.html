@@ -153,7 +153,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div class="quarto-title column-body">
       <h1 class="title">A3 Tattoo Dataset</h1>
                                 <div class="quarto-categories">
-                <div class="quarto-category">Tattoo</div>
+                <div class="quarto-category">A3</div>
               </div>
                   </div>
   </div>
@@ -190,6 +190,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
+<section id="do-tattoos-make-people-look-attractive-or-not" class="level1">
+<h1>Do tattoos make people look attractive or not?</h1>
+<section id="setting-up-r-packages" class="level2">
+<h2 class="anchored" data-anchor-id="setting-up-r-packages">Setting up R Packages</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
@@ -250,10 +254,8 @@ The following object is masked from 'package:mosaic':
 
     mplot</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(visStatistics) <span class="co"># One package to test them all</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="do">### Dataset from Chihara and Hesterberg's book (Second Edition)</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(resampledata)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(visStatistics)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(resampledata)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>
 Attaching package: 'resampledata'
@@ -272,8 +274,7 @@ The following objects are masked from 'package:mosaic':
 
     prop_test, t_test</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Datasets from Cetinkaya-Rundel and Hardin's book (First Edition)</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(openintro)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(openintro)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Loading required package: airports
 Loading required package: cherryblossom
@@ -290,6 +291,9 @@ The following objects are masked from 'package:lattice':
     ethanol, lsegments</code></pre>
 </div>
 </div>
+</section>
+<section id="read-data" class="level2">
+<h2 class="anchored" data-anchor-id="read-data">Read Data</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>tattoo <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"tattoo.csv"</span>)</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(tattoo)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -301,6 +305,9 @@ $ Gender            &lt;chr&gt; "F", "M", "M", "M", "M", "M", "M", "M", "M", "F"
 $ Tattoo_Attractive &lt;chr&gt; "Yes", "Yes", "No", "Yes", "No", "Yes", "Yes", "Yes"…</code></pre>
 </div>
 </div>
+</section>
+<section id="view-missing-data" class="level2">
+<h2 class="anchored" data-anchor-id="view-missing-data">View Missing Data</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>visdat<span class="sc">::</span><span class="fu">vis_dat</span>(tattoo)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -311,6 +318,9 @@ $ Tattoo_Attractive &lt;chr&gt; "Yes", "Yes", "No", "Yes", "No", "Yes", "Yes", "
 </div>
 </div>
 </div>
+</section>
+<section id="summerise-examine-data" class="level2">
+<h2 class="anchored" data-anchor-id="summerise-examine-data">Summerise: Examine Data</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>tattoo <span class="sc">%&gt;%</span> <span class="fu">count</span>(Tattoo_Attractive)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -327,6 +337,9 @@ $ Tattoo_Attractive &lt;chr&gt; "Yes", "Yes", "No", "Yes", "No", "Yes", "Yes", "
 2      M 20</code></pre>
 </div>
 </div>
+</section>
+<section id="data-munging" class="level2">
+<h2 class="anchored" data-anchor-id="data-munging">Data Munging</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>tattoo_modified <span class="ot">&lt;-</span> tattoo <span class="sc">%&gt;%</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(Gender, Tattoo_Attractive) <span class="sc">%&gt;%</span></span>
@@ -350,6 +363,9 @@ $ Gender            &lt;fct&gt; Female, Male, Male, Male, Male, Male, Male, Male
 $ Tattoo_Attractive &lt;fct&gt; Yes, Yes, No, Yes, No, Yes, Yes, Yes, Yes, No, Yes, …</code></pre>
 </div>
 </div>
+</section>
+<section id="chi-sqaure-test" class="level2">
+<h2 class="anchored" data-anchor-id="chi-sqaure-test">Chi Sqaure Test</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>contingency_table <span class="ot">&lt;-</span> vcd<span class="sc">::</span><span class="fu">structable</span>(Gender <span class="sc">~</span> Tattoo_Attractive,</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> tattoo_modified</span>
@@ -725,8 +741,9 @@ key:
 <li><p>Both males and females responded in exactly the same way, showing no variation in opinion.</p></li>
 </ul>
 </section>
-<section id="proportion-test" class="level1">
-<h1>Proportion Test</h1>
+</section>
+<section id="proportion-test" class="level2">
+<h2 class="anchored" data-anchor-id="proportion-test">Proportion Test</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>tattoo_modified <span class="sc">%&gt;%</span></span>
 <span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Tattoo_Attractive) <span class="sc">%&gt;%</span></span>
@@ -761,7 +778,11 @@ key:
 1 0.75 40</code></pre>
 </div>
 </div>
-<p>###Inference - The test result confirms if this percentage is significantly above 50%.</p>
+<section id="inference-3" class="level3">
+<h3 class="anchored" data-anchor-id="inference-3">Inference</h3>
+<ul>
+<li>The test result confirms if this percentage is significantly above 50%.</li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>tattoo_modified_clean <span class="sc">%&gt;%</span></span>
 <span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">%&gt;%</span></span>
@@ -778,8 +799,9 @@ key:
 </div>
 </div>
 </div>
-<section id="inference-3" class="level3">
-<h3 class="anchored" data-anchor-id="inference-3">Inference</h3>
+</section>
+<section id="inference-4" class="level3">
+<h3 class="anchored" data-anchor-id="inference-4">Inference</h3>
 <ul>
 <li><p>Majority of them find tattoos attractive and it’s equally spread out</p></li>
 <li><p>Again no association between gender and perception of tattoo attractiveness</p></li>
@@ -825,8 +847,8 @@ probability of success
 </div>
 </div>
 </section>
-<section id="inference-4" class="level2">
-<h2 class="anchored" data-anchor-id="inference-4">Inference</h2>
+<section id="inference-5" class="level3">
+<h3 class="anchored" data-anchor-id="inference-5">Inference</h3>
 <ul>
 <li><p>A sample proportion test was conducted to determine if the proportion of students who find tattoos attractive differs significantly from 0.5 (i.e., 50%).</p></li>
 <li><p>Out of 40 students, 30 (75%) said they find tattoos attractive.</p></li>
@@ -836,8 +858,8 @@ probability of success
 </ul>
 </section>
 </section>
-<section id="conclusion" class="level1">
-<h1>Conclusion</h1>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
 <ul>
 <li><p>The Chi sqaure result is Not Statistically Significant. We Fail to Reject the Null Hypothesis.</p></li>
 <li><p>However, because the sample size is small (only 40 participants), the test may not capture real-world differences. A larger sample is needed to draw stronger and more reliable conclusions.</p></li>
@@ -846,6 +868,7 @@ probability of success
 </ul>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
