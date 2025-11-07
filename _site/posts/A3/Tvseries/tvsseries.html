@@ -404,9 +404,6 @@ $ Big.Bang.Theory &lt;dbl&gt; 9.0, 6.0, 7.0, 6.0, 5.0, 5.5, 9.0, 6.0, 5.0, 3.0, 
 </div>
 </div>
 </div>
-<section id="inference" class="level3">
-<h3 class="anchored" data-anchor-id="inference">Inference</h3>
-<p>The raw data clearly shows Friends having the highest ratings, followed by ModernFamily, and then BigBangTheory. The overall mean rating (grey line) falls roughly between the ModernFamily and BigBangTheory groups. The groups appear separated, suggesting a strong effect.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>ratings_long <span class="sc">%&gt;%</span></span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_boxplot</span>(Rating <span class="sc">~</span> Show, <span class="at">orientation =</span> <span class="st">"x"</span>, <span class="at">fill =</span> <span class="sc">~</span> Show) <span class="sc">%&gt;%</span></span>
@@ -430,9 +427,8 @@ $ Big.Bang.Theory &lt;dbl&gt; 9.0, 6.0, 7.0, 6.0, 5.0, 5.5, 9.0, 6.0, 5.0, 3.0, 
 </div>
 </div>
 </div>
-</section>
-<section id="inference-1" class="level3">
-<h3 class="anchored" data-anchor-id="inference-1">Inference</h3>
+<section id="inference" class="level3">
+<h3 class="anchored" data-anchor-id="inference">Inference</h3>
 <ul>
 <li>Modern Family received the highest ratings, with most scores around 8–9.</li>
 <li>Friends ratings are moderate, clustering near 7.</li>
@@ -459,8 +455,8 @@ $ Big.Bang.Theory &lt;dbl&gt; 9.0, 6.0, 7.0, 6.0, 5.0, 5.5, 9.0, 6.0, 5.0, 3.0, 
 </div>
 </div>
 </section>
-<section id="inference-2" class="level3">
-<h3 class="anchored" data-anchor-id="inference-2">Inference</h3>
+<section id="inference-1" class="level3">
+<h3 class="anchored" data-anchor-id="inference-1">Inference</h3>
 <ul>
 <li>Both males and females gave a wide range of ratings for all three shows.</li>
 <li>However, females tended to give slightly higher ratings overall, especially for Modern Family.</li>
@@ -509,8 +505,8 @@ Residual standard error: 1.871442
 Estimated effects may be unbalanced</code></pre>
 </div>
 </div>
-<section id="inference-3" class="level3">
-<h3 class="anchored" data-anchor-id="inference-3">Inference</h3>
+<section id="inference-2" class="level3">
+<h3 class="anchored" data-anchor-id="inference-2">Inference</h3>
 <ul>
 <li><p>Null Hypothesis Rejected: We confidently rejected the idea that all three shows have the same true average rating.</p></li>
 <li><p>Alternative Hypothesis Supported: This means we accept the alternative hypothesis, concluding that there is a significant difference in the mean ratings among the TV shows.</p></li>
@@ -541,8 +537,8 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
 </div>
 </section>
-<section id="inference-4" class="level3">
-<h3 class="anchored" data-anchor-id="inference-4">Inference</h3>
+<section id="inference-3" class="level3">
+<h3 class="anchored" data-anchor-id="inference-3">Inference</h3>
 <ul>
 <li>Mean ratings of the shows are significantly different AND ratings given by different genders are also significantly different.</li>
 </ul>
@@ -600,8 +596,8 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
 </div>
 </section>
-<section id="inference-5" class="level3">
-<h3 class="anchored" data-anchor-id="inference-5">Inference</h3>
+<section id="inference-4" class="level3">
+<h3 class="anchored" data-anchor-id="inference-4">Inference</h3>
 <ul>
 <li><p>Modern Family received ratings that are significantly higher than the ratings for Friends.</p></li>
 <li><p>Big Bang Theory and Friends ratings are not significantly different from each other.</p></li>
@@ -693,8 +689,8 @@ Rating = 6.891304 + 1.413043*ShowModern Family + -0.4456522*ShowBig Bang Theory 
 </div>
 </div>
 </section>
-<section id="inference-6" class="level3">
-<h3 class="anchored" data-anchor-id="inference-6">Inference</h3>
+<section id="inference-5" class="level3">
+<h3 class="anchored" data-anchor-id="inference-5">Inference</h3>
 <ul>
 <li>The actual ratings for Big Bang Theory show the widest spread (more variation) compared to the other two shows.</li>
 </ul>
@@ -806,8 +802,8 @@ group   2  1.5298 0.2203
       135               </code></pre>
 </div>
 </div>
-<section id="inference-7" class="level3">
-<h3 class="anchored" data-anchor-id="inference-7">Inference</h3>
+<section id="inference-6" class="level3">
+<h3 class="anchored" data-anchor-id="inference-6">Inference</h3>
 <ul>
 <li><p>The p-value (0.33) is greater than 0.05, so there’s no big difference in variances.</p></li>
 <li><p>The spread of ratings is similar across all three shows.</p></li>
@@ -875,8 +871,8 @@ Adding another scale for colour, which will replace the existing scale.</code></
 </div>
 </div>
 </section>
-<section id="inference-8" class="level3">
-<h3 class="anchored" data-anchor-id="inference-8">Inference</h3>
+<section id="inference-7" class="level3">
+<h3 class="anchored" data-anchor-id="inference-7">Inference</h3>
 <ul>
 <li><p>Highest Rating: Modern Family has the highest average score (8.30).</p></li>
 <li><p>Lowest Rating: Big Bang Theory has the lowest average score (6.45).</p></li>

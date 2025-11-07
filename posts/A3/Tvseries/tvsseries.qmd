@@ -78,8 +78,6 @@ gf_jitter(Rating ~ Show, color = ~Show, width = 0.2, data = ratings_long, size =
   gf_annotate(geom = "text", label = "Overall Mean", x = 3, y = mean(ratings_long$Rating) + 0.2, size = 4)
 
 ```
-### Inference
-The raw data clearly shows Friends having the highest ratings, followed by ModernFamily, and then BigBangTheory. The overall mean rating (grey line) falls roughly between the ModernFamily and BigBangTheory groups. The groups appear separated, suggesting a strong effect.
 
 
 ```{r}
