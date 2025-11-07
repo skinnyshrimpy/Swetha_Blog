@@ -6,6 +6,8 @@ categories: [Tv Series]
 format: html
 ---
 
+# Set-up Packages
+
 ```{r}
 library(tidyverse)
 library(ggformula)
@@ -19,8 +21,11 @@ library(patchwork)
 library(ggprism)
 library(paletteer)
 library(DescTools)
+library(latex2exp)
 
 ```
+
+# Data Munging
 
 ```{r}
 set.seed(123)
@@ -33,7 +38,7 @@ ratings_orig <- tibble(
 )
 ```
 
-# Convert from wide to long format
+### Convert from wide to long format
 
 ```{r}
 ratings_long <- ratings_orig %>%
@@ -45,6 +50,8 @@ ratings_long <- ratings_orig %>%
   )
 ratings_long
 ```
+
+# Visualising Data
 
 ```{r}
 gf_jitter(Rating ~ Show, color = ~Show, width = 0.2, data = ratings_long, size = 3, alpha = 0.5) %>%
@@ -70,44 +77,61 @@ Confirms the means are different and shows the distribution of scores.
 - BigBangTheory is lowest (peaked around 6-7). The black vertical line is the overall mean.
 
 ```{r}
+gf_point(Rating ~ Show, color = ~Gender, data = ratings_long, 
+         position = position_dodge(width = 0.5)) %>% 
+  gf_line(Rating ~ Show, color = ~Gender, data = ratings_long, 
+          stat = "summary", fun.y = "mean", 
+          position = position_dodge(width = 0.5))
+```
+# ANOVA Test
+
+```{r}
 ratings_anova <- aov(Rating ~ Show, data = ratings_long)
 summary(ratings_anova)
 
-# Produce a supernova ANOVA table for detailed output
 supernova::supernova(ratings_anova)
-
 ```
 
 ```{r}
 ratings_anova <- aov(Rating ~ Show, data = ratings_long)
 ratings_anova
 ```
-
-# Hypothesis 
+### Inference
 
 - Null Hypothesis Rejected: We confidently rejected the idea that all three shows have the same true average rating.
 
 - Alternative Hypothesis Supported: This means we accept the alternative hypothesis, concluding that there is a significant difference in the mean ratings among the TV shows.
 
 ```{r}
-# Create a "pairwise" list object
+ratings_anova_1 <- aov(Rating ~ Show + Gender, data = ratings_long)
+summary(ratings_anova)
+
+supernova::supernova(ratings_anova_1)
+```
+### Inference
+- Mean ratings of the shows are significantly different AND ratings given by different genders are also significantly different.
+
+```{r}
 ratings_supernova <-
-  supernova::pairwise(ratings_anova,
+  supernova::pairwise(ratings_anova_1,
     correction = "Bonferroni", # Try "Tukey"
     alpha = 0.05, # 95% CI calculation
     var_equal = TRUE, # We'll see
     plot = T
   )
 ```
+### Inferemce
 
+- Friends > Mordern Family > Big Bang Theory
 
+- Males gave a higher average rating than Females did (By abt quater point).
 
 ```{r}
 ratings_supernova$Show
 ```
 
 ```{r}
-supernova::supernova(ratings_anova)
+supernova::supernova(ratings_anova_1)
 ```
 
 ```{r}
@@ -115,9 +139,6 @@ supernova::equation(ratings_anova)
 ```
 
 ```{r}
-library(latex2exp)
-library(ggformula)
-library(paletteer)
 
 ratings_anova <- aov(Rating ~ Show, data = ratings_long)
 
@@ -162,8 +183,11 @@ ratings_long %>%
 ```
 ### Inference
 
-Visually confirms the mean differences calculated in the ANOVA. The predicted mean for Friends is highest, ModernFamily is next, and BigBangTheory is lowest. The blue line connecting the means illustrates the difference between groups.
+- Friends has the highest predicted mean rating (triangle and dashed line) at 8.5.
+- ModernFamily has the next highest predicted mean rating at $7.5.
+- BigBangTheory has the lowest predicted mean rating at 6.5.
 
+# Normality Test
 
 ```{r}
 shapiro.test(x = ratings_long$Rating)
