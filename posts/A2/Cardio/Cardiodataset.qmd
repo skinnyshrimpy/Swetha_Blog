@@ -102,10 +102,6 @@ visdat::vis_miss(scottish_CVD_df)
 ```
 
 ```{r}
-scottish_CVD_df %>% tt ()
-```
-
-```{r}
 scottish_CVD_df %>%
   DT::datatable(
     caption = htmltools::tags$caption(
@@ -373,13 +369,6 @@ scottish_CVD_df %>%
   gf_refine(scale_fill_brewer(palette = "Set3")) %>% 
     gf_theme(theme_minimal())
 
-```
-
-### (c) Density Plot
-```{r}
-gf_density(~ carstair, fill = ~smoke, data = scottish_CVD_df, alpha = 0.5) %>% 
-  gf_labs(title = "Density of Carstairs Index by Smoking Category",
-          x = "Carstairs Index", y = "Density")
 ```
 -Inference
 1. Although heavy smokers appear slightly more deprived on average, the differences are minor.
