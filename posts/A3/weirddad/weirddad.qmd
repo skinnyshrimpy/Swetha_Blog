@@ -110,8 +110,9 @@ contingency_table <- vcd::structable(college ~ is_dad_weird,
 contingency_table
 
 ```
+### Inference
 
-At MIT, 5 out of 33 students (15%) said their dad is weird. At SMI, 12 out of 31 students (39%) said their dad is weird.
+- At MIT, 5 out of 33 students (15%) said their dad is weird. At SMI, 12 out of 31 students (39%) said their dad is weird.
 
 ```{r}
 gss_vcd_table <- vcd::structable(is_dad_weird ~ college, data = weirddad_clean)
@@ -128,6 +129,11 @@ contingency_table <- vcd::structable(college ~ is_dad_weird, data = weirddad_cle
 contingency_table <- as.table(contingency_table)
 xq_test_object <- xchisq.test(contingency_table)
 ```
+### Inference
+
+- But in chi sqaure result is not satistically siginificant!
+
+- MIT and SMI do not differ significantly in the number of ‘weird dads’.
 
 ```{r}
 xq_test_object %>%
@@ -138,7 +144,6 @@ X_squared_observed
 ```
 
 ```{r}
-# Determine the Chi-Square critical value
 X_squared_critical <- qchisq(
   p = .05,
   df = (5 - 1) * (2 - 1), # (nrows-1) * (ncols-1)
@@ -150,7 +155,6 @@ X_squared_critical
 ```{r}
 test_result <- chisq.test(contingency_table)
 
-# Extract required values
 X_squared_observed <- test_result$statistic
 df <- test_result$parameter
 X_squared_critical <- qchisq(0.95, df)
@@ -225,9 +229,9 @@ weirddad_clean %>%
 
 -   Across both colleges (MIT and SMI combined), about 26.6% of students said their dad is weird.
 
--   This means that most students (≈73%) do not consider their dad weird, suggesting that “weird dads” are a minority perception overall.
+-   This means that most students (73%) do not consider their dad weird, suggesting that “weird dads” are a minority perception overall.
 
--   MIT: 15% “weird dads” SMI: 39% “weird dads”
+-   From the contingency table we know that MIT: 15% “weird dads” SMI: 39% “weird dads”
 
 -   That contrast shows that SMI is well above the overall average (26.6%), while MIT is below it.
 

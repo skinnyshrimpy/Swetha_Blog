@@ -430,7 +430,11 @@ Yes                    5  12
 No                    28  19</code></pre>
 </div>
 </div>
-<p>At MIT, 5 out of 33 students (15%) said their dad is weird. At SMI, 12 out of 31 students (39%) said their dad is weird.</p>
+<section id="inference-2" class="level3">
+<h3 class="anchored" data-anchor-id="inference-2">Inference</h3>
+<ul>
+<li>At MIT, 5 out of 33 students (15%) said their dad is weird. At SMI, 12 out of 31 students (39%) said their dad is weird.</li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>gss_vcd_table <span class="ot">&lt;-</span> vcd<span class="sc">::</span><span class="fu">structable</span>(is_dad_weird <span class="sc">~</span> college, <span class="at">data =</span> weirddad_clean)</span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>gss_vcd_table <span class="sc">%&gt;%</span></span>
@@ -475,6 +479,13 @@ key:
     &lt;Pearson residual&gt;</code></pre>
 </div>
 </div>
+</section>
+<section id="inference-3" class="level3">
+<h3 class="anchored" data-anchor-id="inference-3">Inference</h3>
+<ul>
+<li><p>But in chi sqaure result is not satistically siginificant!</p></li>
+<li><p>MIT and SMI do not differ significantly in the number of ‘weird dads’.</p></li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>xq_test_object <span class="sc">%&gt;%</span></span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  broom<span class="sc">::</span><span class="fu">tidy</span>() <span class="sc">%&gt;%</span></span>
@@ -486,13 +497,12 @@ key:
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Determine the Chi-Square critical value</span></span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>X_squared_critical <span class="ot">&lt;-</span> <span class="fu">qchisq</span>(</span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">p =</span> .<span class="dv">05</span>,</span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">df =</span> (<span class="dv">5</span> <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> (<span class="dv">2</span> <span class="sc">-</span> <span class="dv">1</span>), <span class="co"># (nrows-1) * (ncols-1)</span></span>
-<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">lower.tail =</span> <span class="cn">FALSE</span></span>
-<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>X_squared_critical</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>X_squared_critical <span class="ot">&lt;-</span> <span class="fu">qchisq</span>(</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">p =</span> .<span class="dv">05</span>,</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">df =</span> (<span class="dv">5</span> <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> (<span class="dv">2</span> <span class="sc">-</span> <span class="dv">1</span>), <span class="co"># (nrows-1) * (ncols-1)</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">lower.tail =</span> <span class="cn">FALSE</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>X_squared_critical</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 9.487729</code></pre>
 </div>
@@ -500,10 +510,9 @@ key:
 <div class="cell">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>test_result <span class="ot">&lt;-</span> <span class="fu">chisq.test</span>(contingency_table)</span>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract required values</span></span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>X_squared_observed <span class="ot">&lt;-</span> test_result<span class="sc">$</span>statistic</span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> test_result<span class="sc">$</span>parameter</span>
-<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>X_squared_critical <span class="ot">&lt;-</span> <span class="fu">qchisq</span>(<span class="fl">0.95</span>, df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>X_squared_observed <span class="ot">&lt;-</span> test_result<span class="sc">$</span>statistic</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> test_result<span class="sc">$</span>parameter</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>X_squared_critical <span class="ot">&lt;-</span> <span class="fu">qchisq</span>(<span class="fl">0.95</span>, df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>mosaic<span class="sc">::</span><span class="fu">xqchisq</span>(</span>
@@ -558,6 +567,7 @@ key:
 </div>
 </div>
 </section>
+</section>
 <section id="propotion-test" class="level2">
 <h2 class="anchored" data-anchor-id="propotion-test">Propotion Test</h2>
 <div class="cell">
@@ -590,13 +600,13 @@ $ is_dad_weird &lt;fct&gt; No, No, No, Yes, No, No, No, No, Yes, Yes, Yes, Yes, 
 1 0.265625 64</code></pre>
 </div>
 </div>
-<section id="inference-2" class="level3">
-<h3 class="anchored" data-anchor-id="inference-2">Inference</h3>
+<section id="inference-4" class="level3">
+<h3 class="anchored" data-anchor-id="inference-4">Inference</h3>
 <ul>
 <li><p>The difference in the proportion of students saying “Yes, my dad is weird” in college is statistically significant.</p></li>
 <li><p>Across both colleges (MIT and SMI combined), about 26.6% of students said their dad is weird.</p></li>
-<li><p>This means that most students (≈73%) do not consider their dad weird, suggesting that “weird dads” are a minority perception overall.</p></li>
-<li><p>MIT: 15% “weird dads” SMI: 39% “weird dads”</p></li>
+<li><p>This means that most students (73%) do not consider their dad weird, suggesting that “weird dads” are a minority perception overall.</p></li>
+<li><p>From the contingency table we know that MIT: 15% “weird dads” SMI: 39% “weird dads”</p></li>
 <li><p>That contrast shows that SMI is well above the overall average (26.6%), while MIT is below it.</p></li>
 <li><p>SMI dads are perceived as significantly weirder than MIT dads.</p></li>
 </ul>
@@ -653,7 +663,7 @@ probability of success
 <pre><code># A tibble: 1 × 2
   lower_ci upper_ci
      &lt;dbl&gt;    &lt;dbl&gt;
-1    0.156    0.375</code></pre>
+1    0.172    0.375</code></pre>
 </div>
 </div>
 <hr>
