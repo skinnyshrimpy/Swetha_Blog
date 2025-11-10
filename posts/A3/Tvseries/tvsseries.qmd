@@ -88,13 +88,15 @@ ratings_long %>%
     x = "TV Shows",
     y = "Ratings"
   ) %>%
-  gf_hline(yintercept = ~ mean(Rating), color = "darkblue") %>%
+  gf_hline(yintercept = ~ mean(Rating), color = "red") %>%
   gf_annotate(
     geom = "text",
     label = "Overall Mean",
-    x = 2,
-    y = mean(ratings_long$Rating)
-  )
+    x = 3,
+    y = mean(ratings_long$Rating) + 0.3
+  ) %>% 
+  gf_theme(theme_minimal()) %>% 
+  gf_refine(scale_fill_brewer(palette = "Set2"))
 
 ```
 ### Inference
@@ -133,9 +135,9 @@ ratings_anova
 ```
 ### Inference
 
-- Null Hypothesis Rejected: We confidently rejected the idea that all three shows have the same true average rating.
+- Null Hypothesis Rejected: We confidently reject the idea that all three shows have the same true average rating.
 
-- Alternative Hypothesis Supported: This means we accept the alternative hypothesis, concluding that there is a significant difference in the mean ratings among the TV shows.
+- Alternative Hypothesis: This means we accept the alternative hypothesis, concluding that there is a significant difference in the mean ratings among the TV shows.
 
 ```{r}
 ratings_anova_1 <- aov(Rating ~ Show + Gender, data = ratings_long)

@@ -412,13 +412,15 @@ $ Big.Bang.Theory &lt;dbl&gt; 9.0, 6.0, 7.0, 6.0, 5.0, 5.5, 9.0, 6.0, 5.0, 3.0, 
 <span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"TV Shows"</span>,</span>
 <span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Ratings"</span></span>
 <span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_hline</span>(<span class="at">yintercept =</span> <span class="sc">~</span> <span class="fu">mean</span>(Rating), <span class="at">color =</span> <span class="st">"darkblue"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_hline</span>(<span class="at">yintercept =</span> <span class="sc">~</span> <span class="fu">mean</span>(Rating), <span class="at">color =</span> <span class="st">"red"</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_annotate</span>(</span>
 <span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">geom =</span> <span class="st">"text"</span>,</span>
 <span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="st">"Overall Mean"</span>,</span>
-<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="dv">2</span>,</span>
-<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="fu">mean</span>(ratings_long<span class="sc">$</span>Rating)</span>
-<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="dv">3</span>,</span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="fu">mean</span>(ratings_long<span class="sc">$</span>Rating) <span class="sc">+</span> <span class="fl">0.3</span></span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_theme</span>(<span class="fu">theme_minimal</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_refine</span>(<span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">"Set2"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -508,8 +510,8 @@ Estimated effects may be unbalanced</code></pre>
 <section id="inference-2" class="level3">
 <h3 class="anchored" data-anchor-id="inference-2">Inference</h3>
 <ul>
-<li><p>Null Hypothesis Rejected: We confidently rejected the idea that all three shows have the same true average rating.</p></li>
-<li><p>Alternative Hypothesis Supported: This means we accept the alternative hypothesis, concluding that there is a significant difference in the mean ratings among the TV shows.</p></li>
+<li><p>Null Hypothesis Rejected: We confidently reject the idea that all three shows have the same true average rating.</p></li>
+<li><p>Alternative Hypothesis: This means we accept the alternative hypothesis, concluding that there is a significant difference in the mean ratings among the TV shows.</p></li>
 </ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>ratings_anova_1 <span class="ot">&lt;-</span> <span class="fu">aov</span>(Rating <span class="sc">~</span> Show <span class="sc">+</span> Gender, <span class="at">data =</span> ratings_long)</span>
