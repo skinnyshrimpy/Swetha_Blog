@@ -237,7 +237,7 @@ ratings_long %>%
     x = 1.25,
     size = 3,
     color = "black",
-    fill = "moccasin"
+    fill = "lightgrey"
   ) %>%
   gf_labs(
     title = "Fitted ANOVA Model Equation",

@@ -210,9 +210,9 @@ mosaic::cor_test(as.numeric(cvddef) ~ age, data = scottish_CVD_df) %>%
 
 ### Inferences
 
-1. The p-value = 0 means this result is highly significant
+1.  The p-value = 0 means this result is highly significant
 
-2. The confidence interval (0.34 to 0.38) is narrow and fully positive → this strengthens our confidence.
+2.  The confidence interval (0.34 to 0.38) is narrow and fully positive → this strengthens our confidence.
 
 ### (a) Scatter Plot
 
@@ -235,9 +235,9 @@ vcd::structable(age_group ~ cvddef, data = scottish_CVD_df_grp) %>%
   vcd::mosaic(gp = shading_Friendly())
 ```
 
-### Inference 
+### Inference
 
-1. From the mosaic plot, it shows that age and CVD are strongly correlated.
+1.  From the mosaic plot, it shows that age and CVD are strongly correlated.
 
 2.  The tall blue blocks (who don't have CVD), mostly younger ages (18–30 and 31–50).
 
@@ -309,9 +309,9 @@ vcd::assoc(age_group ~ smoke, data = scottish_CVD_df_grp,
 
 ```
 
-### Inference 
+### Inference
 
-1. Younger people are usually never or light smokers. Is there a link between age, deprivation, and smoking type?
+1.  Younger people are usually never or light smokers. Is there a link between age, deprivation, and smoking type?
 
 ### (c) Box Plot
 
@@ -327,15 +327,15 @@ scottish_CVD_df %>%
 
 ```
 
-### Inference 
+### Inference
 
-1. For every smoking group, people with CVD are older than those without CVD.
+1.  For every smoking group, people with CVD are older than those without CVD.
 
 2.  Ex-smokers likely quit after their cardio health issues began — ex smokers cluster with CVD-positive and older age groups with very few outliers.
 
 3.  This boxplot also confirms again that age factor also affect cvd not just smoking behiviour.
 
-## Age, carstair and smoking behiviour
+## 3. Age, carstair and smoking behiviour
 
 ### (a) Correaltion Test
 
@@ -348,9 +348,9 @@ mosaic::cor_test(carstair ~ age, data = scottish_CVD_df) %>%
   )
 ```
 
-### Inference 
+### Inference
 
-1. There isn’t much of a connection between age and deprivation within each smoking group here.
+1.  There isn’t much of a connection between age and deprivation within each smoking group here.
 
 ### (b) Box Plot
 
@@ -369,13 +369,13 @@ scottish_CVD_df %>%
 
 ```
 
-### Inference 
+### Inference
 
-1. Although heavy smokers appear slightly more deprived on average, the differences are minor.
+1.  Although heavy smokers appear slightly more deprived on average, the differences are minor.
 
 2.  The smoking behiviour does not strongly relate with social deprivation in this dataset
 
-## How their social class impact their smoking behiviour?
+## 4. How their social class impact their smoking behiviour?
 
 ### (a) Mosaic Plot
 
@@ -393,12 +393,12 @@ vcd::assoc(sc ~ smoke, data = scottish_CVD_df,
           direction = "v", gp = shading_max, legend = FALSE)
   
 ```
+
 ### Inference
 
-1. Strong Correlation between scoial class and smoking behiviour!
+1.  Strong Correlation between scoial class and smoking behiviour!
 
-2. Better-off people smoke less.
-
+2.  Better-off people smoke less.
 
 ### (b) Box Plot
 
@@ -414,13 +414,13 @@ scottish_CVD_df %>%
   gf_refine(scale_fill_brewer(palette = "Set2"))
 ```
 
-### Inference 
+### Inference
 
-1. People with lower social and economic status (lower social class, higher Carstairs index) are more likely to live in deprived areas and to smoke more.
+1.  People with lower social and economic status (lower social class, higher Carstairs index) are more likely to live in deprived areas and to smoke more.
 
 2.  Those with higher social class and less deprivation tend to smoke less or be non-smokers/ex-smokers.
 
-## False Hypothesis - Gender vs Smoking behiviour and CVD 
+## 5. Gender vs Smoking behiviour and CVD
 
 ```{r}
 scottish_CVD_df %>% 
@@ -437,19 +437,19 @@ vcd::structable(cvddef + smoke ~ sex, data = scottish_CVD_df) %>%
   )
 ```
 
-### Inference 
+### Inference
 
-1. Males who are ex-smokers seem to have a higher chance of CVD.
+1.  Males who are ex-smokers seem to have a higher chance of CVD.
 
-2. Males who never smoke also have higher cvd risks than expected (Age factor) But why not for female? 
+2.  Males who never smoke also have higher cvd risks than expected (Age factor) But why not for female?
 
-3. Females who never smoked are less likely to have CVD.
+3.  Females who never smoked are less likely to have CVD.
 
-4. Females who are ex-smokers seem to have without CVD than expected.
+4.  Females who are ex-smokers seem to have without CVD than expected.
 
-5. It’s surprising that female ex-smokers have more without CVD than expected, while male ex-smokers have higher CVD cases!!
+5.  It’s surprising that female ex-smokers have more without CVD than expected, while male ex-smokers have higher CVD cases!!
 
-6. Overall, smoking habits does affect CVD differently for males and females.
+6.  Overall, smoking habits does affect CVD differently for males and females.
 
 ### (b) Bar Filled Graph
 
@@ -465,13 +465,14 @@ gf_bar(~ cvddef, fill = ~sex, position = "fill") %>%
 
 ### Inference
 
-1. But why here it looks like there's no difference in age groups? 
+1.  But why here it looks like there's no difference in age groups?
 
+## Conclusion
 
-## Conclusion 
+1.  From the Scottish CVD dataset, it’s clear that age plays the biggest role in cardiovascular disease. Older people are far more likely to have CVD.
 
-1. The Scottish CVD dataset suggests that age is also the strongest reason for cardiovascular disease, with prevalence rising sharply after age 50.
+2.  Smoking also increases risk, especially among older males. Ex-smokers often end up in the CVD-positive category, probably they might have quit after experiencing health problems.
 
-2. The social class (in relation to class) and Carstairs deprivation index suggest that the lower socioeconomic group are bearing a disproportionate amount of the CVD risk. 
+3.  Although social deprivation influence smoking habits. People from more deprived or lower social classes tend to smoke more.
 
-3. Sex appears to be less important than age, smoking or deprivation.
+4.  Gender patterns show that men generally have higher CVD rates. Women, even when they smoke, they have fewer CVD cases!
