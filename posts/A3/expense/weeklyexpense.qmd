@@ -18,6 +18,8 @@ library(gt)
 library(visStatistics)
 library(dplyr)
 library(ggplot2)
+library(infer)
+
 ```
 
 ## Read Data
@@ -133,6 +135,27 @@ obs_diff_expense <- diffmean(
 obs_diff_expense
 
 ```
+- This is difference is huge because the male expense is not evenly distributed and because of few outliers the mean difference is high.
+
+```{r}
+shapiro.test(weekly_expense$Total_Expenditure_Last_Week[weekly_expense$Gender == "Female"])
+shapiro.test(weekly_expense$Total_Expenditure_Last_Week[weekly_expense$Gender == "Male"])
+```
+### Inference
+
+- The weekly expenditure data for both males and females is not normally distributed. This is also strongly supported by histogram chart.
+
+```{r}
+var.test(
+  Total_Expenditure_Last_Week ~ Gender,
+  data = weekly_expense
+)
+```
+### Inference 
+
+- There is a statistically significant difference in the variability (spread) of the weekly expenditures between males and females. 
+
+- This also we saw in the graphs that Male spending is far more spread out and inconsistent than Female spending on the histogram chart.
 
 ```{r}
 mosaic::t_test(
@@ -179,87 +202,72 @@ From Mann-Whitney Test
 
 
 ```{r}
-shapiro.test(weekly_expense$Total_Expenditure_Last_Week[weekly_expense$Gender == "Female"])
-shapiro.test(weekly_expense$Total_Expenditure_Last_Week[weekly_expense$Gender == "Male"])
-```
-### Inference
-
-- The weekly expenditure data for both males and females is not normally distributed. This is also strongly supported by histogram chart.
-
-```{r}
-var.test(
-  Total_Expenditure_Last_Week ~ Gender,
-  data = weekly_expense
-)
-```
-### Inference 
-
-- There is a statistically significant difference in the variability (spread) of the weekly expenditures between males and females. Specifically, the sample ratio of variances (0.0459) shows that the variance of Female expenditure is much smaller than the variance of Male expenditure. 
-
-- This also we saw the visual observation that Male spending is far more spread out and inconsistent than Female spending on the histogram chart.
-
-```{r}
 obs_diff_expense_less <- diffmean(
   Total_Expenditure_Last_Week ~ Gender,
   data = weekly_expense
 )
 
 obs_diff_expense_less
-
 ```
 
+```{r}
+mosaic::t_test(Total_Expenditure_Last_Week ~ Gender,
+  var.equal = FALSE,
+  data = weekly_expense
+) %>%
+  broom::tidy()
+```
+
+```{r}
+obs_diff_infer <- weekly_expense %>% 
+  infer::specify(Total_Expenditure_Last_Week ~ Gender) %>%
+  infer::calculate(
+    stat = "diff in means",
+    order = c("Male", "Female")
+  )
+obs_diff_infer
+```
 
 
 ```{r}
-set.seed(12345)
-polarity_less <- c(rep(1, 15), rep(-1, 14)) 
-
-# Observed difference
-obs_diff_expense_less <- mean(
-  ~ (Total_Expenditure_Last_Week[Gender == "Female"] - 
-       Total_Expenditure_Last_Week[Gender == "Male"]),
-  data = weekly_expense
-)
-
-# Null distribution using permutation
-null_dist_expense_less <- 
-  do(9999) * mean(
-    data = weekly_expense,
-    ~ (Total_Expenditure_Last_Week[Gender == "Female"] - 
-         Total_Expenditure_Last_Week[shuffle(Gender) == "Male"])
+null_dist <- weekly_expense %>%
+  specify(Total_Expenditure_Last_Week ~ Gender) %>%
+  hypothesize(null = "independence") %>%
+  generate(reps = 5000, type = "permute") %>% 
+  calculate(
+    stat = "diff in means",
+    order = c("Male", "Female") 
   )
+null_dist
 
-## Histogram
-gf_histogram(data = null_dist_expense_less, ~mean) %>%
-  gf_vline(
-    xintercept = obs_diff_expense_less,
-    colour = "red"
-  ) %>%
-  gf_refine(scale_y_continuous(expand = c(0, 0)))
-
-## ECDF
-gf_ecdf(data = null_dist_expense_less, ~mean, linewidth = 1) %>%
-  gf_vline(
-    xintercept = obs_diff_expense_less,
-    colour = "red",
-    linewidth = 1, 
-    title = "Null Distribution by Permutation",
-    subtitle = "Cumulative Density"
-  ) %>%
-  gf_labs(x = "Difference in Means") %>%
-  gf_refine(scale_y_continuous(expand = c(0, 0)))
-
-## P-value
-mean(null_dist_expense_less >= obs_diff_expense_less)
-
+null_dist %>%
+  visualise() + # Note this plus sign!
+  shade_p_value(obs_diff_infer,
+    direction = "two-sided"
+  ) +
+  scale_y_continuous(expand = c(0, 0))
 ```
+
+
+```{r}
+null_dist %>%
+  get_p_value(
+    obs_stat = obs_diff_expense_less,
+    direction = "two_sided"
+  )
+```
+
+```{r}
+null_dist %>%
+  infer::get_confidence_interval(
+    point_estimate = obs_diff_expense_less,
+    level = 0.95
+  )
+```
+
 ### Inference 
+- The p-value (0.056) is slightly above the level 0.05. T the observed difference in average weekly expenditure between males and females is not statistically significant.
 
-- the actual observed difference is very far out in the tail of the Null Distribution
-
-- difference in average weekly expenditure between males and females is statistically significant.
-
-- The average weekly expenditure for males is significantly higher than that for females.
 
 ## Conclusion
 

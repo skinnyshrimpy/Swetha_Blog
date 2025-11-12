@@ -251,14 +251,23 @@ The following objects are masked from 'package:base':
 </div>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(visStatistics)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(infer)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'infer'
+
+The following objects are masked from 'package:mosaic':
+
+    prop_test, t_test</code></pre>
+</div>
 </div>
 </section>
 <section id="read-data" class="level2">
 <h2 class="anchored" data-anchor-id="read-data">Read Data</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>weekly_expense <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"weeklyexpence.csv"</span>)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(weekly_expense)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>weekly_expense <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"weeklyexpence.csv"</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(weekly_expense)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 40
 Columns: 6
@@ -271,21 +280,21 @@ $ X.2                         &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>weekly_expense <span class="ot">&lt;-</span> weekly_expense <span class="sc">%&gt;%</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">Name =</span> <span class="fu">str_squish</span>(Name),</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">Gender =</span> <span class="fu">str_squish</span>(Gender)</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>gender_summary <span class="ot">&lt;-</span> weekly_expense <span class="sc">%&gt;%</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Gender) <span class="sc">%&gt;%</span></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">Average_Expenditure =</span> <span class="fu">mean</span>(Total_Expenditure_Last_Week, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">Total_Expenditure =</span> <span class="fu">sum</span>(Total_Expenditure_Last_Week, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">Count =</span> <span class="fu">n</span>()</span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>gender_summary</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>weekly_expense <span class="ot">&lt;-</span> weekly_expense <span class="sc">%&gt;%</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">Name =</span> <span class="fu">str_squish</span>(Name),</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">Gender =</span> <span class="fu">str_squish</span>(Gender)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>gender_summary <span class="ot">&lt;-</span> weekly_expense <span class="sc">%&gt;%</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Gender) <span class="sc">%&gt;%</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">Average_Expenditure =</span> <span class="fu">mean</span>(Total_Expenditure_Last_Week, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">Total_Expenditure =</span> <span class="fu">sum</span>(Total_Expenditure_Last_Week, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">Count =</span> <span class="fu">n</span>()</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>gender_summary</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 4
   Gender Average_Expenditure Total_Expenditure Count
@@ -305,17 +314,17 @@ $ X.2                         &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
 <section id="visualising-data" class="level2">
 <h2 class="anchored" data-anchor-id="visualising-data">Visualising data</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>weekly_expense <span class="sc">%&gt;%</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_dhistogram</span>(</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="sc">~</span>Total_Expenditure_Last_Week,</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="sc">~</span>Gender,</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.5</span>,</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Weekly Expenditure by Gender"</span></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_facet_grid</span>(<span class="sc">~</span>Gender) <span class="sc">%&gt;%</span></span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_fitdistr</span>(<span class="at">dist =</span> <span class="st">"dnorm"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_refine</span>(<span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">"Set2"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_theme</span>(<span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>weekly_expense <span class="sc">%&gt;%</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_dhistogram</span>(</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="sc">~</span>Total_Expenditure_Last_Week,</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="sc">~</span>Gender,</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.5</span>,</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Weekly Expenditure by Gender"</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_facet_grid</span>(<span class="sc">~</span>Gender) <span class="sc">%&gt;%</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_fitdistr</span>(<span class="at">dist =</span> <span class="st">"dnorm"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_refine</span>(<span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">"Set2"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_theme</span>(<span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>`stat_bin()` using `bins = 30`. Pick better value `binwidth`.</code></pre>
 </div>
@@ -335,12 +344,12 @@ $ X.2                         &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
 <li><p>The highest individual spenders in the dataset are all boys.</p></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>weekly_expense <span class="sc">%&gt;%</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_boxplot</span>(</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    Total_Expenditure_Last_Week <span class="sc">~</span> Gender, <span class="at">orientation =</span> <span class="st">"x"</span> ,</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="sc">~</span>Gender</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_refine</span>(<span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">"Set2"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>weekly_expense <span class="sc">%&gt;%</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_boxplot</span>(</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    Total_Expenditure_Last_Week <span class="sc">~</span> Gender, <span class="at">orientation =</span> <span class="st">"x"</span> ,</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="sc">~</span>Gender</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_refine</span>(<span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">"Set2"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -356,13 +365,13 @@ $ X.2                         &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
 <li>A few boys who spent a lot of money (outliers) made the average spending for all boys look much higher than it really is for most of them.</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>weekly_expense <span class="sc">%&gt;%</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_jitter</span>(</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    Total_Expenditure_Last_Week <span class="sc">~</span> Gender,</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="sc">~</span>Gender,</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.6</span>,</span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Individual Weekly Expenditures"</span></span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>weekly_expense <span class="sc">%&gt;%</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_jitter</span>(</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    Total_Expenditure_Last_Week <span class="sc">~</span> Gender,</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="sc">~</span>Gender,</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.6</span>,</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Individual Weekly Expenditures"</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -372,15 +381,15 @@ $ X.2                         &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>weekly_expense <span class="sc">%&gt;%</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Gender) <span class="sc">%&gt;%</span></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Average_Spend =</span> <span class="fu">mean</span>(Total_Expenditure_Last_Week, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_col</span>(</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    Gender <span class="sc">~</span> Average_Spend,</span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="sc">~</span>Gender,</span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Average Weekly Expenditure by Gender"</span></span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_refine</span>(<span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">"Set2"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>weekly_expense <span class="sc">%&gt;%</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Gender) <span class="sc">%&gt;%</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Average_Spend =</span> <span class="fu">mean</span>(Total_Expenditure_Last_Week, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_col</span>(</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    Gender <span class="sc">~</span> Average_Spend,</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="sc">~</span>Gender,</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Average Weekly Expenditure by Gender"</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_refine</span>(<span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">"Set2"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -390,14 +399,14 @@ $ X.2                         &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>weekly_expense <span class="sc">%&gt;%</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_violin</span>(</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    Total_Expenditure_Last_Week <span class="sc">~</span> Gender,</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="sc">~</span>Gender,</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.7</span>,</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Distribution of Weekly Expenditure by Gender"</span></span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_refine</span>(<span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">"Set2"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>weekly_expense <span class="sc">%&gt;%</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_violin</span>(</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    Total_Expenditure_Last_Week <span class="sc">~</span> Gender,</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="sc">~</span>Gender,</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.7</span>,</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Distribution of Weekly Expenditure by Gender"</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_refine</span>(<span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">"Set2"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -407,50 +416,103 @@ $ X.2                         &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>obs_diff_expense <span class="ot">&lt;-</span> <span class="fu">diffmean</span>(</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  Total_Expenditure_Last_Week <span class="sc">~</span> Gender,</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> weekly_expense,</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">only.2 =</span> <span class="cn">FALSE</span></span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>obs_diff_expense</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>obs_diff_expense <span class="ot">&lt;-</span> <span class="fu">diffmean</span>(</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  Total_Expenditure_Last_Week <span class="sc">~</span> Gender,</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> weekly_expense,</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">only.2 =</span> <span class="cn">FALSE</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>obs_diff_expense</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>diffmean 
 4502.745 </code></pre>
 </div>
 </div>
+<ul>
+<li>This is difference is huge because the male expense is not evenly distributed and because of few outliers the mean difference is high.</li>
+</ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>mosaic<span class="sc">::</span><span class="fu">t_test</span>(</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  Total_Expenditure_Last_Week <span class="sc">~</span> Gender,</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> weekly_expense</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  broom<span class="sc">::</span><span class="fu">tidy</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_style</span>(</span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">style =</span> <span class="fu">list</span>(</span>
-<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>      <span class="fu">cell_fill</span>(<span class="at">color =</span> <span class="st">"orange"</span>),</span>
-<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>      <span class="fu">cell_text</span>(<span class="at">weight =</span> <span class="st">"bold"</span>)</span>
-<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> <span class="fu">cells_body</span>(<span class="at">columns =</span> p.value)</span>
-<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(<span class="at">title =</span> <span class="st">"t-test: Difference in Mean Weekly Expenditure by Gender"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">shapiro.test</span>(weekly_expense<span class="sc">$</span>Total_Expenditure_Last_Week[weekly_expense<span class="sc">$</span>Gender <span class="sc">==</span> <span class="st">"Female"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Shapiro-Wilk normality test
+
+data:  weekly_expense$Total_Expenditure_Last_Week[weekly_expense$Gender == "Female"]
+W = 0.78317, p-value = 0.0004899</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">shapiro.test</span>(weekly_expense<span class="sc">$</span>Total_Expenditure_Last_Week[weekly_expense<span class="sc">$</span>Gender <span class="sc">==</span> <span class="st">"Male"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Shapiro-Wilk normality test
+
+data:  weekly_expense$Total_Expenditure_Last_Week[weekly_expense$Gender == "Male"]
+W = 0.56351, p-value = 1.261e-06</code></pre>
+</div>
+</div>
+</section>
+<section id="inference-2" class="level3">
+<h3 class="anchored" data-anchor-id="inference-2">Inference</h3>
+<ul>
+<li>The weekly expenditure data for both males and females is not normally distributed. This is also strongly supported by histogram chart.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var.test</span>(</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  Total_Expenditure_Last_Week <span class="sc">~</span> Gender,</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> weekly_expense</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    F test to compare two variances
+
+data:  Total_Expenditure_Last_Week by Gender
+F = 0.045923, num df = 19, denom df = 19, p-value = 8.531e-09
+alternative hypothesis: true ratio of variances is not equal to 1
+95 percent confidence interval:
+ 0.01817673 0.11602126
+sample estimates:
+ratio of variances 
+        0.04592263 </code></pre>
+</div>
+</div>
+</section>
+<section id="inference-3" class="level3">
+<h3 class="anchored" data-anchor-id="inference-3">Inference</h3>
+<ul>
+<li><p>There is a statistically significant difference in the variability (spread) of the weekly expenditures between males and females.</p></li>
+<li><p>This also we saw in the graphs that Male spending is far more spread out and inconsistent than Female spending on the histogram chart.</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>mosaic<span class="sc">::</span><span class="fu">t_test</span>(</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  Total_Expenditure_Last_Week <span class="sc">~</span> Gender,</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> weekly_expense</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  broom<span class="sc">::</span><span class="fu">tidy</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_style</span>(</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">style =</span> <span class="fu">list</span>(</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>      <span class="fu">cell_fill</span>(<span class="at">color =</span> <span class="st">"orange"</span>),</span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>      <span class="fu">cell_text</span>(<span class="at">weight =</span> <span class="st">"bold"</span>)</span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> <span class="fu">cells_body</span>(<span class="at">columns =</span> p.value)</span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(<span class="at">title =</span> <span class="st">"t-test: Difference in Mean Weekly Expenditure by Gender"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div id="srbutbsfdc" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#srbutbsfdc table {
+<div id="oeymifpwjt" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#oeymifpwjt table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#srbutbsfdc thead, #srbutbsfdc tbody, #srbutbsfdc tfoot, #srbutbsfdc tr, #srbutbsfdc td, #srbutbsfdc th {
+#oeymifpwjt thead, #oeymifpwjt tbody, #oeymifpwjt tfoot, #oeymifpwjt tr, #oeymifpwjt td, #oeymifpwjt th {
   border-style: none;
 }
 
-#srbutbsfdc p {
+#oeymifpwjt p {
   margin: 0;
   padding: 0;
 }
 
-#srbutbsfdc .gt_table {
+#oeymifpwjt .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -476,12 +538,12 @@ $ X.2                         &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
   border-left-color: #D3D3D3;
 }
 
-#srbutbsfdc .gt_caption {
+#oeymifpwjt .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#srbutbsfdc .gt_title {
+#oeymifpwjt .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -493,7 +555,7 @@ $ X.2                         &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
   border-bottom-width: 0;
 }
 
-#srbutbsfdc .gt_subtitle {
+#oeymifpwjt .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -505,7 +567,7 @@ $ X.2                         &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
   border-top-width: 0;
 }
 
-#srbutbsfdc .gt_heading {
+#oeymifpwjt .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -517,13 +579,13 @@ $ X.2                         &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
   border-right-color: #D3D3D3;
 }
 
-#srbutbsfdc .gt_bottom_border {
+#oeymifpwjt .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#srbutbsfdc .gt_col_headings {
+#oeymifpwjt .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -538,7 +600,7 @@ $ X.2                         &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
   border-right-color: #D3D3D3;
 }
 
-#srbutbsfdc .gt_col_heading {
+#oeymifpwjt .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -558,7 +620,7 @@ $ X.2                         &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
   overflow-x: hidden;
 }
 
-#srbutbsfdc .gt_column_spanner_outer {
+#oeymifpwjt .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -570,15 +632,15 @@ $ X.2                         &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
   padding-right: 4px;
 }
 
-#srbutbsfdc .gt_column_spanner_outer:first-child {
+#oeymifpwjt .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#srbutbsfdc .gt_column_spanner_outer:last-child {
+#oeymifpwjt .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#srbutbsfdc .gt_column_spanner {
+#oeymifpwjt .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -590,11 +652,11 @@ $ X.2                         &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
   width: 100%;
 }
 
-#srbutbsfdc .gt_spanner_row {
+#oeymifpwjt .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#srbutbsfdc .gt_group_heading {
+#oeymifpwjt .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -620,7 +682,7 @@ $ X.2                         &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
   text-align: left;
 }
 
-#srbutbsfdc .gt_empty_group_heading {
+#oeymifpwjt .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -635,15 +697,15 @@ $ X.2                         &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
   vertical-align: middle;
 }
 
-#srbutbsfdc .gt_from_md > :first-child {
+#oeymifpwjt .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#srbutbsfdc .gt_from_md > :last-child {
+#oeymifpwjt .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#srbutbsfdc .gt_row {
+#oeymifpwjt .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -662,7 +724,7 @@ $ X.2                         &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
   overflow-x: hidden;
 }
 
-#srbutbsfdc .gt_stub {
+#oeymifpwjt .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -675,7 +737,7 @@ $ X.2                         &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
   padding-right: 5px;
 }
 
-#srbutbsfdc .gt_stub_row_group {
+#oeymifpwjt .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -689,15 +751,15 @@ $ X.2                         &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
   vertical-align: top;
 }
 
-#srbutbsfdc .gt_row_group_first td {
+#oeymifpwjt .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#srbutbsfdc .gt_row_group_first th {
+#oeymifpwjt .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#srbutbsfdc .gt_summary_row {
+#oeymifpwjt .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -707,16 +769,16 @@ $ X.2                         &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
   padding-right: 5px;
 }
 
-#srbutbsfdc .gt_first_summary_row {
+#oeymifpwjt .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#srbutbsfdc .gt_first_summary_row.thick {
+#oeymifpwjt .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#srbutbsfdc .gt_last_summary_row {
+#oeymifpwjt .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -726,7 +788,7 @@ $ X.2                         &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
   border-bottom-color: #D3D3D3;
 }
 
-#srbutbsfdc .gt_grand_summary_row {
+#oeymifpwjt .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -736,7 +798,7 @@ $ X.2                         &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
   padding-right: 5px;
 }
 
-#srbutbsfdc .gt_first_grand_summary_row {
+#oeymifpwjt .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -746,7 +808,7 @@ $ X.2                         &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
   border-top-color: #D3D3D3;
 }
 
-#srbutbsfdc .gt_last_grand_summary_row_top {
+#oeymifpwjt .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -756,11 +818,11 @@ $ X.2                         &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
   border-bottom-color: #D3D3D3;
 }
 
-#srbutbsfdc .gt_striped {
+#oeymifpwjt .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#srbutbsfdc .gt_table_body {
+#oeymifpwjt .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -769,7 +831,7 @@ $ X.2                         &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
   border-bottom-color: #D3D3D3;
 }
 
-#srbutbsfdc .gt_footnotes {
+#oeymifpwjt .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -783,7 +845,7 @@ $ X.2                         &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
   border-right-color: #D3D3D3;
 }
 
-#srbutbsfdc .gt_footnote {
+#oeymifpwjt .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -792,7 +854,7 @@ $ X.2                         &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
   padding-right: 5px;
 }
 
-#srbutbsfdc .gt_sourcenotes {
+#oeymifpwjt .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -806,7 +868,7 @@ $ X.2                         &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
   border-right-color: #D3D3D3;
 }
 
-#srbutbsfdc .gt_sourcenote {
+#oeymifpwjt .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -814,72 +876,72 @@ $ X.2                         &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
   padding-right: 5px;
 }
 
-#srbutbsfdc .gt_left {
+#oeymifpwjt .gt_left {
   text-align: left;
 }
 
-#srbutbsfdc .gt_center {
+#oeymifpwjt .gt_center {
   text-align: center;
 }
 
-#srbutbsfdc .gt_right {
+#oeymifpwjt .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#srbutbsfdc .gt_font_normal {
+#oeymifpwjt .gt_font_normal {
   font-weight: normal;
 }
 
-#srbutbsfdc .gt_font_bold {
+#oeymifpwjt .gt_font_bold {
   font-weight: bold;
 }
 
-#srbutbsfdc .gt_font_italic {
+#oeymifpwjt .gt_font_italic {
   font-style: italic;
 }
 
-#srbutbsfdc .gt_super {
+#oeymifpwjt .gt_super {
   font-size: 65%;
 }
 
-#srbutbsfdc .gt_footnote_marks {
+#oeymifpwjt .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#srbutbsfdc .gt_asterisk {
+#oeymifpwjt .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#srbutbsfdc .gt_indent_1 {
+#oeymifpwjt .gt_indent_1 {
   text-indent: 5px;
 }
 
-#srbutbsfdc .gt_indent_2 {
+#oeymifpwjt .gt_indent_2 {
   text-indent: 10px;
 }
 
-#srbutbsfdc .gt_indent_3 {
+#oeymifpwjt .gt_indent_3 {
   text-indent: 15px;
 }
 
-#srbutbsfdc .gt_indent_4 {
+#oeymifpwjt .gt_indent_4 {
   text-indent: 20px;
 }
 
-#srbutbsfdc .gt_indent_5 {
+#oeymifpwjt .gt_indent_5 {
   text-indent: 25px;
 }
 
-#srbutbsfdc .katex-display {
+#oeymifpwjt .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#srbutbsfdc div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#oeymifpwjt div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -920,22 +982,22 @@ $ X.2                         &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
 
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wilcox.test</span>(</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  Total_Expenditure_Last_Week <span class="sc">~</span> Gender,</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> weekly_expense,</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">conf.int =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">conf.level =</span> <span class="fl">0.95</span></span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  broom<span class="sc">::</span><span class="fu">tidy</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_style</span>(</span>
-<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">style =</span> <span class="fu">list</span>(</span>
-<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>      <span class="fu">cell_fill</span>(<span class="at">color =</span> <span class="st">"yellow"</span>),</span>
-<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>      <span class="fu">cell_text</span>(<span class="at">weight =</span> <span class="st">"bold"</span>)</span>
-<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> <span class="fu">cells_body</span>(<span class="at">columns =</span> p.value)</span>
-<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(<span class="at">title =</span> <span class="st">"Wilcoxon Test: Median Expenditure Difference by Gender"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wilcox.test</span>(</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  Total_Expenditure_Last_Week <span class="sc">~</span> Gender,</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> weekly_expense,</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">conf.int =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">conf.level =</span> <span class="fl">0.95</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>  broom<span class="sc">::</span><span class="fu">tidy</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_style</span>(</span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">style =</span> <span class="fu">list</span>(</span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>      <span class="fu">cell_fill</span>(<span class="at">color =</span> <span class="st">"yellow"</span>),</span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>      <span class="fu">cell_text</span>(<span class="at">weight =</span> <span class="st">"bold"</span>)</span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> <span class="fu">cells_body</span>(<span class="at">columns =</span> p.value)</span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(<span class="at">title =</span> <span class="st">"Wilcoxon Test: Median Expenditure Difference by Gender"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning in wilcox.test.default(x = DATA[[1L]], y = DATA[[2L]], ...): cannot
 compute exact p-value with ties</code></pre>
@@ -945,23 +1007,23 @@ compute exact p-value with ties</code></pre>
 compute exact confidence intervals with ties</code></pre>
 </div>
 <div class="cell-output-display">
-<div id="djjnsmizdo" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#djjnsmizdo table {
+<div id="lvtesmltai" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#lvtesmltai table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#djjnsmizdo thead, #djjnsmizdo tbody, #djjnsmizdo tfoot, #djjnsmizdo tr, #djjnsmizdo td, #djjnsmizdo th {
+#lvtesmltai thead, #lvtesmltai tbody, #lvtesmltai tfoot, #lvtesmltai tr, #lvtesmltai td, #lvtesmltai th {
   border-style: none;
 }
 
-#djjnsmizdo p {
+#lvtesmltai p {
   margin: 0;
   padding: 0;
 }
 
-#djjnsmizdo .gt_table {
+#lvtesmltai .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -987,12 +1049,12 @@ compute exact confidence intervals with ties</code></pre>
   border-left-color: #D3D3D3;
 }
 
-#djjnsmizdo .gt_caption {
+#lvtesmltai .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#djjnsmizdo .gt_title {
+#lvtesmltai .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1004,7 +1066,7 @@ compute exact confidence intervals with ties</code></pre>
   border-bottom-width: 0;
 }
 
-#djjnsmizdo .gt_subtitle {
+#lvtesmltai .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1016,7 +1078,7 @@ compute exact confidence intervals with ties</code></pre>
   border-top-width: 0;
 }
 
-#djjnsmizdo .gt_heading {
+#lvtesmltai .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1028,13 +1090,13 @@ compute exact confidence intervals with ties</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#djjnsmizdo .gt_bottom_border {
+#lvtesmltai .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#djjnsmizdo .gt_col_headings {
+#lvtesmltai .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1049,7 +1111,7 @@ compute exact confidence intervals with ties</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#djjnsmizdo .gt_col_heading {
+#lvtesmltai .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1069,7 +1131,7 @@ compute exact confidence intervals with ties</code></pre>
   overflow-x: hidden;
 }
 
-#djjnsmizdo .gt_column_spanner_outer {
+#lvtesmltai .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1081,15 +1143,15 @@ compute exact confidence intervals with ties</code></pre>
   padding-right: 4px;
 }
 
-#djjnsmizdo .gt_column_spanner_outer:first-child {
+#lvtesmltai .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#djjnsmizdo .gt_column_spanner_outer:last-child {
+#lvtesmltai .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#djjnsmizdo .gt_column_spanner {
+#lvtesmltai .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1101,11 +1163,11 @@ compute exact confidence intervals with ties</code></pre>
   width: 100%;
 }
 
-#djjnsmizdo .gt_spanner_row {
+#lvtesmltai .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#djjnsmizdo .gt_group_heading {
+#lvtesmltai .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1131,7 +1193,7 @@ compute exact confidence intervals with ties</code></pre>
   text-align: left;
 }
 
-#djjnsmizdo .gt_empty_group_heading {
+#lvtesmltai .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1146,15 +1208,15 @@ compute exact confidence intervals with ties</code></pre>
   vertical-align: middle;
 }
 
-#djjnsmizdo .gt_from_md > :first-child {
+#lvtesmltai .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#djjnsmizdo .gt_from_md > :last-child {
+#lvtesmltai .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#djjnsmizdo .gt_row {
+#lvtesmltai .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1173,7 +1235,7 @@ compute exact confidence intervals with ties</code></pre>
   overflow-x: hidden;
 }
 
-#djjnsmizdo .gt_stub {
+#lvtesmltai .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1186,7 +1248,7 @@ compute exact confidence intervals with ties</code></pre>
   padding-right: 5px;
 }
 
-#djjnsmizdo .gt_stub_row_group {
+#lvtesmltai .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1200,15 +1262,15 @@ compute exact confidence intervals with ties</code></pre>
   vertical-align: top;
 }
 
-#djjnsmizdo .gt_row_group_first td {
+#lvtesmltai .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#djjnsmizdo .gt_row_group_first th {
+#lvtesmltai .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#djjnsmizdo .gt_summary_row {
+#lvtesmltai .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1218,16 +1280,16 @@ compute exact confidence intervals with ties</code></pre>
   padding-right: 5px;
 }
 
-#djjnsmizdo .gt_first_summary_row {
+#lvtesmltai .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#djjnsmizdo .gt_first_summary_row.thick {
+#lvtesmltai .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#djjnsmizdo .gt_last_summary_row {
+#lvtesmltai .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1237,7 +1299,7 @@ compute exact confidence intervals with ties</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#djjnsmizdo .gt_grand_summary_row {
+#lvtesmltai .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1247,7 +1309,7 @@ compute exact confidence intervals with ties</code></pre>
   padding-right: 5px;
 }
 
-#djjnsmizdo .gt_first_grand_summary_row {
+#lvtesmltai .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1257,7 +1319,7 @@ compute exact confidence intervals with ties</code></pre>
   border-top-color: #D3D3D3;
 }
 
-#djjnsmizdo .gt_last_grand_summary_row_top {
+#lvtesmltai .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1267,11 +1329,11 @@ compute exact confidence intervals with ties</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#djjnsmizdo .gt_striped {
+#lvtesmltai .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#djjnsmizdo .gt_table_body {
+#lvtesmltai .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1280,7 +1342,7 @@ compute exact confidence intervals with ties</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#djjnsmizdo .gt_footnotes {
+#lvtesmltai .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1294,7 +1356,7 @@ compute exact confidence intervals with ties</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#djjnsmizdo .gt_footnote {
+#lvtesmltai .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1303,7 +1365,7 @@ compute exact confidence intervals with ties</code></pre>
   padding-right: 5px;
 }
 
-#djjnsmizdo .gt_sourcenotes {
+#lvtesmltai .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1317,7 +1379,7 @@ compute exact confidence intervals with ties</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#djjnsmizdo .gt_sourcenote {
+#lvtesmltai .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1325,72 +1387,72 @@ compute exact confidence intervals with ties</code></pre>
   padding-right: 5px;
 }
 
-#djjnsmizdo .gt_left {
+#lvtesmltai .gt_left {
   text-align: left;
 }
 
-#djjnsmizdo .gt_center {
+#lvtesmltai .gt_center {
   text-align: center;
 }
 
-#djjnsmizdo .gt_right {
+#lvtesmltai .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#djjnsmizdo .gt_font_normal {
+#lvtesmltai .gt_font_normal {
   font-weight: normal;
 }
 
-#djjnsmizdo .gt_font_bold {
+#lvtesmltai .gt_font_bold {
   font-weight: bold;
 }
 
-#djjnsmizdo .gt_font_italic {
+#lvtesmltai .gt_font_italic {
   font-style: italic;
 }
 
-#djjnsmizdo .gt_super {
+#lvtesmltai .gt_super {
   font-size: 65%;
 }
 
-#djjnsmizdo .gt_footnote_marks {
+#lvtesmltai .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#djjnsmizdo .gt_asterisk {
+#lvtesmltai .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#djjnsmizdo .gt_indent_1 {
+#lvtesmltai .gt_indent_1 {
   text-indent: 5px;
 }
 
-#djjnsmizdo .gt_indent_2 {
+#lvtesmltai .gt_indent_2 {
   text-indent: 10px;
 }
 
-#djjnsmizdo .gt_indent_3 {
+#lvtesmltai .gt_indent_3 {
   text-indent: 15px;
 }
 
-#djjnsmizdo .gt_indent_4 {
+#lvtesmltai .gt_indent_4 {
   text-indent: 20px;
 }
 
-#djjnsmizdo .gt_indent_5 {
+#lvtesmltai .gt_indent_5 {
   text-indent: 25px;
 }
 
-#djjnsmizdo .katex-display {
+#lvtesmltai .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#djjnsmizdo div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#lvtesmltai div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1427,8 +1489,8 @@ compute exact confidence intervals with ties</code></pre>
 </div>
 </div>
 </section>
-<section id="inference-2" class="level3">
-<h3 class="anchored" data-anchor-id="inference-2">Inference</h3>
+<section id="inference-4" class="level3">
+<h3 class="anchored" data-anchor-id="inference-4">Inference</h3>
 </section>
 </section>
 <section id="from-t-test" class="level2">
@@ -1438,133 +1500,121 @@ compute exact confidence intervals with ties</code></pre>
 <li>Estimate is 1100 The median for boys is about 1,100 Rs. higher than the median for girls.</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">shapiro.test</span>(weekly_expense<span class="sc">$</span>Total_Expenditure_Last_Week[weekly_expense<span class="sc">$</span>Gender <span class="sc">==</span> <span class="st">"Female"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-    Shapiro-Wilk normality test
-
-data:  weekly_expense$Total_Expenditure_Last_Week[weekly_expense$Gender == "Female"]
-W = 0.78317, p-value = 0.0004899</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">shapiro.test</span>(weekly_expense<span class="sc">$</span>Total_Expenditure_Last_Week[weekly_expense<span class="sc">$</span>Gender <span class="sc">==</span> <span class="st">"Male"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-    Shapiro-Wilk normality test
-
-data:  weekly_expense$Total_Expenditure_Last_Week[weekly_expense$Gender == "Male"]
-W = 0.56351, p-value = 1.261e-06</code></pre>
-</div>
-</div>
-<section id="inference-3" class="level3">
-<h3 class="anchored" data-anchor-id="inference-3">Inference</h3>
-<ul>
-<li>The weekly expenditure data for both males and females is not normally distributed. This is also strongly supported by histogram chart.</li>
-</ul>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var.test</span>(</span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  Total_Expenditure_Last_Week <span class="sc">~</span> Gender,</span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> weekly_expense</span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-    F test to compare two variances
-
-data:  Total_Expenditure_Last_Week by Gender
-F = 0.045923, num df = 19, denom df = 19, p-value = 8.531e-09
-alternative hypothesis: true ratio of variances is not equal to 1
-95 percent confidence interval:
- 0.01817673 0.11602126
-sample estimates:
-ratio of variances 
-        0.04592263 </code></pre>
-</div>
-</div>
-</section>
-<section id="inference-4" class="level3">
-<h3 class="anchored" data-anchor-id="inference-4">Inference</h3>
-<ul>
-<li><p>There is a statistically significant difference in the variability (spread) of the weekly expenditures between males and females. Specifically, the sample ratio of variances (0.0459) shows that the variance of Female expenditure is much smaller than the variance of Male expenditure.</p></li>
-<li><p>This also we saw the visual observation that Male spending is far more spread out and inconsistent than Female spending on the histogram chart.</p></li>
-</ul>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>obs_diff_expense_less <span class="ot">&lt;-</span> <span class="fu">diffmean</span>(</span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  Total_Expenditure_Last_Week <span class="sc">~</span> Gender,</span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> weekly_expense</span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>obs_diff_expense_less</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>obs_diff_expense_less <span class="ot">&lt;-</span> <span class="fu">diffmean</span>(</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  Total_Expenditure_Last_Week <span class="sc">~</span> Gender,</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> weekly_expense</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>obs_diff_expense_less</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>diffmean 
 4502.745 </code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">12345</span>)</span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>polarity_less <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">1</span>, <span class="dv">15</span>), <span class="fu">rep</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">14</span>)) </span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Observed difference</span></span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>obs_diff_expense_less <span class="ot">&lt;-</span> <span class="fu">mean</span>(</span>
-<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>  <span class="sc">~</span> (Total_Expenditure_Last_Week[Gender <span class="sc">==</span> <span class="st">"Female"</span>] <span class="sc">-</span> </span>
-<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>       Total_Expenditure_Last_Week[Gender <span class="sc">==</span> <span class="st">"Male"</span>]),</span>
-<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> weekly_expense</span>
-<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Null distribution using permutation</span></span>
-<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>null_dist_expense_less <span class="ot">&lt;-</span> </span>
-<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">do</span>(<span class="dv">9999</span>) <span class="sc">*</span> <span class="fu">mean</span>(</span>
-<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> weekly_expense,</span>
-<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>    <span class="sc">~</span> (Total_Expenditure_Last_Week[Gender <span class="sc">==</span> <span class="st">"Female"</span>] <span class="sc">-</span> </span>
-<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a>         Total_Expenditure_Last_Week[<span class="fu">shuffle</span>(Gender) <span class="sc">==</span> <span class="st">"Male"</span>])</span>
-<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-19"><a href="#cb32-19" aria-hidden="true" tabindex="-1"></a><span class="do">## Histogram</span></span>
-<span id="cb32-20"><a href="#cb32-20" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_histogram</span>(<span class="at">data =</span> null_dist_expense_less, <span class="sc">~</span>mean) <span class="sc">%&gt;%</span></span>
-<span id="cb32-21"><a href="#cb32-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_vline</span>(</span>
-<span id="cb32-22"><a href="#cb32-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">xintercept =</span> obs_diff_expense_less,</span>
-<span id="cb32-23"><a href="#cb32-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">colour =</span> <span class="st">"red"</span></span>
-<span id="cb32-24"><a href="#cb32-24" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb32-25"><a href="#cb32-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_refine</span>(<span class="fu">scale_y_continuous</span>(<span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>`stat_bin()` using `bins = 30`. Pick better value `binwidth`.</code></pre>
-</div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="weeklyexpense_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="do">## ECDF</span></span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_ecdf</span>(<span class="at">data =</span> null_dist_expense_less, <span class="sc">~</span>mean, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_vline</span>(</span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">xintercept =</span> obs_diff_expense_less,</span>
-<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">colour =</span> <span class="st">"red"</span>,</span>
-<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">linewidth =</span> <span class="dv">1</span>, </span>
-<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Null Distribution by Permutation"</span>,</span>
-<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Cumulative Density"</span></span>
-<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">x =</span> <span class="st">"Difference in Means"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_refine</span>(<span class="fu">scale_y_continuous</span>(<span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="weeklyexpense_files/figure-html/unnamed-chunk-14-2.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="do">## P-value</span></span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(null_dist_expense_less <span class="sc">&gt;=</span> obs_diff_expense_less)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>mosaic<span class="sc">::</span><span class="fu">t_test</span>(Total_Expenditure_Last_Week <span class="sc">~</span> Gender,</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">var.equal =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> weekly_expense</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>  broom<span class="sc">::</span><span class="fu">tidy</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.9735974</code></pre>
+<pre><code># A tibble: 1 × 10
+  estimate estimate1 estimate2 statistic p.value parameter conf.low conf.high
+     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+1   -4503.      2582     7085.     -1.71   0.102      20.7   -9976.      971.
+# ℹ 2 more variables: method &lt;chr&gt;, alternative &lt;chr&gt;</code></pre>
 </div>
 </div>
-</section>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>obs_diff_infer <span class="ot">&lt;-</span> weekly_expense <span class="sc">%&gt;%</span> </span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  infer<span class="sc">::</span><span class="fu">specify</span>(Total_Expenditure_Last_Week <span class="sc">~</span> Gender) <span class="sc">%&gt;%</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  infer<span class="sc">::</span><span class="fu">calculate</span>(</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">stat =</span> <span class="st">"diff in means"</span>,</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">order =</span> <span class="fu">c</span>(<span class="st">"Male"</span>, <span class="st">"Female"</span>)</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>obs_diff_infer</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Response: Total_Expenditure_Last_Week (numeric)
+Explanatory: Gender (factor)
+# A tibble: 1 × 1
+   stat
+  &lt;dbl&gt;
+1 4503.</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>null_dist <span class="ot">&lt;-</span> weekly_expense <span class="sc">%&gt;%</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">specify</span>(Total_Expenditure_Last_Week <span class="sc">~</span> Gender) <span class="sc">%&gt;%</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">hypothesize</span>(<span class="at">null =</span> <span class="st">"independence"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">generate</span>(<span class="at">reps =</span> <span class="dv">5000</span>, <span class="at">type =</span> <span class="st">"permute"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">calculate</span>(</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">stat =</span> <span class="st">"diff in means"</span>,</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">order =</span> <span class="fu">c</span>(<span class="st">"Male"</span>, <span class="st">"Female"</span>) </span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>null_dist</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Response: Total_Expenditure_Last_Week (numeric)
+Explanatory: Gender (factor)
+...
+# A tibble: 5,000 × 2
+   replicate   stat
+       &lt;int&gt;  &lt;dbl&gt;
+ 1         1  1316.
+ 2         2  2170.
+ 3         3  -453.
+ 4         4  1974.
+ 5         5 -4615.
+ 6         6 -3928.
+ 7         7  2558.
+ 8         8   743.
+ 9         9  1925.
+10        10  2249.
+# ℹ 4,990 more rows</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>null_dist <span class="sc">%&gt;%</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visualise</span>() <span class="sc">+</span> <span class="co"># Note this plus sign!</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">shade_p_value</span>(obs_diff_infer,</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">direction =</span> <span class="st">"two-sided"</span></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="weeklyexpense_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>null_dist <span class="sc">%&gt;%</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">get_p_value</span>(</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">obs_stat =</span> obs_diff_expense_less,</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">direction =</span> <span class="st">"two_sided"</span></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 1
+  p_value
+    &lt;dbl&gt;
+1  0.0568</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>null_dist <span class="sc">%&gt;%</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>  infer<span class="sc">::</span><span class="fu">get_confidence_interval</span>(</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">point_estimate =</span> obs_diff_expense_less,</span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">level =</span> <span class="fl">0.95</span></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 2
+  lower_ci upper_ci
+     &lt;dbl&gt;    &lt;dbl&gt;
+1   -4589.    4575.</code></pre>
+</div>
+</div>
 <section id="inference-5" class="level3">
 <h3 class="anchored" data-anchor-id="inference-5">Inference</h3>
 <ul>
-<li><p>the actual observed difference is very far out in the tail of the Null Distribution</p></li>
-<li><p>difference in average weekly expenditure between males and females is statistically significant.</p></li>
-<li><p>The average weekly expenditure for males is significantly higher than that for females.</p></li>
+<li>The p-value (0.056) is slightly above the level 0.05. T the observed difference in average weekly expenditure between males and females is not statistically significant.</li>
 </ul>
 </section>
 </section>
