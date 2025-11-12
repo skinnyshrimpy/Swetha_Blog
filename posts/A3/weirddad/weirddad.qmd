@@ -194,30 +194,22 @@ X_squared_observed
 ```{r}
 X_squared_critical <- qchisq(
   p = .05,
-  df = (2 - 1) * (2 - 1),
+  df = (2 - 1) * (2 - 1), 
   lower.tail = FALSE
 )
 X_squared_critical
 ```
-
-```{r}
-test_result <- chisq.test(contingency_table_mod)
-
-X_squared_observed <- test_result$statistic
-df <- test_result$parameter
-X_squared_critical <- qchisq(0.95, df)
-```
+`
 
 
 ```{r}
 mosaic::xqchisq(
-  p = 0.95, df = df,
+  p = 0.95, df = 1,
   return = c("plot"), verbose = F,
   system = "gg"
 ) %>%
   gf_labs(
-    x = "Chi-Square Value", title = "Critical and Observed Chi-Square Values",
-    x = ""
+    x = "F value", title = "Critical and Observed Chi-Square Values"
   ) %>%
   gf_vline(
     xintercept = X_squared_observed,
@@ -225,27 +217,28 @@ mosaic::xqchisq(
   ) %>%
   gf_vline(
     xintercept = X_squared_critical,
-    color = "dodgerblue", linewidth = 1
+    color = "dodgerblue",
+    linewidth = 1
   ) %>%
   gf_annotate(
-    x = X_squared_observed - 1, y = 0.15,
-    geom = "label", label = "Observed\nChi-Square",
+    x = X_squared_observed -1.5, y = 0.35,
+    geom = "label", label = "Observed\n Chi-Square",
     fill = "red", alpha = 0.3
   ) %>%
-  gf_annotate("curve", X_squared_observed - 1,
-    y = 0.135, yend = 0.10,
-    xend = X_squared_observed - 0.3,
+  gf_annotate("curve", X_squared_observed - 1.5,
+    y = 0.30, yend = 0.15,
+    xend = X_squared_observed - 0.2,
     linewidth = 0.5, curvature = 0.3,
     arrow = arrow(length = unit(0.25, "cm"))
   ) %>%
   gf_annotate(
-    x = X_squared_critical + 1, y = 0.15,
-    geom = "label", label = "Critical\nChi-Square",
+    x = X_squared_critical + 1.5, y = 0.35,
+    geom = "label", label = "Critical\n Chi-Square",
     fill = "lightblue"
   ) %>%
-  gf_annotate("curve", X_squared_critical + 1,
-    y = 0.135, yend = 0.10,
-    xend = X_squared_critical + 0.3,
+  gf_annotate("curve", X_squared_critical + 1.5,
+    y = 0.30, yend = 0.15,
+    xend = X_squared_critical + 0.2,
     linewidth = 0.5, curvature = -0.3,
     arrow = arrow(length = unit(0.25, "cm"))
   ) %>%
@@ -328,5 +321,5 @@ weirddad_clean %>%
 
 ## Conclsion
 
-- Both college and gender do not have a significant effect on whether their dad is weird. However, the difference in proportions for the “weird dad” responses is statistically significant.
+- Both college and gender do not have a significant effect on whether their dad is weird. However, the difference in proportions for the “weird dad” responses itself is statistically significant.
 ------------------------------------------------------------------------

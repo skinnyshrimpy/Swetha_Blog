@@ -6,7 +6,7 @@ categories: [A3]
 format: html
 ---
 
-# Do people believe in God? 
+# Do people believe in God?
 
 ## Setting up R Packages
 
@@ -15,6 +15,7 @@ library(tidyverse)
 library(mosaic)
 library(vcd)
 library(visStatistics)
+library(resampledata)
 library(ggformula)
 library(infer)
 library(openintro)
@@ -26,6 +27,7 @@ library(openintro)
 god <- read.csv("kadavulirukanda.csv")
 glimpse(god)
 ```
+
 ## Cleaning Data
 
 ```{r}
@@ -36,7 +38,8 @@ god <- god%>%
 ```{r}
 visdat::vis_dat(god)
 ```
-## Propotion test
+
+## Summerise: Examine Data
 
 ```{r}
 god %>%
@@ -60,6 +63,8 @@ god_table <- vcd::structable(Gender ~ Believe_in_God, data = god)
 god_table
 ```
 
+## Visualising Data
+
 ```{r}
 god %>%
   gf_bar(~Believe_in_God, fill = ~Gender) %>%
@@ -68,9 +73,19 @@ god %>%
     title = "Proportion of Students saying they believe in god"
   )
 ```
-### Inference 
 
-- The bar graph shows a moderate distribution of belief, indicating coexistence of both religious and secular perspectives among students.
+### Inference
+
+-   The bar graph shows a moderate distribution of belief, indicating coexistence of both religious and secular perspectives among students.
+
+```{r}
+god %>% 
+gf_bar(~Gender, fill = ~Believe_in_God,
+       position = "dodge") %>% 
+gf_labs(x="gender",
+        y="count",
+        title=" Genders Vs Beliefs in God")
+```
 
 ```{r}
 god %>%
@@ -81,9 +96,23 @@ god %>%
   )
 ```
 
+## Propotion Test
+
 ```{r}
 mosaic::binom.test(~Believe_in_God, data = god, success = "Yes")
 ```
+
+### Inference
+
+-   Since the p-value (0.1173) \> 0.05, we fail to reject the null hypothesis.
+
+-   The sample proportion (63%) does lean higher than 0.5, which means tendency toward belief that become significant.
+
+### Hypothesis
+
+Numerical hypothesis: The proportion of students that believe in God is equal to 0.5 (no difference and equally to believe and disbelieve).
+
+Alternative hypothesis: The proportion of students that believe in God is not equal to 0.5 (there is a difference between believe and disbelieve).
 
 ```{r}
 god %>%
@@ -94,22 +123,40 @@ god %>%
   get_ci(level = 0.95)
 ```
 
-### Hypothesis
+### Inference
 
-Numerical hypothesis: The proportion of students that believe in God is equal to 0.5 (no difference and equally to believe and disbelieve).
+-   The 95% confidence interval (0.469 to 0.779) means we are 95% confident that the true population proportion of students who believe in God lies between 46.9% and 77.9%.
 
-Alternative hypothesis: The proportion of students that believe in God is not equal to 0.5 (there is a difference between believe and disbelieve).
+```{r}
+contingency_table <- vcd::structable(Believe_in_God~ Gender,
+  data = god
+)
+contingency_table
+```
+
+```{r}
+vcd::mosaic(Gender ~ Believe_in_God, data = god, 
+            direction = "v", gp = shading_max, legend = TRUE)
+
+vcd::mosaic(Gender ~ Believe_in_God, data = god, 
+            type = "expected", direction = "v", gp = shading_max, 
+            legend = TRUE)
+
+vcd::assoc(Gender ~ Believe_in_God, 
+           data = god, 
+           gp = shading_max, 
+           legend = TRUE) 
+```
+
+```{r}
+xq_test_object <- chisq.test(contingency_table)
+xq_test_object
+```
 
 ### Inference
 
-- Since the p-value (0.1173) > 0.05, we fail to reject the null hypothesis.
+Null Hypothesis: There is no association between gender and in belief in God Alternative Hypothesis: Null Hypothesis is true
 
-- There isn’t strong statistical evidence that the proportion of students who believe in God differs significantly from 50%.
+## Conclusion
 
-- The sample proportion (63%) does lean higher than 0.5, which means tendency toward belief that become significant.
-
-- The 95% confidence interval (0.469 to 0.779) means we are 95% confident that the true population proportion of students who believe in God lies between 46.9% and 77.9%.
-
-- The unequal gender sample (23 female, 18 male) have slightly biased the overall proportion upward because the graph is showing that females tend to express higher belief rates. A gender-balanced sample might give us a slightly lower or more neutral proportion.
-
-------------------------------------------------------------------------
+-   The unequal gender sample (23 female, 18 male) have slightly biased the overall proportion upward because the graph is showing that females tend to express higher belief rates. A gender-balanced sample might give us a slightly lower or more neutral proportion.
