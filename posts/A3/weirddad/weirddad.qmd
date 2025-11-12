@@ -5,6 +5,7 @@ date: "2025-11-01"
 categories: [A3]
 format: html
 ---
+
 # Are All Srishti Dads are Weird?
 
 ## Setting up R Packages
@@ -56,6 +57,16 @@ weirddad_clean <- weirddad %>%
 glimpse(weirddad_clean)
 ```
 
+```{r}
+weirddad_clean1 <- weirddad %>%
+  dplyr::select(gender, is_dad_weird) %>%
+  tidyr::drop_na(c(gender, is_dad_weird)) %>%
+  mutate(
+    college = factor(gender),
+    is_dad_weird = factor(is_dad_weird, levels = c("Yes", "No"))
+  )
+```
+
 ## Summaries: Examining the Data
 
 ```{r}
@@ -64,7 +75,6 @@ weirddad_clean %>% count(is_dad_weird)
 
 ```{r}
 weirddad_clean %>% count(college)
-
 ```
 
 # Visualing data
@@ -110,30 +120,68 @@ contingency_table <- vcd::structable(college ~ is_dad_weird,
 contingency_table
 
 ```
+
 ### Inference
 
-- At MIT, 5 out of 33 students (15%) said their dad is weird. At SMI, 12 out of 31 students (39%) said their dad is weird.
+-   At MIT, 5 out of 33 students (15%) said their dad is weird. At SMI, 12 out of 31 students (39%) said their dad is weird.
 
 ```{r}
-gss_vcd_table <- vcd::structable(is_dad_weird ~ college, data = weirddad_clean)
-gss_vcd_table %>%
-  vcd::mosaic(
-    gp = shading_hsv, direction = "v",
-    main = "College vs 'Is Dad Weird?' Mosaic Chart",
-    legend = TRUE
-      )
+vcd::mosaic(college ~ is_dad_weird, data = weirddad_clean, 
+            direction = "v", gp = shading_max, legend = TRUE)
+
+vcd::mosaic(college ~ is_dad_weird, data = weirddad_clean, 
+            type = "expected", direction = "v", gp = shading_max, 
+            legend = TRUE)
+
+vcd::assoc(college ~ is_dad_weird, 
+           data = weirddad_clean, 
+           gp = shading_max, 
+           legend = TRUE) 
+```
+### Inference
+
+- p-value is 0.065, There is NO significant connection between college and weird dad.
+
+```{r}
+chisq_visstat <- visstat(
+  x = weirddad_clean, 
+  y = "is_dad_weird",
+  "college"
+)
+
+chisq_visstat %>% summary()
+```
+### Inference
+
+-   In chi sqaure result is not satistically siginificant!
+
+-   MIT and SMI do not differ significantly in the number of ‘weird dads’.
+
+```{r}
+chisq_visstat$observed
 ```
 
 ```{r}
-contingency_table <- vcd::structable(college ~ is_dad_weird, data = weirddad_clean)
-contingency_table <- as.table(contingency_table)
-xq_test_object <- xchisq.test(contingency_table)
+chisq_visstat$expected
 ```
-### Inference
 
-- But in chi sqaure result is not satistically siginificant!
+```{r}
+chisq_visstat$stdres
+```
 
-- MIT and SMI do not differ significantly in the number of ‘weird dads’.
+```{r}
+contingency_table <- vcd::structable(college ~ is_dad_weird, data= weirddad_clean)
+contingency_table
+```
+
+```{r}
+contingency_table_mod <- as.table(contingency_table)
+contingency_table_mod
+```
+
+```{r}
+xq_test_object <- xchisq.test(contingency_table_mod)
+```
 
 ```{r}
 xq_test_object %>%
@@ -146,19 +194,20 @@ X_squared_observed
 ```{r}
 X_squared_critical <- qchisq(
   p = .05,
-  df = (5 - 1) * (2 - 1), # (nrows-1) * (ncols-1)
+  df = (2 - 1) * (2 - 1),
   lower.tail = FALSE
 )
 X_squared_critical
 ```
 
 ```{r}
-test_result <- chisq.test(contingency_table)
+test_result <- chisq.test(contingency_table_mod)
 
 X_squared_observed <- test_result$statistic
 df <- test_result$parameter
 X_squared_critical <- qchisq(0.95, df)
 ```
+
 
 ```{r}
 mosaic::xqchisq(
@@ -206,6 +255,23 @@ mosaic::xqchisq(
   )
 ```
 
+```{r}
+vcd::mosaic(gender ~ is_dad_weird, data = weirddad_clean1, 
+            direction = "v", gp = shading_max, legend = TRUE)
+
+vcd::mosaic(gender ~ is_dad_weird, data = weirddad_clean1, 
+            type = "expected", direction = "v", gp = shading_max, 
+            legend = TRUE)
+
+vcd::assoc(gender ~ is_dad_weird, 
+           data = weirddad_clean1, 
+           gp = shading_max, 
+           legend = TRUE) 
+```
+### Inference
+
+- p-value is 0.292, There is NO significant connection between gender and weird dad.
+
 ## Propotion Test
 
 ```{r}
@@ -230,12 +296,6 @@ weirddad_clean %>%
 -   Across both colleges (MIT and SMI combined), about 26.6% of students said their dad is weird.
 
 -   This means that most students (73%) do not consider their dad weird, suggesting that “weird dads” are a minority perception overall.
-
--   From the contingency table we know that MIT: 15% “weird dads” SMI: 39% “weird dads”
-
--   That contrast shows that SMI is well above the overall average (26.6%), while MIT is below it.
-
--   SMI dads are perceived as significantly weirder than MIT dads.
 
 ```{r}
 weirddad_clean %>%
@@ -266,4 +326,7 @@ weirddad_clean %>%
   get_ci(level = 0.95)
 ```
 
+## Conclsion
+
+- Both college and gender do not have a significant effect on whether their dad is weird. However, the difference in proportions for the “weird dad” responses is statistically significant.
 ------------------------------------------------------------------------
